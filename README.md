@@ -14,16 +14,14 @@ Installing Tools and Libraries:
 
 If you have no already done so, install Eclipse for Java and the FRC Plugins by following the instructions at https://wpilib.screenstepslive.com/s/currentCS/m/getting_started/l/599679-installing-eclipse-c-java. This will place a copy of wpilib (the large set of Java and C++ libraries provided by FIRST to make our software job a lot easier) into your home directory. DO NOT MOVE THIS! The Eclipse project will assume it's there and attempting to move it to somewhere more sensible like, for example, inside our project directory, will result in wailing and gnashing of teeth. Just don't do it, OK?
 
-To install the extra libraries our project needs, navigate to robot_code_2018/resources and copy 2018_java_user_libs.zip into the wpilib/user/java/lib directory under your home directory then double-click it to decompress the collection of .jar files there.
-
 Update your local copy of the Robotbuilder tool with extensions to support components from CTRE. You can find a Windows installer for this at http://www.ctr-electronics.com/downloads/installers/CTRE%20Phoenix%20Framework%20v5.1.3.1.zip or, if you're using Linux or macOS, a ZIP of the necessary files at http://www.ctr-electronics.com//downloads/lib/CTRE_Phoenix_FRCLibs_NON-WINDOWS_v5.1.3.1.zip. If installing manually, unzip the downloaded file to a temporary directory then follow the Robotbuilder instructions in README.txt. Note that the Robotbuilder/extensions directory mentioned will likely not exist if you have not already run Robotbuilder so you may have to create it. There is no need to install the Java libraries from teh "java" directory of the CTRE package because these are already included in the 2018_java_user_libs.zip that you previously copied.
 
 Importing the Eclipse Project:
 ------------------------------
 
-NB: At the time of writing, the repo is essentially empty so this section is not yet relevant. Please ignore for now and move on to Recommended Editor Settings
+The root of the Eclipse project is the robot_code_2018/SpringKonstant folder. After you clone the robot_code_2018 project from git, make sure you are on the "develop" branch (from a command prompt, change to your robot_code_2018 directory and type "git checkout develop") then open Eclipse and choose "File/Open Projects from File System..." and choose your local robot_code_2018/SpringKonstant folder. This should result in a project named SpringKonstant in your Eclipse Package Explorer.
 
-The root of the Eclipse project is the robot_code_2018/SpringKonstant folder. After you clone the robot_code_2018 project from git, open Eclipse and choose "File/Open Projects from File System..." and choose your local robot_code_2018/SpringKonstant folder. This should result in a project named SpringKonstant in your Eclipse Package Explorer.
+The repo contains a copy of the WPILib libraries (JARs) and all other third-party libraries it uses so you should not need to modify the project Build Path to build it on your own machine. If you see problems, please speak to Mr. Wilson who has been fighting with settings to make the project file path-independent for weeks!
 
 Recommended Editor Settings:
 ----------------------------
