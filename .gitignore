@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
@@ -17,7 +16,10 @@ hs_err_pid*
 # the entire .metadata
 .metadata
 .metadata/*
+.DS_Store
 SpringKonstant/.DS_Store
 SpringKonstant/src/org/springkonstant/robot/.DS_Store
+SpringKonstant/.DS_Store
+SpringKonstant/.DS_Store
 SpringKonstant/.DS_Store
 SpringKonstant/.DS_Store
