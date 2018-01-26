@@ -8,7 +8,6 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-
 package org.springkonstant.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,15 +15,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.*;
 
 import org.springkonstant.robot.commands.*;
-import org.springkonstant.robot.subsystems.*;
-
+//import org.springkonstant.robot.subsystems.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI 
-{
+public class OI {
     //// CREATING BUTTONS TEST
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
@@ -48,15 +45,14 @@ public class OI
     // the button is released.
     // button.whileHeld(new ExampleCommand());
 
-    // Start the command when the button is released  and let it run the command
+    // Start the command when the button is released and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
 
-	public Joystick driver, operator;
+    public Joystick driver, operator;
     public Button a, b, x, y, rb, lb, start, slowDrive, stopSlowDrive;
-    
-    public OI() 
-    {
+
+    public OI() {
 
         operator = new Joystick(1);
         driver = new Joystick(0);
@@ -66,22 +62,22 @@ public class OI
         x = new JoystickButton(operator, 3);
         y = new JoystickButton(operator, 4);
         rb = new JoystickButton(operator, 5);
-        //lb = new JoystickButton(operator, 6);
+        // lb = new JoystickButton(operator, 6);
         start = new JoystickButton(operator, 8);
         stopSlowDrive = new JoystickButton(driver, 5);
         slowDrive = new JoystickButton(driver, 6);
-        
+
         a.whenPressed(new ForwardGearDoubleSolenoid());
         b.whenPressed(new ReverseGearDoubleSolenoid());
         x.whenPressed(new GearPush());
         y.whenPressed(new GearPull());
         rb.whenPressed(new RopeDown());
-        //lb.whenPressed(new RopeUp());
+        // lb.whenPressed(new RopeUp());
         start.whenPressed(new WinchStop());
         stopSlowDrive.whenPressed(new StopSlowDrive());
         slowDrive.whenPressed(new SlowDrive());
 
-        //Smart Dashboard 
+        // Smart Dashboard
         SmartDashboard.putData("Gear Slide Down", new ForwardGearDoubleSolenoid());
         SmartDashboard.putData("Gear Slide Up", new ReverseGearDoubleSolenoid());
         SmartDashboard.putData("Gear Push", new GearPush());
@@ -94,14 +90,11 @@ public class OI
 
     }
 
-    public Joystick getDriver() 
-    {
+    public Joystick getDriver() {
         return driver;
     }
 
-    public Joystick getOperator() 
-    {
+    public Joystick getOperator() {
         return operator;
     }
 }
-
