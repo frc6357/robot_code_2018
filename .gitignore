@@ -13,8 +13,10 @@ hs_err_pid*
 # Ignore build products
 SpringKonstant/bin/*
 SpringKonstant/build/*
+SpringKonstant/dist/*
 
 # All metadata files
 .metadata
 .metadata/*
+SpringKonstant/.DS_Store
 .DS_Store
