@@ -3,18 +3,18 @@
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Package Files
 *.war
 *.ear
-*.class
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# the entire bin directory
-/SpringKonstant/bin/*
+# Ignore build products
+SpringKonstant/bin/*
+SpringKonstant/build/*
 
-# the entire .metadata
+# All metadata files
 .metadata
 .metadata/*
 .DS_Store
