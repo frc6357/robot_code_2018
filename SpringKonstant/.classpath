@@ -10,7 +10,7 @@
 	<classpathentry kind="lib" path="wpilib/java/current/lib/opencv-sources.jar"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/opencv.jar"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/WPILib-sources.jar"/>
-	<classpathentry kind="lib" path="wpilib/java/current/lib/WPILib.jar"/>
+	<classpathentry kind="lib" path="wpilib/java/current/lib/WPILib.jar" sourcepath="wpilib/java/current/lib/WPILib-sources.jar"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/wpiutil-sources.jar"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/wpiutil.jar"/>
 	<classpathentry kind="lib" path="wpilib/user/java/lib/ADIS16448.jar"/>
@@ -30,5 +30,10 @@
 	<classpathentry kind="lib" path="wpilib/user/java/lib/jna-4.1.0.jar"/>
 	<classpathentry kind="lib" path="wpilib/user/java/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry kind="lib" path="wpilib/user/java/lib/junit-4.12.jar"/>
+	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
+	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
+	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
+	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
+	<classpathentry kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
