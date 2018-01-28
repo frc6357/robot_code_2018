@@ -21,7 +21,7 @@ import org.springkonstant.robot.subsystems.DriveBaseSystem;
 import org.springkonstant.robot.subsystems.GearDeploymentSystem;
 import org.springkonstant.robot.subsystems.RopeClimbSystem;
 
-import com.analog.adis16448.frc.ADIS16448_IMU;
+//import com.analog.adis16448.frc.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -85,7 +85,7 @@ public class Robot extends IterativeRobot {
     public static Encoder encoderLeft;
     public static Encoder encoderRight;
 
-    public static ADIS16448_IMU imu; // This is the Gyroscope
+    //public static ADIS16448_IMU imu; // This is the Gyroscope
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -100,9 +100,9 @@ public class Robot extends IterativeRobot {
         gearDoubleSolenoidPush = new DoubleSolenoid(1, 3, 2);
 
         // Gyroscope
-        imu = new ADIS16448_IMU(); // **** NEEDS PORT NUMBER
-        imu.reset();
-        imu.calibrate();
+        //imu = new ADIS16448_IMU(); // **** NEEDS PORT NUMBER
+        //imu.reset();
+        //imu.calibrate();
 
         // TALON SRX ASSIGNMENTS:
         // LEFT 10,11,15
@@ -213,7 +213,7 @@ public class Robot extends IterativeRobot {
 
         gearDeploymentSystem.resetSolenoids();
 
-        SmartDashboard.putData("IMU", imu);
+        //SmartDashboard.putData("IMU", imu);
 
         if (autonomousCommand != null)
             autonomousCommand.start();
