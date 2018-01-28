@@ -13,6 +13,6 @@ We'll flesh this out into a real coding standard soon but, for now, here are a f
 
 5. Fully brace all code. Don't, for example, think you can get away without the braces if you only have a single line following an "if" statement. Although this is syntactically legal, it's a great way to inject unintentional errors.
 
-6. Use Windows-style (CR+LF) line delimiters. Most of the programmers working on the project are Windows-based and some Windows editors get confused by Linux/MacOS style line delimiters. This can be configured in Eclipse in the Preferences/General/Workspace window under "New text file line delimiter" and problems in existing files can be fixed from the Eclipse menu via File/Convert Line Delimiters To/Windows.
+6. Use Linux-style line delimiters. Although most of the programmers working on the project are Windows-based, RoboRio has problems if some of the deployed files have Windows-style CR+LF line endings and these result in obscure and unhelpful error messages relating to inability to access files so let's stick with Linux format to prevent this. This can be configured in Eclipse in the Preferences/General/Workspace window under "New text file line delimiter" and problems in existing files can be fixed from the Eclipse menu via File/Convert Line Delimiters To/Windows.
 
 7. Use UTF-8 text file encoding. This can be configured in Eclipse in the Preferences/General/Workspace window under "Text file encoding".
