@@ -16,3 +16,42 @@ We'll flesh this out into a real coding standard soon but, for now, here are a f
 6. Use Windows-style (CR+LF) line delimiters. Most of the programmers working on the project are Windows-based and some Windows editors get confused by Linux/MacOS style line delimiters. This can be configured in Eclipse in the Preferences/General/Workspace window under "New text file line delimiter" and problems in existing files can be fixed from the Eclipse menu via File/Convert Line Delimiters To/Windows.
 
 7. Use UTF-8 text file encoding. This can be configured in Eclipse in the Preferences/General/Workspace window under "Text file encoding".
+
+
+
+For javadoc documentation, every class will be preceded with a javadoc comment (/**) and be followed by a short description of the function of the class.
+When finished with your comment, it can be ended with "*/".
+Every method will have documentation according to the following format:
+/**
+ * The first part of the comment will be a short description of the method's function
+ * After you've typed your description, it will be followed by the parameters
+ * @param paramName paramDescription (description must include potential values that the parameter can encompass)
+ * Note: if there are no parameters, type @param None
+ * @return returnType returnDescription
+ * Note: if void, type @return Nothing.
+ * If any exception is thrown, finish with 
+ * @exception exceptionType exceptionDescription (i.e. when it is thrown)
+ */
+
+When you want to generate javadocs, open a terminal and type javadoc Robot.java
+
+EXAMPLE:
+
+/**
+ * This class is an example of how to write javadocs
+ */
+public class Test
+{
+	/**
+	 * This method adds two integers and returns the sum of those integers.
+	 * Both the parameters and the return value are integers.
+	 * It's also a static method, so it should be referenced from a class pointer
+	 * @param num1 This is the first number that the user passes and must be an int
+	 * @param num2 This is the second number to be passed and also must be an intj
+	 * @return int Returns the integer sum of the two parameters
+	 */
+	public static int addNum(int num1, int num2)
+	{
+		return num1+num2;
+	}
+}
