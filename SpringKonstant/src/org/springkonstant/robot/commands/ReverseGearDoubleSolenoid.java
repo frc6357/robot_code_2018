@@ -8,19 +8,21 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-
 package org.springkonstant.robot.commands;
+
 import org.springkonstant.robot.Robot;
 
 //import edu.wpi.first.wpilibj.DoubleSolenoid;
 //import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Command;
+
 /**
  *
  */
 public class ReverseGearDoubleSolenoid extends Command
 {
     private boolean isDone = true;
+
     // Called just before this Command runs the first time
     protected void initialize()
     {

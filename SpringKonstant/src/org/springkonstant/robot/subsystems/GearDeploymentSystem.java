@@ -21,43 +21,51 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 /**
  *
  */
-public class GearDeploymentSystem extends Subsystem {
+public class GearDeploymentSystem extends Subsystem
+{
     private final DoubleSolenoid gearDoubleSolenoidRight;
     private final DoubleSolenoid gearDoubleSolenoidLeft;
     private final DoubleSolenoid gearDoubleSolenoidPush;
 
     public GearDeploymentSystem(DoubleSolenoid gearDoubleSolenoidLeftin, DoubleSolenoid gearDoubleSolenoidRightin,
-            DoubleSolenoid gearDoubleSolenoidPushin) {
+            DoubleSolenoid gearDoubleSolenoidPushin)
+    {
         gearDoubleSolenoidLeft = gearDoubleSolenoidLeftin;
         gearDoubleSolenoidRight = gearDoubleSolenoidRightin;
         gearDoubleSolenoidPush = gearDoubleSolenoidPushin;
 
     }
 
-    public void pushGear() {
+    public void pushGear()
+    {
         gearDoubleSolenoidPush.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void resetPush() {
+    public void resetPush()
+    {
         gearDoubleSolenoidPush.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void gearSlideDown() {
+    public void gearSlideDown()
+    {
         gearDoubleSolenoidLeft.set(DoubleSolenoid.Value.kReverse);
         gearDoubleSolenoidRight.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void gearSlideUp() {
+    public void gearSlideUp()
+    {
         gearDoubleSolenoidLeft.set(DoubleSolenoid.Value.kForward);
         gearDoubleSolenoidRight.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void resetSolenoids() {
+    public void resetSolenoids()
+    {
         resetPush();
         gearSlideDown();
     }
 
-    public void initDefaultCommand() {
+    public void initDefaultCommand()
+    {
         // Set the default command for a subsystem here.
         // setDefaultCommand(new MySpecialCommand());
     }

@@ -13,31 +13,39 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 // This is the auto for the middle without placing
 
-public class AutoPlan1 extends CommandGroup {
+public class AutoPlan1 extends CommandGroup
+{
 
     boolean isDone = true;
     boolean driving = false;
 
-    public AutoPlan1() {
+    public AutoPlan1()
+    {
         requires(Robot.gearDeploymentSystem);
         requires(Robot.driveBaseSystem);
     }
 
     // Called just before this Command runs the first time
-    protected void initialize() {
+    protected void initialize()
+    {
 
         isDone = false;
         Robot.gearDeploymentSystem.resetSolenoids();
 
-        if (!isDone) {
-            new Thread() {
-                public void run() {
+        if (!isDone)
+        {
+            new Thread()
+            {
+                public void run()
+                {
                     // Code to run here:
-                    try {
+                    try
+                    {
                         Robot.driveBaseSystem.DriveStraight(90 / 12);
                         Thread.sleep(1);
                         isDone = true;
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException e)
+                    {
                         e.printStackTrace();
                     }
                 }
@@ -46,23 +54,27 @@ public class AutoPlan1 extends CommandGroup {
     }
 
     // Called repeatedly when this Command is scheduled to run
-    protected void execute() {
+    protected void execute()
+    {
 
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
+    protected boolean isFinished()
+    {
         return isDone;
     }
 
     // Called once after isFinished returns true
-    protected void end() {
+    protected void end()
+    {
         // timer.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    protected void interrupted() {
+    protected void interrupted()
+    {
     }
 
     /*

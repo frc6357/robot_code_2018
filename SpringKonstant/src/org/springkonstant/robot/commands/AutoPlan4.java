@@ -30,35 +30,33 @@ public class AutoPlan4 extends CommandGroup
         isDone = false;
         Robot.gearDeploymentSystem.resetSolenoids();
 
-        if(!isDone)
+        if (!isDone)
         {
             new Thread()
             {
-                    public void run()
+                public void run()
+                {
+                    // Code to run here:
+                    try
                     {
-                         //Code to run here:
-                         try
-                         {
-                             Robot.driveBaseSystem.DriveStraight(98/12);
-                                 Thread.sleep(3500);
-                                 Robot.driveBaseSystem.SetPositionMode();
-                                 Robot.driveBaseSystem.rotateRobot(-65);
-                                 Thread.sleep(4000);
-                                 Robot.driveBaseSystem.SetPositionMode();
-                                 Robot.driveBaseSystem.DriveStraight(26/12);
-                                 Thread.sleep(1750);
-                                 Robot.gearDeploymentSystem.pushGear();
-                                 Thread.sleep(500);
-                                 Robot.gearDeploymentSystem.resetPush();
-                                 isDone = true;
-                      }
-                      catch (InterruptedException e)
-                      {
-                          e.printStackTrace();
-                      }
-                 }
-            }
-                .start();
+                        Robot.driveBaseSystem.DriveStraight(98 / 12);
+                        Thread.sleep(3500);
+                        Robot.driveBaseSystem.SetPositionMode();
+                        Robot.driveBaseSystem.rotateRobot(-65);
+                        Thread.sleep(4000);
+                        Robot.driveBaseSystem.SetPositionMode();
+                        Robot.driveBaseSystem.DriveStraight(26 / 12);
+                        Thread.sleep(1750);
+                        Robot.gearDeploymentSystem.pushGear();
+                        Thread.sleep(500);
+                        Robot.gearDeploymentSystem.resetPush();
+                        isDone = true;
+                    } catch (InterruptedException e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
         }
     }
 
@@ -66,8 +64,8 @@ public class AutoPlan4 extends CommandGroup
     protected void execute()
     {
 
-
     }
+
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished()
     {
@@ -77,7 +75,7 @@ public class AutoPlan4 extends CommandGroup
     // Called once after isFinished returns true
     protected void end()
     {
-        //timer.stop();
+        // timer.stop();
     }
 
     // Called when another command which requires one or more of the same
@@ -86,31 +84,18 @@ public class AutoPlan4 extends CommandGroup
     {
     }
 
-
-
     /*
-    ////////////////// STATE MACHINE ////////////////////
-    ////////////////////////////////////////////////////
-    private gearState currentState;
-
-    private enum gearState
-    {
-        GEAR_EMPTY,
-        GEAR_RETREAVING,
-        CARRING_GEAR,
-        READY_TO_PLACE,
-        GEAR_PLACED
-    };
-
-    public gearState getGearState()
-    {
-        return currentState;
-    }
-
-    public void setGearState(gearState state)
-    {
-        currentState = state;
-    }
-    //////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////*/
+     * ////////////////// STATE MACHINE ////////////////////
+     * //////////////////////////////////////////////////// private gearState
+     * currentState;
+     * 
+     * private enum gearState { GEAR_EMPTY, GEAR_RETREAVING, CARRING_GEAR,
+     * READY_TO_PLACE, GEAR_PLACED };
+     * 
+     * public gearState getGearState() { return currentState; }
+     * 
+     * public void setGearState(gearState state) { currentState = state; }
+     * //////////////////////////////////////////////////////
+     * //////////////////////////////////////////////////////
+     */
 }

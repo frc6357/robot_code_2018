@@ -16,3 +16,5 @@ We'll flesh this out into a real coding standard soon but, for now, here are a f
 6. Use Linux-style line delimiters. Although most of the programmers working on the project are Windows-based, RoboRio has problems if some of the deployed files have Windows-style CR+LF line endings and these result in obscure and unhelpful error messages relating to inability to access files so let's stick with Linux format to prevent this. This can be configured in Eclipse in the Preferences/General/Workspace window under "New text file line delimiter" and problems in existing files can be fixed from the Eclipse menu via File/Convert Line Delimiters To/Windows.
 
 7. Use UTF-8 text file encoding. This can be configured in Eclipse in the Preferences/General/Workspace window under "Text file encoding".
+
+8. Use the "One True Bracing" style with opening and closing braces aligned vertically.

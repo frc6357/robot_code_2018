@@ -5,7 +5,8 @@ import edu.wpi.first.wpilibj.PIDController;
 //import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class PositionAndVelocityControlledDrivetrainSide {
+public class PositionAndVelocityControlledDrivetrainSide
+{
     private final SpeedController mySpeedController;
     private final Encoder myEncoder;
     private final PIDController myPidController;
@@ -17,7 +18,8 @@ public class PositionAndVelocityControlledDrivetrainSide {
 
     private boolean isPositionModeEnabled;
 
-    public PositionAndVelocityControlledDrivetrainSide(SpeedController inSpeedController, Encoder inEncoder) {
+    public PositionAndVelocityControlledDrivetrainSide(SpeedController inSpeedController, Encoder inEncoder)
+    {
         mySpeedController = inSpeedController;
         myEncoder = inEncoder;
         myVelocityControl = new VelocityControlledDrivetrainSide(mySpeedController, new EncoderSpeedForPID(inEncoder));
@@ -29,59 +31,74 @@ public class PositionAndVelocityControlledDrivetrainSide {
         isPositionModeEnabled = false;
     }
 
-    public boolean SetDistanceTarget(double distance) {
-        if (isPositionModeEnabled) {
+    public boolean SetDistanceTarget(double distance)
+    {
+        if (isPositionModeEnabled)
+        {
             myPidController.setSetpoint(distance);
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
 
-    public void Enable() {
+    public void Enable()
+    {
         myVelocityControl.Enable();
-        if (isPositionModeEnabled) {
+        if (isPositionModeEnabled)
+        {
             myPidController.enable();
         }
     }
 
-    public void Disable() {
+    public void Disable()
+    {
         myVelocityControl.Disable();
         myPidController.disable();
     }
 
-    public void SetPositionMode() {
+    public void SetPositionMode()
+    {
         myPidController.reset();
         myVelocityControl.reset();
         myPidController.enable();
         isPositionModeEnabled = true;
     }
 
-    public void SetVelocityMode() {
+    public void SetVelocityMode()
+    {
         myVelocityControl.reset();
         myPidController.disable();
         isPositionModeEnabled = false;
     }
 
-    public boolean SetSpeedAbsolute(double speed) {
-        if (!isPositionModeEnabled) {
+    public boolean SetSpeedAbsolute(double speed)
+    {
+        if (!isPositionModeEnabled)
+        {
             myVelocityControl.SetSpeedAbsoluteFps(speed);
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
 
-    public boolean SetSpeedPercent(double percent) {
-        if (!isPositionModeEnabled) {
+    public boolean SetSpeedPercent(double percent)
+    {
+        if (!isPositionModeEnabled)
+        {
             myVelocityControl.SetSpeedPercent(percent);
             return true;
-        } else {
+        } else
+        {
             return false;
         }
     }
 
-    public double GetSpeedSetpoint() {
+    public double GetSpeedSetpoint()
+    {
         return myVelocityControl.GetSetpoint();
     }
 

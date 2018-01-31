@@ -21,7 +21,8 @@ import org.springkonstant.robot.commands.*;
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
+public class OI
+{
     //// CREATING BUTTONS TEST
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
@@ -52,7 +53,8 @@ public class OI {
     public Joystick driver, operator;
     public Button a, b, x, y, rb, lb, start, slowDrive, stopSlowDrive;
 
-    public OI() {
+    public OI()
+    {
 
         operator = new Joystick(1);
         driver = new Joystick(0);
@@ -90,11 +92,13 @@ public class OI {
 
     }
 
-    public Joystick getDriver() {
+    public Joystick getDriver()
+    {
         return driver;
     }
 
-    public Joystick getOperator() {
+    public Joystick getOperator()
+    {
         return operator;
     }
 }

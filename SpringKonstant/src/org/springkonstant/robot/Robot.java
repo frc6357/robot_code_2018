@@ -50,7 +50,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Robot extends IterativeRobot {
+public class Robot extends IterativeRobot
+{
 
     CommandGroup autonomousCommand;
     SendableChooser<CommandGroup> autoChooser;
@@ -85,13 +86,14 @@ public class Robot extends IterativeRobot {
     public static Encoder encoderLeft;
     public static Encoder encoderRight;
 
-    //public static ADIS16448_IMU imu; // This is the Gyroscope
+    // public static ADIS16448_IMU imu; // This is the Gyroscope
 
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
-    public void robotInit() {
+    public void robotInit()
+    {
         // Actuators
         compressor1 = new Compressor(1);
 
@@ -100,9 +102,9 @@ public class Robot extends IterativeRobot {
         gearDoubleSolenoidPush = new DoubleSolenoid(1, 3, 2);
 
         // Gyroscope
-        //imu = new ADIS16448_IMU(); // **** NEEDS PORT NUMBER
-        //imu.reset();
-        //imu.calibrate();
+        // imu = new ADIS16448_IMU(); // **** NEEDS PORT NUMBER
+        // imu.reset();
+        // imu.calibrate();
 
         // TALON SRX ASSIGNMENTS:
         // LEFT 10,11,15
@@ -113,9 +115,9 @@ public class Robot extends IterativeRobot {
         // LEFT DRIVE TALONS
         baseFrontLeft = new WPI_TalonSRX(10);
         baseCenterLeft = new WPI_TalonSRX(11);
-        ((WPI_TalonSRX)baseCenterLeft).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontLeft).getDeviceID());
+        ((WPI_TalonSRX) baseCenterLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeft).getDeviceID());
         baseBackLeft = new WPI_TalonSRX(15);
-        ((WPI_TalonSRX)baseBackLeft).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontLeft).getDeviceID());
+        ((WPI_TalonSRX) baseBackLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeft).getDeviceID());
 
         // RIGHT DRIVE TALONS
         baseFrontRight = new WPI_TalonSRX(12);
@@ -124,8 +126,8 @@ public class Robot extends IterativeRobot {
         baseCenterRight.setInverted(true);
         baseBackRight = new WPI_TalonSRX(16);
         baseBackRight.setInverted(true);
-        ((WPI_TalonSRX)baseBackRight).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontRight).getDeviceID());
-        ((WPI_TalonSRX)baseCenterRight).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontRight).getDeviceID());
+        ((WPI_TalonSRX) baseBackRight).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontRight).getDeviceID());
+        ((WPI_TalonSRX) baseCenterRight).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontRight).getDeviceID());
 
         // WENCH TALONS
         ropeMotor1 = new WPI_TalonSRX(20);
@@ -157,7 +159,8 @@ public class Robot extends IterativeRobot {
 
         ///////////////// CAMERA FEED \\\\\\\\\\\\\\\\
 
-        new Thread(() -> {
+        new Thread(() ->
+        {
             UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
             camera.setResolution(720, 480);
 
@@ -167,7 +170,8 @@ public class Robot extends IterativeRobot {
             Mat source = new Mat();
             Mat output = new Mat();
 
-            while (!Thread.interrupted()) {
+            while (!Thread.interrupted())
+            {
                 cvSink.grabFrame(source);
                 Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
                 outputStream.putFrame(output);
@@ -183,11 +187,13 @@ public class Robot extends IterativeRobot {
      * This function is called when the disabled button is hit. You can use it to
      * reset subsystems before shutting down.
      */
-    public void disabledInit() {
+    public void disabledInit()
+    {
         // Code can be put here to do things before match ends
     }
 
-    public void disabledPeriodic() {
+    public void disabledPeriodic()
+    {
         Scheduler.getInstance().run();
         driveBaseSystem.setLeftMotorSpeedPercent(0.0f);
         driveBaseSystem.setRightMotorSpeedPercent(0.0f);
@@ -202,7 +208,8 @@ public class Robot extends IterativeRobot {
 
     }
 
-    public void autonomousInit() {
+    public void autonomousInit()
+    {
         autonomousCommand = (CommandGroup) autoChooser.getSelected();
         // schedule the autonomous command (example)
 
@@ -214,7 +221,7 @@ public class Robot extends IterativeRobot {
 
         gearDeploymentSystem.resetSolenoids();
 
-        //SmartDashboard.putData("IMU", imu);
+        // SmartDashboard.putData("IMU", imu);
 
         if (autonomousCommand != null)
             autonomousCommand.start();
@@ -224,13 +231,15 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during autonomous
      */
-    public void autonomousPeriodic() {
+    public void autonomousPeriodic()
+    {
         Scheduler.getInstance().run();
         // driveBaseSystem.DriveStraight(6.5);
 
     }
 
-    public void teleopInit() {
+    public void teleopInit()
+    {
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -250,7 +259,8 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
+    public void teleopPeriodic()
+    {
         Scheduler.getInstance().run();
 
         double leftDrive = -1 * driver.getRawAxis(1);
@@ -260,7 +270,8 @@ public class Robot extends IterativeRobot {
         {
             leftDrive = 0.0f;
         }
-        if (Math.abs(rightDrive) < 0.05) {
+        if (Math.abs(rightDrive) < 0.05)
+        {
             rightDrive = 0.0f;
         }
 
@@ -272,7 +283,8 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during test mode
      */
-    public void testPeriodic() {
-        //LiveWindow.run();
+    public void testPeriodic()
+    {
+        // LiveWindow.run();
     }
 }

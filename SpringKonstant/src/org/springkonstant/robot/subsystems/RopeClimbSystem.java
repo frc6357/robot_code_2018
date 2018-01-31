@@ -8,7 +8,6 @@
 // update. Deleting the comments indicating the section will prevent
 // it from being updated in the future.
 
-
 package org.springkonstant.robot.subsystems;
 
 //import org.springkonstant.robot.commands.*;
@@ -16,7 +15,6 @@ package org.springkonstant.robot.subsystems;
 //import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
-
 
 /**
  *
@@ -57,7 +55,6 @@ public class RopeClimbSystem extends Subsystem
     public void initDefaultCommand()
     {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new WinchStop());
+        // setDefaultCommand(new WinchStop());
     }
 }
-
