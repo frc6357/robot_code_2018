@@ -121,10 +121,11 @@ public class Robot extends IterativeRobot {
         baseFrontRight = new WPI_TalonSRX(12);
         baseFrontRight.setInverted(true);
         baseCenterRight = new WPI_TalonSRX(14);
-        ((WPI_TalonSRX)baseCenterRight).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontRight).getDeviceID());
+        baseCenterRight.setInverted(true);
         baseBackRight = new WPI_TalonSRX(16);
+        baseBackRight.setInverted(true);
         ((WPI_TalonSRX)baseBackRight).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontRight).getDeviceID());
-
+        ((WPI_TalonSRX)baseCenterRight).set(ControlMode.Follower, ((WPI_TalonSRX)baseFrontRight).getDeviceID());
 
         // WENCH TALONS
         ropeMotor1 = new WPI_TalonSRX(20);

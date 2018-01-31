@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_141]"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/cscore.jar" sourcepath="wpilib/java/current/lib/cscore-sources.jar"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/ntcore.jar" sourcepath="wpilib/java/current/lib/ntcore-sources.jar"/>
 	<classpathentry kind="lib" path="wpilib/java/current/lib/opencv.jar" sourcepath="wpilib/java/current/lib/opencv-sources.jar"/>
