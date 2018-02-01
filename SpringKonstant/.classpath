@@ -23,12 +23,5 @@
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/junit-4.12.jar"/>
-	<classpathentry exported="true" kind="var" path="wpilib" sourcepath="wpilib.sources"/>
-	<classpathentry exported="true" kind="var" path="networktables" sourcepath="networktables.sources"/>
-	<classpathentry exported="true" kind="var" path="opencv" sourcepath="opencv.sources"/>
-	<classpathentry exported="true" kind="var" path="cscore" sourcepath="cscore.sources"/>
-	<classpathentry exported="true" kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
-	<classpathentry exported="true" kind="var" path="USERLIBS_DIR/ADIS16448.jar"/>
-	<classpathentry exported="true" kind="var" path="USERLIBS_DIR/CTRLib.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
