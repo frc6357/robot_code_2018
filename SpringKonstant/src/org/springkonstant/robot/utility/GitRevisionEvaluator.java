@@ -4,9 +4,9 @@ import java.util.Properties;
 
 public class GitRevisionEvaluator
 {
-    public static String GetGitRevision()
-    {
-        Properties myProps = new Properties();
-        return myProps.getProperty("git.revision");
-    }
+	public static String GetGitRevision()
+	{
+		Properties myProps = new Properties();
+		return myProps.getProperty("git.revision");
+	}
 }

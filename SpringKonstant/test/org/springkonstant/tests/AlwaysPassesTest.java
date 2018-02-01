@@ -7,10 +7,10 @@ import org.junit.Test;
 public class AlwaysPassesTest
 {
 
-    @Test
-    public void test()
-    {
-        assertTrue("Nothing to test right now", true);
-    }
+	@Test
+	public void test()
+	{
+		assertTrue("Nothing to test right now", true);
+	}
 
 }

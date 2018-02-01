@@ -7,25 +7,25 @@ import edu.wpi.first.wpilibj.PIDSourceType;
 public class EncoderSpeedForPID implements PIDSource
 {
 
-    private final Encoder myEncoder;
+	private final Encoder myEncoder;
 
-    public EncoderSpeedForPID(Encoder inEncoder)
-    {
-        myEncoder = inEncoder;
-    }
+	public EncoderSpeedForPID(Encoder inEncoder)
+	{
+		myEncoder = inEncoder;
+	}
 
-    public void setPIDSourceType(PIDSourceType pidSource)
-    {
-        return;
-    }
+	public void setPIDSourceType(PIDSourceType pidSource)
+	{
+		return;
+	}
 
-    public PIDSourceType getPIDSourceType()
-    {
-        return PIDSourceType.kRate;
-    }
+	public PIDSourceType getPIDSourceType()
+	{
+		return PIDSourceType.kRate;
+	}
 
-    public double pidGet()
-    {
-        return myEncoder.getRate();
-    }
+	public double pidGet()
+	{
+		return myEncoder.getRate();
+	}
 }

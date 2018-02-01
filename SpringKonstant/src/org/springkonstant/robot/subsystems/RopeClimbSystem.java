@@ -22,39 +22,39 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class RopeClimbSystem extends Subsystem
 {
 
-    private final SpeedController ropeMotor1;
-    private final SpeedController ropeMotor2;
+	private final SpeedController ropeMotor1;
+	private final SpeedController ropeMotor2;
 
-    public RopeClimbSystem(SpeedController ropeMotor1in, SpeedController ropeMotor2in)
-    {
-        ropeMotor1 = ropeMotor1in;
-        ropeMotor2 = ropeMotor2in;
-    }
+	public RopeClimbSystem(SpeedController ropeMotor1in, SpeedController ropeMotor2in)
+	{
+		ropeMotor1 = ropeMotor1in;
+		ropeMotor2 = ropeMotor2in;
+	}
 
-    public void winchUp()
-    {
-        ropeMotor1.set(.7);
-        ropeMotor2.set(.7);
-    }
+	public void winchUp()
+	{
+		ropeMotor1.set(.7);
+		ropeMotor2.set(.7);
+	}
 
-    public void winchDown()
-    {
-        ropeMotor1.set(-.7);
-        ropeMotor2.set(-.7);
-    }
+	public void winchDown()
+	{
+		ropeMotor1.set(-.7);
+		ropeMotor2.set(-.7);
+	}
 
-    public void stopMotors()
-    {
-        ropeMotor1.set(0);
-        ropeMotor2.set(0);
-    }
+	public void stopMotors()
+	{
+		ropeMotor1.set(0);
+		ropeMotor2.set(0);
+	}
 
-    // Put methods for controlling this subsystem
-    // here. Call these from Commands.
+	// Put methods for controlling this subsystem
+	// here. Call these from Commands.
 
-    public void initDefaultCommand()
-    {
-        // Set the default command for a subsystem here.
-        // setDefaultCommand(new WinchStop());
-    }
+	public void initDefaultCommand()
+	{
+		// Set the default command for a subsystem here.
+		// setDefaultCommand(new WinchStop());
+	}
 }

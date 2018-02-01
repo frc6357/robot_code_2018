@@ -23,82 +23,83 @@ import org.springkonstant.robot.commands.*;
  */
 public class OI
 {
-    //// CREATING BUTTONS TEST
-    // One type of button is a joystick button which is any button on a joystick.
-    // You create one by telling it which joystick it's on and which button
-    // number it is.
-    // Joystick stick = new Joystick(port);
-    // Button button = new JoystickButton(stick, buttonNumber);
+	//// CREATING BUTTONS TEST
+	// One type of button is a joystick button which is any button on a
+	//// joystick.
+	// You create one by telling it which joystick it's on and which button
+	// number it is.
+	// Joystick stick = new Joystick(port);
+	// Button button = new JoystickButton(stick, buttonNumber);
 
-    // There are a few additional built in buttons you can use. Additionally,
-    // by subclassing Button you can create custom triggers and bind those to
-    // commands the same as any other Button.
+	// There are a few additional built in buttons you can use. Additionally,
+	// by subclassing Button you can create custom triggers and bind those to
+	// commands the same as any other Button.
 
-    //// TRIGGERING COMMANDS WITH BUTTONS
-    // Once you have a button, it's trivial to bind it to a button in one of
-    // three ways:
+	//// TRIGGERING COMMANDS WITH BUTTONS
+	// Once you have a button, it's trivial to bind it to a button in one of
+	// three ways:
 
-    // Start the command when the button is pressed and let it run the command
-    // until it is finished as determined by it's isFinished method.
-    // button.whenPressed(new ExampleCommand());
+	// Start the command when the button is pressed and let it run the command
+	// until it is finished as determined by it's isFinished method.
+	// button.whenPressed(new ExampleCommand());
 
-    // Run the command while the button is being held down and interrupt it once
-    // the button is released.
-    // button.whileHeld(new ExampleCommand());
+	// Run the command while the button is being held down and interrupt it once
+	// the button is released.
+	// button.whileHeld(new ExampleCommand());
 
-    // Start the command when the button is released and let it run the command
-    // until it is finished as determined by it's isFinished method.
-    // button.whenReleased(new ExampleCommand());
+	// Start the command when the button is released and let it run the command
+	// until it is finished as determined by it's isFinished method.
+	// button.whenReleased(new ExampleCommand());
 
-    public Joystick driver, operator;
-    public Button a, b, x, y, rb, lb, start, slowDrive, stopSlowDrive;
+	public Joystick driver, operator;
+	public Button a, b, x, y, rb, lb, start, slowDrive, stopSlowDrive;
 
-    public OI()
-    {
+	public OI()
+	{
 
-        operator = new Joystick(1);
-        driver = new Joystick(0);
+		operator = new Joystick(1);
+		driver = new Joystick(0);
 
-        a = new JoystickButton(operator, 1);
-        b = new JoystickButton(operator, 2);
-        x = new JoystickButton(operator, 3);
-        y = new JoystickButton(operator, 4);
-        rb = new JoystickButton(operator, 5);
-        // lb = new JoystickButton(operator, 6);
-        start = new JoystickButton(operator, 8);
-        stopSlowDrive = new JoystickButton(driver, 5);
-        slowDrive = new JoystickButton(driver, 6);
+		a = new JoystickButton(operator, 1);
+		b = new JoystickButton(operator, 2);
+		x = new JoystickButton(operator, 3);
+		y = new JoystickButton(operator, 4);
+		rb = new JoystickButton(operator, 5);
+		// lb = new JoystickButton(operator, 6);
+		start = new JoystickButton(operator, 8);
+		stopSlowDrive = new JoystickButton(driver, 5);
+		slowDrive = new JoystickButton(driver, 6);
 
-        a.whenPressed(new ForwardGearDoubleSolenoid());
-        b.whenPressed(new ReverseGearDoubleSolenoid());
-        x.whenPressed(new GearPush());
-        y.whenPressed(new GearPull());
-        rb.whenPressed(new RopeDown());
-        // lb.whenPressed(new RopeUp());
-        start.whenPressed(new WinchStop());
-        stopSlowDrive.whenPressed(new StopSlowDrive());
-        slowDrive.whenPressed(new SlowDrive());
+		a.whenPressed(new ForwardGearDoubleSolenoid());
+		b.whenPressed(new ReverseGearDoubleSolenoid());
+		x.whenPressed(new GearPush());
+		y.whenPressed(new GearPull());
+		rb.whenPressed(new RopeDown());
+		// lb.whenPressed(new RopeUp());
+		start.whenPressed(new WinchStop());
+		stopSlowDrive.whenPressed(new StopSlowDrive());
+		slowDrive.whenPressed(new SlowDrive());
 
-        // Smart Dashboard
-        SmartDashboard.putData("Gear Slide Down", new ForwardGearDoubleSolenoid());
-        SmartDashboard.putData("Gear Slide Up", new ReverseGearDoubleSolenoid());
-        SmartDashboard.putData("Gear Push", new GearPush());
-        SmartDashboard.putData("Gear Pull", new GearPull());
-        SmartDashboard.putData("Rope Up", new RopeUp());
-        SmartDashboard.putData("Rope Down", new RopeDown());
-        SmartDashboard.putData("AutoPlan1", new AutoPlan1());
-        SmartDashboard.putData("AutoPlan2", new AutoPlan2());
-        SmartDashboard.putData("AutoPlan3", new AutoPlan3());
+		// Smart Dashboard
+		SmartDashboard.putData("Gear Slide Down", new ForwardGearDoubleSolenoid());
+		SmartDashboard.putData("Gear Slide Up", new ReverseGearDoubleSolenoid());
+		SmartDashboard.putData("Gear Push", new GearPush());
+		SmartDashboard.putData("Gear Pull", new GearPull());
+		SmartDashboard.putData("Rope Up", new RopeUp());
+		SmartDashboard.putData("Rope Down", new RopeDown());
+		SmartDashboard.putData("AutoPlan1", new AutoPlan1());
+		SmartDashboard.putData("AutoPlan2", new AutoPlan2());
+		SmartDashboard.putData("AutoPlan3", new AutoPlan3());
 
-    }
+	}
 
-    public Joystick getDriver()
-    {
-        return driver;
-    }
+	public Joystick getDriver()
+	{
+		return driver;
+	}
 
-    public Joystick getOperator()
-    {
-        return operator;
-    }
+	public Joystick getOperator()
+	{
+		return operator;
+	}
 }
