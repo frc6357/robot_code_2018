@@ -17,10 +17,10 @@ We'll flesh this out into a real coding standard soon but, for now, here are a f
 
 7. Use UTF-8 text file encoding. This can be configured in Eclipse in the Preferences/General/Workspace window under "Text file encoding".
 
-
+8. Use the proper, God's-intended coding style of putting brackets in vertical alignment when writing ifs, elses, methods, classes, etc.
 
 For javadoc documentation, every class will be preceded with a javadoc comment (/**) and be followed by a short description of the function of the class.
-When finished with your comment, it can be ended with "*/".
+When finished with your comment, it can be ended with "*/". For those interested, html commands like <p>text</p> is available
 Every method will have documentation according to the following format:
 /**
  * The first part of the comment will be a short description of the method's function
@@ -34,6 +34,7 @@ Every method will have documentation according to the following format:
  */
 
 When you want to generate javadocs, open a terminal and type javadoc Robot.java
+Alternatively, go to eclipse, open the Project tab, and click "Generate JavaDoc"
 
 EXAMPLE:
 
@@ -47,7 +48,7 @@ public class Test
 	 * Both the parameters and the return value are integers.
 	 * It's also a static method, so it should be referenced from a class pointer
 	 * @param num1 This is the first number that the user passes and must be an int
-	 * @param num2 This is the second number to be passed and also must be an intj
+	 * @param num2 This is the second number to be passed and also must be an int
 	 * @return int Returns the integer sum of the two parameters
 	 */
 	public static int addNum(int num1, int num2)
