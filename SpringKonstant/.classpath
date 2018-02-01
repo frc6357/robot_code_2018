@@ -3,22 +3,15 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/cscore-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/cscore.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/ntcore-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/ntcore.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/opencv-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/opencv.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/WPILib-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/WPILib.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/wpiutil-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/wpiutil.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/cscore.jar" sourcepath="wpilib/java/current/lib/cscore-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/ntcore.jar" sourcepath="wpilib/java/current/lib/ntcore-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/opencv.jar" sourcepath="wpilib/java/current/lib/opencv-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/WPILib.jar" sourcepath="wpilib/java/current/lib/WPILib-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/wpiutil.jar" sourcepath="wpilib/java/current/lib/wpiutil-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/ADIS16448.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/commons-codec-1.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/commons-logging-1.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/CTRE_Phoenix-javadoc.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/CTRE_Phoenix-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/CTRE_Phoenix.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/CTRE_Phoenix.jar" sourcepath="wpilib/user/java/lib/CTRE_Phoenix-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/fluent-hc-4.5.3.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/gson-2.8.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/hamcrest-core-1.3.jar"/>
@@ -30,10 +23,5 @@
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/junit-4.12.jar"/>
-	<classpathentry exported="true" kind="var" path="wpilib" sourcepath="wpilib.sources"/>
-	<classpathentry exported="true" kind="var" path="networktables" sourcepath="networktables.sources"/>
-	<classpathentry exported="true" kind="var" path="opencv" sourcepath="opencv.sources"/>
-	<classpathentry exported="true" kind="var" path="cscore" sourcepath="cscore.sources"/>
-	<classpathentry exported="true" kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
