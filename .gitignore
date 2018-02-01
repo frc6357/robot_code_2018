@@ -1,27 +1,23 @@
-.class
+*.class
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-# Package Files #
+# Package Files
 *.war
 *.ear
-*.class
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# the entire bin directory
-/SpringKonstant/bin/*
+# Ignore build products
+SpringKonstant/bin/*
+SpringKonstant/build/*
+SpringKonstant/dist/*
 
-# the entire .metadata
+# All metadata files
 .metadata
 .metadata/*
+SpringKonstant/.DS_Store
 .DS_Store
 SpringKonstant/.DS_Store
-SpringKonstant/src/org/springkonstant/robot/.DS_Store
-SpringKonstant/.DS_Store
-SpringKonstant/.DS_Store
-SpringKonstant/.DS_Store
-SpringKonstant/.DS_Store
-SpringKonstant/dist/FRCUserProgram.jar
