@@ -1,14 +1,16 @@
 
 package org.usfirst.frc6357.robotcode;
 
+import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
+
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc6357.robotcode.commands.*;
-import org.usfirst.frc6357.robotcode.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,6 +26,8 @@ public class Robot extends TimedRobot
     SendableChooser<Command> chooser = new SendableChooser<>();
 
     public static OI oi;
+    
+    public static Joystick operator, driver;
 
     /**
      * This function is run when the robot is first started up and should be
@@ -44,6 +48,14 @@ public class Robot extends TimedRobot
         chooser.addDefault("Autonomous Command", new AutonomousCommand());
 
         SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(2));
+        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(5));
+        SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(1));
+        SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(4));
+        
+        NetworkTable server = NetworkTableInstance.getDefault().getTable("SmartDashboard");
+        server.getEntry("Joystick Y-Inputs").setDouble(0);
+        
     }
 
     /**

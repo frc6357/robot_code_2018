@@ -11,7 +11,11 @@
 
 package org.usfirst.frc6357.robotcode;
 
-import org.usfirst.frc6357.robotcode.commands.*;
+import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
+
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
@@ -46,10 +50,21 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
-
-
+	
+	public Button opA, opB, opX, opY, opRB, opLB, opStart;
+	
     public OI() 
     {
+    	Robot.operator = new Joystick(1);	//Instantiate the joysticks
+    	Robot.driver = new Joystick(0);
+    	
+    	opA = new JoystickButton(Robot.operator, 1);	//Add all buttons to the joystick
+    	opB = new JoystickButton(Robot.operator, 2);
+    	opX = new JoystickButton(Robot.operator, 3);
+    	opY = new JoystickButton(Robot.operator, 4);
+    	opRB = new JoystickButton(Robot.operator, 5);
+    	opLB = new JoystickButton(Robot.operator, 6);
+    	opStart = new JoystickButton(Robot.operator, 8);
 
         // SmartDashboard Buttons
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
