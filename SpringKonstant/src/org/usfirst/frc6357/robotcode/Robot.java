@@ -46,15 +46,6 @@ public class Robot extends TimedRobot
         // Add commands to Autonomous Sendable Chooser
 
         chooser.addDefault("Autonomous Command", new AutonomousCommand());
-
-        SmartDashboard.putData("Auto mode", chooser);
-        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(2));
-        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(5));
-        SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(1));
-        SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(4));
-        
-        NetworkTable server = NetworkTableInstance.getDefault().getTable("SmartDashboard");
-        server.getEntry("Joystick Y-Inputs").setDouble(0);
         
     }
 
@@ -108,5 +99,18 @@ public class Robot extends TimedRobot
     public void teleopPeriodic() 
     {
         Scheduler.getInstance().run();
+        
+        SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(2));
+        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(5));
+//       SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(1));
+//       SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(4));
+        SmartDashboard.putNumberArray("Joystick X-Inputs", new double[] {-1 * driver.getRawAxis(1), -1 * driver.getRawAxis(4)});
+        SmartDashboard.putNumber("Joystick Left Trigger", driver.getRawAxis(3));
+        SmartDashboard.putNumber("Joystick Right Trigger", driver.getRawAxis(3));
+        //SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(3));
+        
+        NetworkTable server = NetworkTableInstance.getDefault().getTable("SmartDashboard");
+        server.getEntry("Joystick Y-Inputs").setDouble(0);
     }
 }
