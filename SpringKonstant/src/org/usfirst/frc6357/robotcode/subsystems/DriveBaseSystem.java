@@ -4,9 +4,11 @@ import org.usfirst.frc6357.robotcode.Ports;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  * The DriveBaseSystem subsystem controls all the basic functions of the speed
@@ -31,6 +33,11 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseFrontRightMaster; // Master speed controller
     private final SpeedController baseCenterRight;
     private final SpeedController baseBackRight;
+
+    // Strafing system motors and state
+    private final SpeedController baseStrafe;
+    private final Solenoid baseStrafeSolenoid;
+    private boolean baseStrafeDeployed;
 
     /**
      * The DriveBaseSystem constructor handles all the actuator object creation, and
@@ -64,12 +71,18 @@ public class DriveBaseSystem extends Subsystem
         // speed controller
         ((WPI_TalonSRX) baseCenterLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
         ((WPI_TalonSRX) baseBackLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
+
+        baseStrafeDeployed = false;
+
+        // STRAFE MOTOR CONTROLLER
+        baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
+        baseStrafeSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoid);
     }
 
     /**
      * This method is used to send a double to the speed controller on the left side
      * of the robot.
-     * 
+     *
      * @param speed
      *            - speed is the double number between 1 and -1, usually from the
      *            joystick axis.
@@ -82,7 +95,7 @@ public class DriveBaseSystem extends Subsystem
     /**
      * This method is used to send a double to the speed controller on the right
      * side of the robot.
-     * 
+     *
      * @param speed
      *            - speed is the double number between 1 and -1, usually from the
      *            joystick axis.
@@ -90,6 +103,54 @@ public class DriveBaseSystem extends Subsystem
     public void setRightSpeed(double speed)
     {
         baseFrontRightMaster.set(speed);
+    }
+
+    /**
+     * This method is used to set the speed of the strafing motor.
+     *
+     * @param speed
+     *            - speed is the double number between 1 and -1, usually from the
+     *            joystick axis.
+     */
+    public void setStrafeSpeed(double speed)
+    {
+        baseStrafe.set(speed);
+    }
+
+    /**
+     * This method is used to deploy or stow the strafing mechanism.
+     *
+     * @param state
+     *            - state us true to deploy the strafing mechanism or false to stow it.
+     */
+    public void deployStrafe(boolean state)
+    {
+        baseStrafeSolenoid.set(state);
+        baseStrafeDeployed = state;
+    }
+
+    /**
+     * This method will toggle the deployment state of the strafe mechanism. It it's currently
+     * deployed, this call will stow it and vice versa.
+     *
+     * @param None
+     * @return Returns the new state of the strafing mechanism, true if deployed, false if stowed.
+     */
+    public boolean toggleStrafe()
+    {
+        deployStrafe(!baseStrafeDeployed);
+        return(baseStrafeDeployed);
+    }
+
+    /**
+     * This method return the current state of the strafing mechanism.
+     *
+     * @param None
+     * @return Returns the current state of the strafing mechanism, true if deployed, false if stowed.
+     */
+    public boolean getStrafeState()
+    {
+        return(baseStrafeDeployed);
     }
 
     /**

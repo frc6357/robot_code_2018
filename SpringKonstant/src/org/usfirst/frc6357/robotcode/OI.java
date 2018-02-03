@@ -6,6 +6,8 @@
 package org.usfirst.frc6357.robotcode;
 
 import org.usfirst.frc6357.robotcode.Ports;
+import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
+import org.usfirst.frc6357.robotcode.commands.StrafeStow;
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -53,20 +55,28 @@ public class OI
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
     private Button buttonIntakeSwing;
+    private Button buttonStrafeDeploy;
+    private Button buttonStrafeStow;
 
     public OI()
     {
         // Instantiate the joystick devices.
         joystickOperator = new Joystick(Ports.OIOperatorJoystick);
-        joystickDriver = new Joystick(Ports.OIDriverJoystick);
+        joystickDriver   = new Joystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
-        buttonDeployClimb = new JoystickButton(joystickOperator, Ports.OIOperatorClimbDeploy);
-        buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
-        buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
-        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
+        buttonDeployClimb  = new JoystickButton(joystickOperator, Ports.OIOperatorClimbDeploy);
+        buttonIntakeIn     = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
+        buttonIntakeOut    = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
+        buttonIntakeSwing  = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
 
-        // SmartDashboard Buttons
+        buttonStrafeDeploy = new JoystickButton(joystickDriver, Ports.OIDriverStrafeDeploy);
+        buttonStrafeStow   = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
+
+        buttonStrafeDeploy.whenPressed(new StrafeDeploy());
+        buttonStrafeStow.whenPressed(new StrafeStow());
+
+        // SmartDashboard insertions for autonomous command chooser.
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
     }
 

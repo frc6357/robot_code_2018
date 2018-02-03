@@ -24,16 +24,14 @@ public class Ports
     // RoboRio Channel Assignments for robot motors and actuators
     //
 
+    // **********************
+    //  Assorted peripherals
+    // **********************
+    public static final int PCM_ID                  = 50; // CAN ID 50
+
     // *****************
     // Drive Subsystem
     // *****************
-
-    // All motors will be controlled by CAN so the IDs here
-    // are CAN IDs. For switches and solenoids, the values are
-    // RoboRio port numbers. For general purpose IO control, inputs
-    // are assigned from port 0 upwards and outputs from port 9
-    // downwards.
-
     public static final int DriveLeftFrontMotor     = 10; // CAN ID 10
     public static final int DriveLeftCenterMotor    = 11; // CAN ID 11
     public static final int DriveLeftRearMotor      = 15; // CAN ID 15
@@ -44,7 +42,7 @@ public class Ports
 
     public static final int DriveStrafeMotor        = 17; // CAN ID 17
 
-    public static final int DriveStrafeSolenoid     = 9;  // DIO output 9
+    public static final int DriveStrafeSolenoid     = 0;  // PCM output 0
 
     public static final int DriveLeftEncoderA       = 2;  // DIO input 2
     public static final int DriveLeftEncoderB       = 3;  // DIO input 1
@@ -64,7 +62,7 @@ public class Ports
     // ******************
     public static final int IntakeLeftMotor         = 30;  // CAN ID 30
     public static final int IntakeRightMotor        = 31;  // CAN ID 31
-    public static final int IntakeTiltSolenoid      = 8;   // DIO output 8
+    public static final int IntakeTiltSolenoid      = 1;   // PCM output 1
 
     // ***************
     // Arm Subsystem
@@ -96,7 +94,8 @@ public class Ports
     // toggle the strafing wheel. In the final code, it is hoped that this
     // will be done automatically depending upon the state of the drive
     // joysticks.
-    public static final int OIDriverStrafeToggle    = 2;   // Button B
+    public static final int OIDriverStrafeDeploy    = 5;   // Left bumper
+    public static final int OIDriverStrafeStow      = 6;   // Right bumper
 
     // *********************
     // Operator Controller

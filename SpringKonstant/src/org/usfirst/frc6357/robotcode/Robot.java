@@ -104,19 +104,23 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight;
+        double driveLeft, driveRight, driveStrafe;
 
         Scheduler.getInstance().run();
 
         driveLeft  = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive);
         driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive);
+        driveStrafe = oi.getDriverJoystickValue(Ports.OIDriverStrafe);
 
         driveBaseSystem.setLeftSpeed(driveLeft);
         driveBaseSystem.setRightSpeed(driveRight);
+        driveBaseSystem.setStrafeSpeed(driveStrafe);
 
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Drive Left Raw", driveLeft);
         SmartDashboard.putNumber("Drive Right Raw", driveRight);
+        SmartDashboard.putNumber("Drive Strafe Raw", driveStrafe);
+        SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
 
         NetworkTable server = NetworkTableInstance.getDefault().getTable("SmartDashboard");
         server.getEntry("Joystick Y-Inputs").setDouble(0);
