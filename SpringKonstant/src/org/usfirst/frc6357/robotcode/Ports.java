@@ -28,6 +28,13 @@ public class Ports
     //*****************
     // Drive Subsystem
     //*****************
+
+    // All motors will be controlled by CAN so the IDs here
+    // are CAN IDs. For switches and solenoids, the values are
+    // RoboRio port numbers. For general purpose IO control, inputs
+    // are assigned from port 0 upwards and outputs from port 9
+    // downwards.
+
     public final int DriveLeftFrontMotor     = 10;
     public final int DriveLeftCenterMotor    = 11;
     public final int DriveLeftRearMotor      = 15;
@@ -36,9 +43,9 @@ public class Ports
     public final int DriveRightCenterMotor   = 14;
     public final int DriveRightRearMotor     = 16;
 
-    public final int DriveStrafeMotor        = -1;
+    public final int DriveStrafeMotor        = 17;
 
-    public final int DriveStrafeSolenoid     = -1;
+    public final int DriveStrafeSolenoid     = 9;
 
     public final int DriveLeftEncoderA       = 2;
     public final int DriveLeftEncoderB       = 3;
@@ -50,52 +57,53 @@ public class Ports
     // Climb Subsystem
     //*****************
     public final int ClimbWinchMotor         = 20;
+    public final int ClimbTopLimitSwitch     = 4;
+    public final int ClimpBottomLimitSwitch  = 5;
 
     //******************
     // Intake Subsystem
     //******************
-    public final int IntakeLeftMotor         = -1;
-    public final int IntakeRightMotor        = -1;
-    public final int IntakeLimitSwitch       = -1;
+    public final int IntakeLeftMotor         = 30;
+    public final int IntakeRightMotor        = 31;
+    public final int IntakeTiltSolenoid      = 8;
 
     //***************
     // Arm Subsystem
     //***************
-    public final int ArmElevationMotor       = -1;
-    public final int ArmTopLimitSwitch       = -1;
-    public final int ArmBottomLimitSwitch    = -1;
-    public final int ArmEncoderA             = -1;
-    public final int ArmEncoderB             = -1;
+    public final int ArmElevationMotor       = 40;
+    public final int ArmEncoderA             = 6;
+    public final int ArmEncoderB             = 7;
 
     //
     // Driver's and operator's OI channel assignments
     //
 
     // TODO: Finalize these with the drivers. This assumes the same
-    // Logitech game controllers as were used in 2017
+    // Logitech game controllers as were used in 2017.
+    //
+    // See the IO subsystem specification for a graphic showing button
+    // and axis IDs for the Logitech F310 gamepads in use.
 
     //********************
     // Drivers Controller
     //********************
     public final int OIDriverJoystick         = 0;
 
-    public final int OIDriverLeftDrive        = -1;
-    public final int OIDriverRightDrive       = -1;
-    public final int OIDriverLeftStrafe       = -1;
-    public final int OIDriverRightStrafe      = -1;
+    public final int OIDriverLeftDrive        = 2; // Left Joystick Y
+    public final int OIDriverRightDrive       = 5; // Right Joystick Y
+    public final int OIDriverStrafe           = 3; // Lower triggers
 
     //*********************
     // Operator Controller
     //*********************
     public final int IOOperatorJoystick       = 1;
 
-    public final int OIOperatorArmUp          = -1;
-    public final int OIOperatorArmDown        = -1;
+    public final int OIOperatorArm            = 1; // Left joystick Y
 
-    public final int OIOperatorClimbUp        = -1;
-    public final int OIOperatorClimbDown      = -1;
+    public final int OIOperatorClimbDeploy    = 2; // Button B
+    public final int OIOperatorClimbWinch     = 4; // Right joystick Y
 
-    public final int OIOperatorIntakeIn       = -1;
-    public final int OIOperatorIntakeOut      = -1;
-    public final int OIOperatorIntakeSwing    = -1;
+    public final int OIOperatorIntakeIn       = 1; // Button A
+    public final int OIOperatorIntakeOut      = 4; // Button Y
+    public final int OIOperatorIntakeSwing    = 3; // Button X
 }
