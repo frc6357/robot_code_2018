@@ -84,7 +84,7 @@ public class OI
      */
     public double getDriverJoystickValue(int port)
     {
-        return joystickDriver.getRawAxis(port);
+        return -1 * joystickDriver.getRawAxis(port);
     }
 
     /**
@@ -101,6 +101,6 @@ public class OI
      */
     public double getOperatorJoystickValue(int port)
     {
-        return joystickOperator.getRawAxis(port);
+        return -1 * joystickOperator.getRawAxis(port);
     }
 }

@@ -46,7 +46,7 @@ public class DriveBaseSystem extends Subsystem
         baseBackLeft = new WPI_TalonSRX(Ports.DriveLeftRearMotor);
 
         // RIGHT DRIVE TALONS
-        baseFrontRightMaster = new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
+        baseFrontRightMaster = new WPI_TalonSRX(Ports.DriveRightFrontMotor);
         baseCenterRight = new WPI_TalonSRX(Ports.DriveRightCenterMotor);
         baseBackRight = new WPI_TalonSRX(Ports.DriveRightRearMotor);
 

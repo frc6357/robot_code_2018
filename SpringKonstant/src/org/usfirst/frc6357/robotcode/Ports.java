@@ -88,7 +88,7 @@ public class Ports
     // ********************
     public static final int OIDriverJoystick = 0;
 
-    public static final int OIDriverLeftDrive = 2; // Left Joystick Y
+    public static final int OIDriverLeftDrive = 1; // Left Joystick Y
     public static final int OIDriverRightDrive = 5; // Right Joystick Y
     public static final int OIDriverStrafe = 3; // Lower triggers
 
