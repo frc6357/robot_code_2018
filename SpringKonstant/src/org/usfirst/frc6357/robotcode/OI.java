@@ -13,12 +13,12 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
+public class OI
+{
     //// CREATING BUTTONS
     // One type of button is a joystick button which is any button on a joystick.
     // You create one by telling it which joystick it's on and which button
@@ -42,7 +42,7 @@ public class OI {
     // the button is released.
     // button.whileHeld(new ExampleCommand());
 
-    // Start the command when the button is released  and let it run the command
+    // Start the command when the button is released and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
 
@@ -58,12 +58,12 @@ public class OI {
     {
         // Instantiate the joystick devices.
         joystickOperator = new Joystick(Ports.OIOperatorJoystick);
-        joystickDriver   = new Joystick(Ports.OIDriverJoystick);
+        joystickDriver = new Joystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
         buttonDeployClimb = new JoystickButton(joystickOperator, Ports.OIOperatorClimbDeploy);
-        buttonIntakeIn    = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
-        buttonIntakeOut   = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
+        buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
+        buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
         buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
 
         // SmartDashboard Buttons
@@ -72,13 +72,15 @@ public class OI {
 
     /**
      *
-     * This function may be called to retrieve the current, possibly-filtered, value of
-     * a given joystick axis on the driver joystick device.
+     * This function may be called to retrieve the current, possibly-filtered, value
+     * of a given joystick axis on the driver joystick device.
      *
-     * @param port The axis number for the joystick being queried. This will come from
-     * Ports.java.
-     * @return returnType The value of the joystick axis. Note that this may be a filtered
-     * value if we subclass the joystick to allow control of deadbands or response curves.
+     * @param port
+     *            The axis number for the joystick being queried. This will come
+     *            from Ports.java.
+     * @return returnType The value of the joystick axis. Note that this may be a
+     *         filtered value if we subclass the joystick to allow control of
+     *         deadbands or response curves.
      */
     public double getDriverJoystickValue(int port)
     {
@@ -87,17 +89,18 @@ public class OI {
 
     /**
      *
-     * This function may be called to retrieve the current, possibly-filtered, value of
-     * a given joystick axis on the operator joystick device.
+     * This function may be called to retrieve the current, possibly-filtered, value
+     * of a given joystick axis on the operator joystick device.
      *
-     * @param port The axis number for the joystick being queried. This will come from
-     * Ports.java.
-     * @return returnType The value of the joystick axis. Note that this may be a filtered
-     * value if we subclass the joystick to allow control of deadbands or response curves.
+     * @param port
+     *            The axis number for the joystick being queried. This will come
+     *            from Ports.java.
+     * @return returnType The value of the joystick axis. Note that this may be a
+     *         filtered value if we subclass the joystick to allow control of
+     *         deadbands or response curves.
      */
     public double getOperatorJoystickValue(int port)
     {
         return joystickOperator.getRawAxis(port);
     }
 }
-
