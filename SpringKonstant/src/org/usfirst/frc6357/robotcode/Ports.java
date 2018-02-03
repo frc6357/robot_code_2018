@@ -11,15 +11,14 @@ package org.usfirst.frc6357.robotcode;
  * on the understanding that using a decscriptive name is very much clearer than an
  * opaque number.
  *
- * @author dave
+ * @author DW
  *
  */
 public class Ports
 {
     // TODO: The numbers here are completely fictitious for now. Get with the
-    // hardware teams to determine the actual port assignments! Anything assigned
-    // value -1 has not been checked with the designers and is currently invalid.
-    // Drive motors are set to match the 2017 robot assignments.
+    // hardware teams to determine the actual port assignments! Drive motors are set
+    // to match the 2017 robot assignments.
 
     //
     // RoboRio Channel Assignments for robot motors and actuators
@@ -96,7 +95,7 @@ public class Ports
     //*********************
     // Operator Controller
     //*********************
-    public static final int IOOperatorJoystick       = 1;
+    public static final int OIOperatorJoystick       = 1;
 
     public static final int OIOperatorArm            = 1; // Left joystick Y
 
