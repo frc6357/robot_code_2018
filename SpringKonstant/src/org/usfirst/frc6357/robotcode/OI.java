@@ -80,7 +80,7 @@ public class OI {
      * @return returnType The value of the joystick axis. Note that this may be a filtered
      * value if we subclass the joystick to allow control of deadbands or response curves.
      */
-    public double GetDriverJoystickValue(int port)
+    public double getDriverJoystickValue(int port)
     {
         return JoystickDriver.getRawAxis(port);
     }
@@ -95,7 +95,7 @@ public class OI {
      * @return returnType The value of the joystick axis. Note that this may be a filtered
      * value if we subclass the joystick to allow control of deadbands or response curves.
      */
-    public double GetOperatorJoystickValue(int port)
+    public double getOperatorJoystickValue(int port)
     {
         return JoystickOperator.getRawAxis(port);
     }

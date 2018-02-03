@@ -40,17 +40,19 @@ public class DriveBaseSystem extends Subsystem
 		super();
 		
 		// LEFT DRIVE TALONS
-		baseFrontLeftMaster = new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
-		baseCenterLeft = new WPI_TalonSRX(Ports.DriveLeftCenterMotor);
-		baseBackLeft = new WPI_TalonSRX(Ports.DriveLeftRearMotor);
+		baseFrontLeftMaster 	= new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
+		baseCenterLeft 			= new WPI_TalonSRX(Ports.DriveLeftCenterMotor);
+		baseBackLeft 			= new WPI_TalonSRX(Ports.DriveLeftRearMotor);
 	
 		// RIGHT DRIVE TALONS
-		baseFrontRightMaster = new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
-		baseFrontRightMaster.setInverted(true);
-		baseCenterRight = new WPI_TalonSRX(Ports.DriveRightCenterMotor);
-		baseCenterRight.setInverted(true);
-		baseBackRight = new WPI_TalonSRX(Ports.DriveRightRearMotor);
+		baseFrontRightMaster	= new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
+		baseCenterRight			= new WPI_TalonSRX(Ports.DriveRightCenterMotor);
+		baseBackRight 			= new WPI_TalonSRX(Ports.DriveRightRearMotor);
+		
+		// Inverts the speed controllers so they do not spin the wrong way.
 		baseBackRight.setInverted(true);
+		baseCenterRight.setInverted(true);
+		baseFrontRightMaster.setInverted(true);
 		
 		// This sets the all the speed controllers on the right side to follow the center speed controller
 		((WPI_TalonSRX) baseBackRight).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontRightMaster).getDeviceID());
@@ -80,7 +82,7 @@ public class DriveBaseSystem extends Subsystem
 	}
 	
 	/**
-	 * Each subsystem may, but is not required to, have a default command which is scheduled whenever the subsystem is idle.f 
+	 * Each subsystem may, but is not required to, have a default command which is scheduled whenever the subsystem is idle.
 	 * If default command is needed use "setDefaultCommand(new MyDefaultCommand());"
 	 */
 	@Override

@@ -107,6 +107,9 @@ public class Robot extends TimedRobot
     {
         Scheduler.getInstance().run();
         
+        driveBaseSystem.setLeftSpeed(oi.getDriverJoystickValue(Ports.OIDriverLeftDrive));
+        driveBaseSystem.setRightSpeed(oi.getDriverJoystickValue(Ports.OIDriverRightDrive));
+        
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(2));
         SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(5));
