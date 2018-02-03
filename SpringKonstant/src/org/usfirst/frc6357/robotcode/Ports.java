@@ -35,44 +35,44 @@ public class Ports
     // are assigned from port 0 upwards and outputs from port 9
     // downwards.
 
-    public final int DriveLeftFrontMotor     = 10;
-    public final int DriveLeftCenterMotor    = 11;
-    public final int DriveLeftRearMotor      = 15;
+    public static final int DriveLeftFrontMotor     = 10;
+    public static final int DriveLeftCenterMotor    = 11;
+    public static final int DriveLeftRearMotor      = 15;
 
-    public final int DriveRightFrontMotor    = 12;
-    public final int DriveRightCenterMotor   = 14;
-    public final int DriveRightRearMotor     = 16;
+    public static final int DriveRightFrontMotor    = 12;
+    public static final int DriveRightCenterMotor   = 14;
+    public static final int DriveRightRearMotor     = 16;
 
-    public final int DriveStrafeMotor        = 17;
+    public static final int DriveStrafeMotor        = 17;
 
-    public final int DriveStrafeSolenoid     = 9;
+    public static final int DriveStrafeSolenoid     = 9;
 
-    public final int DriveLeftEncoderA       = 2;
-    public final int DriveLeftEncoderB       = 3;
+    public static final int DriveLeftEncoderA       = 2;
+    public static final int DriveLeftEncoderB       = 3;
 
-    public final int DriveRightEncoderA      = 0;
-    public final int DriveRightEncoderB      = 1;
+    public static final int DriveRightEncoderA      = 0;
+    public static final int DriveRightEncoderB      = 1;
 
     //*****************
     // Climb Subsystem
     //*****************
-    public final int ClimbWinchMotor         = 20;
-    public final int ClimbTopLimitSwitch     = 4;
-    public final int ClimpBottomLimitSwitch  = 5;
+    public static final int ClimbWinchMotor         = 20;
+    public static final int ClimbTopLimitSwitch     = 4;
+    public static final int ClimpBottomLimitSwitch  = 5;
 
     //******************
     // Intake Subsystem
     //******************
-    public final int IntakeLeftMotor         = 30;
-    public final int IntakeRightMotor        = 31;
-    public final int IntakeTiltSolenoid      = 8;
+    public static final int IntakeLeftMotor         = 30;
+    public static final int IntakeRightMotor        = 31;
+    public static final int IntakeTiltSolenoid      = 8;
 
     //***************
     // Arm Subsystem
     //***************
-    public final int ArmElevationMotor       = 40;
-    public final int ArmEncoderA             = 6;
-    public final int ArmEncoderB             = 7;
+    public static final int ArmElevationMotor       = 40;
+    public static final int ArmEncoderA             = 6;
+    public static final int ArmEncoderB             = 7;
 
     //
     // Driver's and operator's OI channel assignments
@@ -87,23 +87,23 @@ public class Ports
     //********************
     // Drivers Controller
     //********************
-    public final int OIDriverJoystick         = 0;
+    public static final int OIDriverJoystick         = 0;
 
-    public final int OIDriverLeftDrive        = 2; // Left Joystick Y
-    public final int OIDriverRightDrive       = 5; // Right Joystick Y
-    public final int OIDriverStrafe           = 3; // Lower triggers
+    public static final int OIDriverLeftDrive        = 2; // Left Joystick Y
+    public static final int OIDriverRightDrive       = 5; // Right Joystick Y
+    public static final int OIDriverStrafe           = 3; // Lower triggers
 
     //*********************
     // Operator Controller
     //*********************
-    public final int IOOperatorJoystick       = 1;
+    public static final int IOOperatorJoystick       = 1;
 
-    public final int OIOperatorArm            = 1; // Left joystick Y
+    public static final int OIOperatorArm            = 1; // Left joystick Y
 
-    public final int OIOperatorClimbDeploy    = 2; // Button B
-    public final int OIOperatorClimbWinch     = 4; // Right joystick Y
+    public static final int OIOperatorClimbDeploy    = 2; // Button B
+    public static final int OIOperatorClimbWinch     = 4; // Right joystick Y
 
-    public final int OIOperatorIntakeIn       = 1; // Button A
-    public final int OIOperatorIntakeOut      = 4; // Button Y
-    public final int OIOperatorIntakeSwing    = 3; // Button X
+    public static final int OIOperatorIntakeIn       = 1; // Button A
+    public static final int OIOperatorIntakeOut      = 4; // Button Y
+    public static final int OIOperatorIntakeSwing    = 3; // Button X
 }
