@@ -31,8 +31,6 @@ public class Robot extends TimedRobot
 
     public static OI oi;
 
-    public static Joystick operator, driver;
-
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -106,21 +104,19 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
+        double driveLeft, driveRight;
+
         Scheduler.getInstance().run();
 
-        driveBaseSystem.setLeftSpeed(oi.getDriverJoystickValue(Ports.OIDriverLeftDrive));
-        driveBaseSystem.setRightSpeed(oi.getDriverJoystickValue(Ports.OIDriverRightDrive));
+        driveLeft  = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive);
+        driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive);
+
+        driveBaseSystem.setLeftSpeed(driveLeft);
+        driveBaseSystem.setRightSpeed(driveRight);
 
         SmartDashboard.putData("Auto mode", chooser);
-        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(2));
-        SmartDashboard.putNumber("Joystick Y-Inputs", -1 * driver.getRawAxis(5));
-        // SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(1));
-        // SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(4));
-        SmartDashboard.putNumberArray("Joystick X-Inputs", new double[]
-        { -1 * driver.getRawAxis(1), -1 * driver.getRawAxis(4) });
-        SmartDashboard.putNumber("Joystick Left Trigger", driver.getRawAxis(3));
-        SmartDashboard.putNumber("Joystick Right Trigger", driver.getRawAxis(3));
-        // SmartDashboard.putNumber("Joystick X-Inputs", driver.getRawAxis(3));
+        SmartDashboard.putNumber("Drive Left Raw", driveLeft);
+        SmartDashboard.putNumber("Drive Right Raw", driveRight);
 
         NetworkTable server = NetworkTableInstance.getDefault().getTable("SmartDashboard");
         server.getEntry("Joystick Y-Inputs").setDouble(0);
