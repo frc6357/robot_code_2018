@@ -2,6 +2,7 @@
 package org.usfirst.frc6357.robotcode;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
+import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -25,6 +26,9 @@ public class Robot extends TimedRobot
     Command autonomousCommand;
     SendableChooser<Command> chooser = new SendableChooser<>();
 
+    //Subsystems
+    public static DriveBaseSystem driveBaseSystem;
+    
     public static OI oi;
     
     public static Joystick operator, driver;
@@ -36,7 +40,10 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit() 
     {
-
+    	// Subsystem Creation
+    	driveBaseSystem = new DriveBaseSystem();
+    	
+    	
         // OI must be constructed after subsystems. If the OI creates Commands
         //(which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
