@@ -45,26 +45,26 @@ public class OI {
     // Start the command when the button is released  and let it run the command
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
-	
-    private Joystick JoystickOperator;
-    private Joystick JoystickDriver;
-    
-	private Button ButtonDeployClimb;
-    private Button ButtonIntakeIn;
-    private Button ButtonIntakeOut;
-    private Button ButtonIntakeSwing;
-	
-    public OI() 
+
+    private Joystick joystickOperator;
+    private Joystick joystickDriver;
+
+    private Button buttonDeployClimb;
+    private Button buttonIntakeIn;
+    private Button buttonIntakeOut;
+    private Button buttonIntakeSwing;
+
+    public OI()
     {
         // Instantiate the joystick devices.
-    	JoystickOperator = new Joystick(Ports.OIOperatorJoystick);
-    	JoystickDriver   = new Joystick(Ports.OIDriverJoystick);
-    	
+        joystickOperator = new Joystick(Ports.OIOperatorJoystick);
+        joystickDriver   = new Joystick(Ports.OIDriverJoystick);
+
         // Create all the buttons we will be using.
-    	ButtonDeployClimb = new JoystickButton(JoystickOperator, Ports.OIOperatorClimbDeploy);
-    	ButtonIntakeIn    = new JoystickButton(JoystickOperator, Ports.OIOperatorIntakeIn);
-        ButtonIntakeOut   = new JoystickButton(JoystickOperator, Ports.OIOperatorIntakeOut);
-        ButtonIntakeSwing = new JoystickButton(JoystickOperator, Ports.OIOperatorIntakeSwing);
+        buttonDeployClimb = new JoystickButton(joystickOperator, Ports.OIOperatorClimbDeploy);
+        buttonIntakeIn    = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
+        buttonIntakeOut   = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
+        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
 
         // SmartDashboard Buttons
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
@@ -72,7 +72,7 @@ public class OI {
 
     /**
      *
-     * This function may be called to retrieve the current, possibly-filtered, value of 
+     * This function may be called to retrieve the current, possibly-filtered, value of
      * a given joystick axis on the driver joystick device.
      *
      * @param port The axis number for the joystick being queried. This will come from
@@ -82,12 +82,12 @@ public class OI {
      */
     public double getDriverJoystickValue(int port)
     {
-        return JoystickDriver.getRawAxis(port);
+        return joystickDriver.getRawAxis(port);
     }
 
     /**
      *
-     * This function may be called to retrieve the current, possibly-filtered, value of 
+     * This function may be called to retrieve the current, possibly-filtered, value of
      * a given joystick axis on the operator joystick device.
      *
      * @param port The axis number for the joystick being queried. This will come from
@@ -97,7 +97,7 @@ public class OI {
      */
     public double getOperatorJoystickValue(int port)
     {
-        return JoystickOperator.getRawAxis(port);
+        return joystickOperator.getRawAxis(port);
     }
 }
 
