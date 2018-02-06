@@ -1,15 +1,17 @@
 
 package org.usfirst.frc6357.robotcode;
 
+import java.io.IOException;
+
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
+import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -24,7 +26,7 @@ public class Robot extends TimedRobot
 {
 
     Command autonomousCommand;
-    SendableChooser<Command> chooser = new SendableChooser<>();
+    SendableChooser<String> chooser = new SendableChooser<>(); //Lets you pick from a group of commands, whose references are strings
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
@@ -49,8 +51,7 @@ public class Robot extends TimedRobot
 
         // Add commands to Autonomous Sendable Chooser
 
-        chooser.addDefault("Autonomous Command", new AutonomousCommand());
-
+        chooser.addDefault("Autonomous Command", "src/org/usfirst/frc6457/robotcode/commands/AutoSheets/Test.csv");
     }
 
     /**
@@ -72,7 +73,14 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        autonomousCommand = chooser.getSelected();
+    	try
+    	{
+    		autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
+    	}
+    	catch(IOException e)
+    	{
+    	}
+
         // schedule the autonomous command (example)
         if (autonomousCommand != null)
             autonomousCommand.start();

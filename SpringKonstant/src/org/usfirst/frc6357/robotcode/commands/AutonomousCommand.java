@@ -18,9 +18,37 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class AutonomousCommand extends Command
 {
-    public AutonomousCommand()
+	public AutonomousCommand()
+	{
+		
+	}
+	
+	/**
+	 * Overloaded constructor, creates a commandgroup by parsing 2D string array for data
+	 * @param s2d the 2D string array containing data from a csv for parsing with the format specified in CSVReader
+	 */
+    public AutonomousCommand(String[][] s2d)
     {
-
+    	/*
+    	 * Should read through the s2d for references and command types, then construct a command group
+    	 * Format is: line[0] can be ignored, line[boo][0] is function name, line[foo][1 : line[foo].length - 1] are params
+    	 * Afterwards, will execute command group
+    	 */
+    	
+    	for(int row=1; row < s2d.length; row++)
+    	{
+    		switch(s2d[row][0])
+    		{
+    			case "Drive":
+    				System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
+    				break;
+    			case "Turn":
+    				System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
+    				break;
+    			default:
+    				System.out.println("COMMAND UNRECOGNIZED ON LINE " + row);
+    		}
+    	}
     }
 
     // Called just before this Command runs the first time
