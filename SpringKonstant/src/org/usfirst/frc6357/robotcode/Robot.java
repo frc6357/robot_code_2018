@@ -6,12 +6,15 @@ import java.io.IOException;
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.tools.CSVReader;
+import org.usfirst.frc6357.robotcode.subsystems.IMU;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -108,7 +111,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight, driveStrafe;
+        double driveLeft, driveRight, driveStrafe, angle;
 
         Scheduler.getInstance().run();
 
@@ -120,10 +123,13 @@ public class Robot extends TimedRobot
         driveBaseSystem.setRightSpeed(driveRight);
         driveBaseSystem.setStrafeSpeed(driveStrafe);
 
+        angle = driveBaseSystem.driveIMU.updatePeriodic();
+
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Drive Left Raw", driveLeft);
         SmartDashboard.putNumber("Drive Right Raw", driveRight);
         SmartDashboard.putNumber("Drive Strafe Raw", driveStrafe);
         SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
+        SmartDashboard.putNumber("IMU Angle", angle);
     }
 }

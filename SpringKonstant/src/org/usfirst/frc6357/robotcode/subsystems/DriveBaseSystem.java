@@ -1,6 +1,7 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import org.usfirst.frc6357.robotcode.Ports;
+import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
@@ -39,6 +40,10 @@ public class DriveBaseSystem extends Subsystem
     private final Solenoid baseStrafeSolenoid;
     private boolean baseStrafeDeployed;
 
+    // An instance of the inertial management unit to allow angle measurements. We make
+    // this public to allow the robot to access it to make periodic angle readings.
+    public final IMU driveIMU;
+
     /**
      * The DriveBaseSystem constructor handles all the actuator object creation, and
      * sets the follow mode for the speed controllers
@@ -61,6 +66,11 @@ public class DriveBaseSystem extends Subsystem
         baseBackRight.setInverted(true);
         baseCenterRight.setInverted(true);
         baseFrontRightMaster.setInverted(true);
+
+        // Configure the IMU.
+        driveIMU = new IMU();
+        driveIMU.setMajorAxis(OrientationAxis.X);
+        driveIMU.setMovingAverageSamples(20);
 
         // This sets the all the speed controllers on the right side to follow the
         // center speed controller
