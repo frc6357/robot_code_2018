@@ -2,7 +2,6 @@ package org.usfirst.frc6357.robotcode.commands;
 
 import org.usfirst.frc6357.robotcode.Robot;
 import edu.wpi.first.wpilibj.command.Command;
-import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 
 /**
  * The StrafeStow class implements the command which will cause the drive system

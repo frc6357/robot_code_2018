@@ -7,8 +7,6 @@ import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
