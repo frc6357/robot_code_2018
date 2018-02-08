@@ -51,7 +51,6 @@ public class OI
     private Joystick joystickOperator;
     private Joystick joystickDriver;
 
-    private Button buttonDeployClimb;
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
     private Button buttonIntakeSwing;
@@ -65,7 +64,6 @@ public class OI
         joystickDriver   = new Joystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
-        buttonDeployClimb  = new JoystickButton(joystickOperator, Ports.OIOperatorClimbDeploy);
         buttonIntakeIn     = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut    = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
         buttonIntakeSwing  = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
@@ -88,13 +86,22 @@ public class OI
      * @param port
      *            The axis number for the joystick being queried. This will come
      *            from Ports.java.
+     * @ param invert
+     *            If true, the returned joystick value will be inverted. If false,
+     *            the unmodified joystick value is returned.
      * @return returnType The value of the joystick axis. Note that this may be a
      *         filtered value if we subclass the joystick to allow control of
      *         deadbands or response curves.
      */
-    public double getDriverJoystickValue(int port)
+    public double getDriverJoystickValue(int port, boolean invert)
     {
-        return -1 * joystickDriver.getRawAxis(port);
+        double multiplier = 1.0;
+
+        if(invert)
+        {
+            multiplier = -1.0;
+        }
+        return multiplier * joystickDriver.getRawAxis(port);
     }
 
     /**
@@ -105,12 +112,21 @@ public class OI
      * @param port
      *            The axis number for the joystick being queried. This will come
      *            from Ports.java.
+     * @ param invert
+     *            If true, the returned joystick value will be inverted. If false,
+     *            the unmodified joystick value is returned.
      * @return returnType The value of the joystick axis. Note that this may be a
      *         filtered value if we subclass the joystick to allow control of
      *         deadbands or response curves.
      */
-    public double getOperatorJoystickValue(int port)
+    public double getOperatorJoystickValue(int port, boolean invert)
     {
-        return -1 * joystickOperator.getRawAxis(port);
+        double multiplier = 1.0;
+
+        if(invert)
+        {
+            multiplier = -1.0;
+        }
+        return joystickOperator.getRawAxis(port);
     }
 }
