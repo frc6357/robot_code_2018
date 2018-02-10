@@ -60,9 +60,9 @@ public class IMU extends ADIS16448_IMU
 
         switch(MajorAxis)
         {
-        case X: Angle = getAngleX(); break;
-        case Y: Angle = getAngleY(); break;
-        case Z: Angle = getAngleZ(); break;
+            case X: Angle = getAngleX(); break;
+            case Y: Angle = getAngleY(); break;
+            case Z: Angle = getAngleZ(); break;
         }
 
         if(FirstCall)

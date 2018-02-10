@@ -11,8 +11,8 @@ import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
 import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
 import org.usfirst.frc6357.robotcode.commands.StrafeStow;
 import org.usfirst.frc6357.robotcode.tools.FilteredJoystick;
+import org.usfirst.frc6357.robotcode.tools.filters.*;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +53,8 @@ public class OI
     private FilteredJoystick joystickOperator;
     private FilteredJoystick joystickDriver;
 
+    private FilterDeadband   filterClimbDeadband;
+
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
     private Button buttonIntakeSwing;
@@ -82,6 +84,10 @@ public class OI
         buttonIntakeIn.whenReleased(new IntakeCommand(false, true));
         buttonIntakeOut.whenPressed(new IntakeCommand(true, false));
         buttonIntakeOut.whenReleased(new IntakeCommand(false, false));
+
+        // Set deadbands and response curves for various joystick axes.
+        filterClimbDeadband = new FilterDeadband(0.1);
+        joystickOperator.setFilter(Ports.OIOperatorClimbWinch, filterClimbDeadband);
 
         // SmartDashboard insertions for autonomous command chooser.
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
