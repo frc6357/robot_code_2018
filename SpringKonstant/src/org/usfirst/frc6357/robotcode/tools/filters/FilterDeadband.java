@@ -22,6 +22,7 @@ public class FilterDeadband extends Filter
      * Filters the raw input for a deadbanding zone
      * If the given value is inside the deadband, zero is returned
      * Otherwise, a scale is implemented and slope is readjusted for careful control
+     * @param rawAxis the data to be passed in, from -1 to 1
      */
     @Override
     public double filter(double rawAxis)
