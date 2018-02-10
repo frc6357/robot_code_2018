@@ -140,6 +140,10 @@ public class Robot extends TimedRobot
 
         robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
 
+        SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
+        SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
+        SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
+        SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Drive Left Raw", driveLeft);
         SmartDashboard.putNumber("Drive Right Raw", driveRight);

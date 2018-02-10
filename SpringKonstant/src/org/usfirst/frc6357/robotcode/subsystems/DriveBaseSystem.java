@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
 
 /**
@@ -34,6 +35,10 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseFrontRightMaster; // Master speed controller
     private final SpeedController baseCenterRight;
     private final SpeedController baseBackRight;
+    
+    // Encoders
+    private final Encoder rightEncoder;
+    private final Encoder leftEncoder;
 
     // Strafing system motors and state
     private final SpeedController baseStrafe;
@@ -66,6 +71,10 @@ public class DriveBaseSystem extends Subsystem
         baseBackRight.setInverted(true);
         baseCenterRight.setInverted(true);
         baseFrontRightMaster.setInverted(true);
+        
+        // Encoders
+        leftEncoder = new Encoder(Ports.DriveLeftEncoderA, Ports.DriveLeftEncoderB);
+        rightEncoder = new Encoder(Ports.DriveRightEncoderA, Ports.DriveRightEncoderB);
 
         // Configure the IMU.
         driveIMU = new IMU();
@@ -82,11 +91,14 @@ public class DriveBaseSystem extends Subsystem
         ((WPI_TalonSRX) baseCenterLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
         ((WPI_TalonSRX) baseBackLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
 
-        baseStrafeDeployed = false;
-
         // STRAFE MOTOR CONTROLLER
         baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
         baseStrafeSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoid);
+        
+        baseStrafeDeployed = false;
+        
+        leftEncoder.reset();
+        rightEncoder.reset();
     }
 
     /**
@@ -158,11 +170,32 @@ public class DriveBaseSystem extends Subsystem
      * @param None
      * @return Returns the current state of the strafing mechanism, true if deployed, false if stowed.
      */
+    
     public boolean getStrafeState()
     {
         return(baseStrafeDeployed);
     }
 
+    public double getLeftEncoderRaw() // Returns raw value of the encoder
+    {
+        return leftEncoder.getRaw();
+    } 
+    
+    public double getRightEncoderRaw()  // Returns raw value of the encoder
+    {
+        return rightEncoder.getRaw();
+    }
+    
+    public double getLeftEncoderRate() // Returns the current rate of the encoder
+    {
+        return leftEncoder.getRate();
+    } 
+    
+    public double getRightEncoderRate() // Returns the current rate of the encoder
+    {
+        return rightEncoder.getRate();
+    } 
+    
     /**
      * Each subsystem may, but is not required to, have a default command which is
      * scheduled whenever the subsystem is idle. If default command is needed use
