@@ -162,6 +162,11 @@
       <put url="http://${target}/files${command.dir}">
         <fileset file="${wpilib.ant.dir}/robotCommand" />
       </put>
+      <!-- Deploy the autonomous mode CSV files to the robot  -->
+      <delete url="http://${target}/files${deploy.dir}/AutoSheets/*.csv" />
+      <put url="http://${target}/files${deploy.dir}/AutoSheets/">
+        <fileset file="src/org/usfirst/frc6357/robotcode/commands/AutoSheets/*.csv" />
+      </put>
     </webdav>
     <echo message="[athena-deploy] Starting program." />
     <sshexec host="${target}"
@@ -206,6 +211,11 @@
       <delete url="http://${target}/files${deploy.dir}/${jar}" />
       <put url="http://${target}/files${deploy.dir}/">
         <fileset file="${dist.jar}" />
+      </put>
+      <!-- Deploy the autonomous mode CSV files to the robot  -->
+      <delete url="http://${target}/files${deploy.dir}/AutoSheets/*.csv" />
+      <put url="http://${target}/files${deploy.dir}/AutoSheets/">
+        <fileset file="src/org/usfirst/frc6357/robotcode/commands/AutoSheets/*.csv" />
       </put>
       <!-- The remoteDebugCommand file is used by /usr/local/frc/bin/frcRunRobot.sh on the roboRIO  -->
       <delete url="http://${target}/files${command.dir}/robotDebugCommand" />
