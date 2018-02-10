@@ -4,9 +4,9 @@ package org.usfirst.frc6357.robotcode;
 import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
-import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
-import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
+import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
+import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
 import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
@@ -31,9 +31,9 @@ public class Robot extends TimedRobot
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
-    public static ClimbSystem     climbSystem;
-    public static ArmSystem       armSystem;
-    public static IntakeSystem    intakeSystem;
+    public static ClimbSystem climbSystem;
+    public static ArmSystem armSystem;
+    public static IntakeSystem intakeSystem;
 
     public static OI oi;
 
@@ -46,9 +46,9 @@ public class Robot extends TimedRobot
     {
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
-        climbSystem     = new ClimbSystem();
-        armSystem       = new ArmSystem();
-        intakeSystem    = new IntakeSystem();
+        climbSystem = new ClimbSystem();
+        armSystem = new ArmSystem();
+        intakeSystem = new IntakeSystem();
 
         // OI must be constructed after subsystems. If the OI creates Commands
         // (which it very likely will), subsystems are not guaranteed to be
@@ -80,12 +80,16 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
+        String test = Robot.class.getResource("Test.csv").getPath();
+        System.out.println(System.getProperty("user.dir"));
         try
         {
-            autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
+//          autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
+            autonomousCommand = new AutonomousCommand(CSVReader.parse(test));
         }
         catch (IOException e)
         {
+            System.out.println("Exception here: " + e);
         }
 
         // schedule the autonomous command (example)
@@ -121,11 +125,11 @@ public class Robot extends TimedRobot
 
         Scheduler.getInstance().run();
 
-        driveLeft   = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
-        driveRight  = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
+        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
+        driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
         driveStrafe = oi.getDriverJoystickValue(Ports.OIDriverStrafe, true);
-        climbSpeed  = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
-        armSpeed    = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
+        climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
+        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
 
         driveBaseSystem.setLeftSpeed(driveLeft);
         driveBaseSystem.setRightSpeed(driveRight);

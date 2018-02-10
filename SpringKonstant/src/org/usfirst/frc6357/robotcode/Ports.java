@@ -27,7 +27,7 @@ public class Ports
     // **********************
     //  Assorted peripherals
     // **********************
-    public static final int PCM_ID                  = 50; // CAN ID 50
+    public static final int PCM_ID                  = 1; // CAN ID 1
 
     // *****************
     // Drive Subsystem
