@@ -47,6 +47,13 @@ public class IntakeSystem extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 
+    /**
+     * Sets the raw speed of the intake motors.
+     *
+     * @param speed The speed setting for the intake motors. Valid values are in the range -1.0 to 1.0.
+     *
+     * @return None
+     */
     public void setIntakeSpeed(double speed)
     {
         intakeLeftMotor.set(speed);
@@ -83,6 +90,11 @@ public class IntakeSystem extends Subsystem {
         setIntakeSpeed(Speed);
     }
 
+    /**
+     * Toggles the swing (up/down) state of the intake mechanism.
+     *
+     * @return Returns true if the intake is swung up, false if down.
+     */
     public boolean toggleIntakeSwing()
     {
         if(intakeIsUp)
@@ -97,6 +109,11 @@ public class IntakeSystem extends Subsystem {
         return(intakeIsUp);
     }
 
+    /**
+     * Moves the intake mechanism into the up position.
+     *
+     * @return None
+     */
     public void setIntakeUp()
     {
         // TODO: Check polarity of this control.
@@ -104,6 +121,11 @@ public class IntakeSystem extends Subsystem {
         intakeIsUp = true;
     }
 
+    /**
+     * Moves the intake mechanism into the down position.
+     *
+     * @return None
+     */
     public void setIntakeDown()
     {
         // TODO: Check polarity of this control.
