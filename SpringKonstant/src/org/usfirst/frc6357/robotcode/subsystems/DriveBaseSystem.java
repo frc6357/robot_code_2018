@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * The DriveBaseSystem subsystem controls all the basic functions of the speed
@@ -36,14 +37,20 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseCenterRight;
     private final SpeedController baseBackRight;
 
+    // Gear shifter
+    private final DoubleSolenoid  baseGearShiftSolenoid;
+    private boolean               baseHighGear;
+
     // Encoders
     private final Encoder rightEncoder;
     private final Encoder leftEncoder;
 
     // Strafing system motors and state
     private final SpeedController baseStrafe;
-    private final Solenoid baseStrafeSolenoid;
-    private boolean baseStrafeDeployed;
+    private final DoubleSolenoid  baseStrafeSolenoid;
+    private final Solenoid        baseFrontLiftSolenoid;
+    private final Solenoid        baseBackLiftSolenoid;
+    private boolean               baseStrafeDeployed;
 
     // An instance of the inertial management unit to allow angle measurements. We make
     // this public to allow the robot to access it to make periodic angle readings.
@@ -57,12 +64,16 @@ public class DriveBaseSystem extends Subsystem
     {
         super();
 
-        // LEFT DRIVE TALONS
+        // TODO: Change these to VictorSPX controllers when we move to the
+        //       new robot chassis. We left them as Talons for now while testing
+        //       on the 2017 robot.
+
+        // Left Drive Controllers
         baseFrontLeftMaster = new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
         baseCenterLeft = new WPI_TalonSRX(Ports.DriveLeftCenterMotor);
         baseBackLeft = new WPI_TalonSRX(Ports.DriveLeftRearMotor);
 
-        // RIGHT DRIVE TALONS
+        // Right Drive Controllers
         baseFrontRightMaster = new WPI_TalonSRX(Ports.DriveRightFrontMotor);
         baseCenterRight = new WPI_TalonSRX(Ports.DriveRightCenterMotor);
         baseBackRight = new WPI_TalonSRX(Ports.DriveRightRearMotor);
@@ -91,14 +102,25 @@ public class DriveBaseSystem extends Subsystem
         ((WPI_TalonSRX) baseCenterLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
         ((WPI_TalonSRX) baseBackLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
 
-        // STRAFE MOTOR CONTROLLER
+        // Strafing motor
         baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
-        baseStrafeSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoid);
+
+        // Lift system
+        baseStrafeSolenoid    = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoidUp, Ports.DriveStrafeSolenoidDown);
+        baseFrontLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidFront);
+        baseBackLiftSolenoid  = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidBack);
 
         baseStrafeDeployed = false;
 
+        // Gear shifter
+        baseGearShiftSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveGearSolenoidLow, Ports.DriveGearSolenoidHigh);
+        baseHighGear = true;
+
+        // Set initial states of all actuators
         leftEncoder.reset();
         rightEncoder.reset();
+        deployStrafe(baseStrafeDeployed);
+        setHighGear(baseHighGear);
     }
 
     /**
@@ -147,7 +169,18 @@ public class DriveBaseSystem extends Subsystem
      */
     public void deployStrafe(boolean state)
     {
-        baseStrafeSolenoid.set(state);
+        if(state)
+        {
+            baseStrafeSolenoid.set(DoubleSolenoid.Value.kForward);
+            baseFrontLiftSolenoid.set(true);
+            baseBackLiftSolenoid.set(true);
+        }
+        else
+        {
+            baseStrafeSolenoid.set(DoubleSolenoid.Value.kReverse);
+            baseFrontLiftSolenoid.set(false);
+            baseBackLiftSolenoid.set(false);
+        }
         baseStrafeDeployed = state;
     }
 
@@ -174,6 +207,25 @@ public class DriveBaseSystem extends Subsystem
     public boolean getStrafeState()
     {
         return(baseStrafeDeployed);
+    }
+
+    /**
+     * This method is used to change between low and high gear ratios.
+     *
+     * @param state
+     *            - state is true to switch to high gear, false to switch to low gear.
+     */
+    public void setHighGear(boolean high)
+    {
+        if(high)
+        {
+            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kReverse);
+        }
+        else
+        {
+            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kForward);
+        }
+        baseHighGear = high;
     }
 
     public double getLeftEncoderRaw() // Returns raw value of the encoder

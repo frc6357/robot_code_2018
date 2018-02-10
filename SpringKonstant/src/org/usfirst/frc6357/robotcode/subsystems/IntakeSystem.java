@@ -1,7 +1,7 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 import org.usfirst.frc6357.robotcode.Ports;
 
@@ -19,12 +19,12 @@ public class IntakeSystem extends Subsystem {
     private static final double INTAKE_SPEED = 0.25;
     public final WPI_TalonSRX intakeLeftMotor;
     public final WPI_TalonSRX intakeRightMotor;
-    public final Solenoid intakeSolenoid;
+    public final DoubleSolenoid intakeSolenoid;
     public boolean intakeIsUp = true;
 
     public IntakeSystem()
     {
-        intakeSolenoid   = new Solenoid(Ports.IntakeTiltSolenoid);
+        intakeSolenoid   = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
 
         intakeLeftMotor  = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
@@ -116,8 +116,7 @@ public class IntakeSystem extends Subsystem {
      */
     public void setIntakeUp()
     {
-        // TODO: Check polarity of this control.
-        intakeSolenoid.set(true);
+        intakeSolenoid.set(DoubleSolenoid.Value.kForward);
         intakeIsUp = true;
     }
 
@@ -128,8 +127,7 @@ public class IntakeSystem extends Subsystem {
      */
     public void setIntakeDown()
     {
-        // TODO: Check polarity of this control.
-        intakeSolenoid.set(false);
+        intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
         intakeIsUp = false;
     }
 

@@ -38,7 +38,20 @@ public class Ports
 
     public static final int DriveStrafeMotor        = 17; // CAN ID 17
 
-    public static final int DriveStrafeSolenoid     = 0;  // PCM output 0
+    // Pneumatics for drive lift mechanisms.
+    //
+    // This assumes that we use a double solenoid for the H-wheel lifter
+    // but only single solenoids for the front and back lifters where gravity
+    // should be sufficient to drop the drive when lift is disengaged.
+    //
+    // We also use a double solenoid to control both side's low/high gear
+    // selection.
+    public static final int DriveStrafeSolenoidUp   = 0;  // PCM output 0 (forward channel)
+    public static final int DriveStrafeSolenoidDown = 1;  // PCM output 1 (reverse channel)
+    public static final int DriveLiftSolenoidFront  = 2;  // PCM output 2
+    public static final int DriveLiftSolenoidBack   = 3;  // PCM output 3
+    public static final int DriveGearSolenoidLow    = 4;  // PDM output 4 (forward channel)
+    public static final int DriveGearSolenoidHigh   = 5;  // PDM output 5 (reverse channel)
 
     public static final int DriveLeftEncoderA       = 2;  // DIO input 2
     public static final int DriveLeftEncoderB       = 3;  // DIO input 1
@@ -50,6 +63,7 @@ public class Ports
     // Climb Subsystem
     // *****************
     public static final int ClimbWinchMotor         = 20;  // CAN ID 20
+
     public static final int ClimbTopLimitSwitch     = 4;   // DIO input 4 - normally open
     public static final int ClimpBottomLimitSwitch  = 5;   // DIO input 5 - normally open
 
@@ -58,12 +72,15 @@ public class Ports
     // ******************
     public static final int IntakeLeftMotor         = 30;  // CAN ID 30
     public static final int IntakeRightMotor        = 31;  // CAN ID 31
-    public static final int IntakeTiltSolenoid      = 1;   // PCM output 1
+
+    public static final int IntakeTiltSolenoidUp    = 6;   // PCM output 6 (forward channel)
+    public static final int IntakeTiltSolenoidDown  = 7;   // PCM output 7 (reverse channel)
 
     // ***************
     // Arm Subsystem
     // ***************
     public static final int ArmElevationMotor       = 40;  // CAN ID 40
+
     public static final int ArmEncoderA             = 6;   // DIO input 6
     public static final int ArmEncoderB             = 7;   // DIO input 7
     public static final int ArmLimitTop             = 8;   // DIO input 8
@@ -94,6 +111,9 @@ public class Ports
     // joysticks.
     public static final int OIDriverStrafeDeploy    = 5;   // Left bumper
     public static final int OIDriverStrafeStow      = 6;   // Right bumper
+
+    public static final int IODriverGearSelectLow   = 1;   // Button A
+    public static final int IODriverGearSelectHigh  = 4;   // Button Y
 
     // *********************
     // Operator Controller

@@ -5,11 +5,7 @@
 
 package org.usfirst.frc6357.robotcode;
 
-import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
-import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
-import org.usfirst.frc6357.robotcode.commands.StrafeStow;
+import org.usfirst.frc6357.robotcode.commands.*;
 import org.usfirst.frc6357.robotcode.tools.FilteredJoystick;
 import org.usfirst.frc6357.robotcode.tools.filters.*;
 
@@ -60,6 +56,8 @@ public class OI
     private Button buttonIntakeSwing;
     private Button buttonStrafeDeploy;
     private Button buttonStrafeStow;
+    private Button buttonLowGear;
+    private Button buttonHighGear;
 
     public OI()
     {
@@ -75,8 +73,14 @@ public class OI
         buttonStrafeDeploy = new JoystickButton(joystickDriver, Ports.OIDriverStrafeDeploy);
         buttonStrafeStow   = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
 
+        buttonLowGear      = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
+        buttonHighGear     = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
+
         buttonStrafeDeploy.whenPressed(new StrafeDeploy());
         buttonStrafeStow.whenPressed(new StrafeStow());
+
+        buttonLowGear.whenPressed(new GearShiftCommand(false));
+        buttonHighGear.whenPressed(new GearShiftCommand(true));
 
         buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
 
