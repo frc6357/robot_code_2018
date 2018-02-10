@@ -10,5 +10,5 @@ public abstract class Filter
      * @param rawAxis the actual value being returned by the raw data
      * @return the filtered data to be passed to the motor
      */
-    abstract double filter(double rawAxis);
+    public abstract double filter(double rawAxis);
 }

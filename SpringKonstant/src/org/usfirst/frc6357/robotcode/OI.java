@@ -10,7 +10,7 @@ import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
 import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
 import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
 import org.usfirst.frc6357.robotcode.commands.StrafeStow;
-import org.usfirst.frc6357.robotcode.tools.filters.FilteredJoystick;
+import org.usfirst.frc6357.robotcode.tools.FilteredJoystick;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;

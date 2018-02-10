@@ -1,4 +1,6 @@
-package org.usfirst.frc6357.robotcode.tools.filters;
+package org.usfirst.frc6357.robotcode.tools;
+
+import org.usfirst.frc6357.robotcode.tools.filters.Filter;
 
 /**
  * This class is a general class whose function is to filter out joystick inputs
