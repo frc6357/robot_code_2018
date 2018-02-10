@@ -16,10 +16,6 @@ package org.usfirst.frc6357.robotcode;
  */
 public class Ports
 {
-    // TODO: The numbers here are completely fictitious for now. Get with the
-    // hardware teams to determine the actual port assignments! Drive motors are set
-    // to match the 2017 robot assignments.
-
     //
     // RoboRio Channel Assignments for robot motors and actuators
     //
@@ -70,6 +66,8 @@ public class Ports
     public static final int ArmElevationMotor       = 40;  // CAN ID 40
     public static final int ArmEncoderA             = 6;   // DIO input 6
     public static final int ArmEncoderB             = 7;   // DIO input 7
+    public static final int ArmLimitTop             = 8;   // DIO input 8
+    public static final int ArmLimitBottom          = 9;   // DIO input 9
 
     //
     // Driver's and operator's OI channel assignments

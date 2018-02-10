@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.Solenoid;
  * means that the speed sent to the master controllers are sent to the other
  * speed controllers on each side.
  *
- * TODO: determine all methods the need to be in the Base class for the drive
+ * TODO: determine all methods that need to be in the Base class for the drive
  */
 public class DriveBaseSystem extends Subsystem
 {
@@ -35,7 +35,7 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseFrontRightMaster; // Master speed controller
     private final SpeedController baseCenterRight;
     private final SpeedController baseBackRight;
-    
+
     // Encoders
     private final Encoder rightEncoder;
     private final Encoder leftEncoder;
@@ -71,7 +71,7 @@ public class DriveBaseSystem extends Subsystem
         baseBackRight.setInverted(true);
         baseCenterRight.setInverted(true);
         baseFrontRightMaster.setInverted(true);
-        
+
         // Encoders
         leftEncoder = new Encoder(Ports.DriveLeftEncoderA, Ports.DriveLeftEncoderB);
         rightEncoder = new Encoder(Ports.DriveRightEncoderA, Ports.DriveRightEncoderB);
@@ -94,9 +94,9 @@ public class DriveBaseSystem extends Subsystem
         // STRAFE MOTOR CONTROLLER
         baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
         baseStrafeSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoid);
-        
+
         baseStrafeDeployed = false;
-        
+
         leftEncoder.reset();
         rightEncoder.reset();
     }
@@ -170,7 +170,7 @@ public class DriveBaseSystem extends Subsystem
      * @param None
      * @return Returns the current state of the strafing mechanism, true if deployed, false if stowed.
      */
-    
+
     public boolean getStrafeState()
     {
         return(baseStrafeDeployed);
@@ -179,23 +179,23 @@ public class DriveBaseSystem extends Subsystem
     public double getLeftEncoderRaw() // Returns raw value of the encoder
     {
         return leftEncoder.getRaw();
-    } 
-    
+    }
+
     public double getRightEncoderRaw()  // Returns raw value of the encoder
     {
         return rightEncoder.getRaw();
     }
-    
+
     public double getLeftEncoderRate() // Returns the current rate of the encoder
     {
         return leftEncoder.getRate();
-    } 
-    
+    }
+
     public double getRightEncoderRate() // Returns the current rate of the encoder
     {
         return rightEncoder.getRate();
-    } 
-    
+    }
+
     /**
      * Each subsystem may, but is not required to, have a default command which is
      * scheduled whenever the subsystem is idle. If default command is needed use
