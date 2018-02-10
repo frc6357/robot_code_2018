@@ -5,8 +5,12 @@
 
 package org.usfirst.frc6357.robotcode;
 
-import org.usfirst.frc6357.robotcode.Ports;
-import org.usfirst.frc6357.robotcode.commands.*;
+import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
+import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
+import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
+import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
+import org.usfirst.frc6357.robotcode.commands.StrafeStow;
+import org.usfirst.frc6357.robotcode.tools.filters.FilteredJoystick;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -46,8 +50,8 @@ public class OI
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
 
-    private Joystick joystickOperator;
-    private Joystick joystickDriver;
+    private FilteredJoystick joystickOperator;
+    private FilteredJoystick joystickDriver;
 
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
@@ -58,8 +62,8 @@ public class OI
     public OI()
     {
         // Instantiate the joystick devices.
-        joystickOperator = new Joystick(Ports.OIOperatorJoystick);
-        joystickDriver   = new Joystick(Ports.OIDriverJoystick);
+        joystickOperator = new FilteredJoystick(Ports.OIOperatorJoystick);
+        joystickDriver   = new FilteredJoystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
         buttonIntakeIn     = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
