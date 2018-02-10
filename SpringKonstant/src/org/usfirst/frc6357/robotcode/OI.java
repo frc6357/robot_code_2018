@@ -6,9 +6,7 @@
 package org.usfirst.frc6357.robotcode;
 
 import org.usfirst.frc6357.robotcode.Ports;
-import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
-import org.usfirst.frc6357.robotcode.commands.StrafeStow;
-import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
+import org.usfirst.frc6357.robotcode.commands.*;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -74,6 +72,13 @@ public class OI
         buttonStrafeDeploy.whenPressed(new StrafeDeploy());
         buttonStrafeStow.whenPressed(new StrafeStow());
 
+        buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
+
+        buttonIntakeIn.whenPressed(new IntakeCommand(true, true));
+        buttonIntakeIn.whenReleased(new IntakeCommand(false, true));
+        buttonIntakeOut.whenPressed(new IntakeCommand(true, false));
+        buttonIntakeOut.whenReleased(new IntakeCommand(false, false));
+
         // SmartDashboard insertions for autonomous command chooser.
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
     }
@@ -127,6 +132,6 @@ public class OI
         {
             multiplier = -1.0;
         }
-        return joystickOperator.getRawAxis(port);
+        return (multiplier * joystickOperator.getRawAxis(port));
     }
 }

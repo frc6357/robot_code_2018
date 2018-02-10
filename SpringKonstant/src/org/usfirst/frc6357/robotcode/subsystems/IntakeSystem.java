@@ -1,6 +1,7 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Solenoid;
 
 import org.usfirst.frc6357.robotcode.Ports;
 
@@ -15,11 +16,16 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 public class IntakeSystem extends Subsystem {
 
+    private static final double INTAKE_SPEED = 0.25;
     public final WPI_TalonSRX intakeLeftMotor;
     public final WPI_TalonSRX intakeRightMotor;
+    public final Solenoid intakeSolenoid;
+    public boolean intakeIsUp = true;
 
     public IntakeSystem()
     {
+        intakeSolenoid   = new Solenoid(Ports.IntakeTiltSolenoid);
+
         intakeLeftMotor  = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
 
@@ -46,7 +52,67 @@ public class IntakeSystem extends Subsystem {
         intakeLeftMotor.set(speed);
     }
 
-    public void initDefaultCommand() {
+    /**
+     * Helper function used to control the state of both intake motors at the
+     * same time. This allows the motors to be started and run in forwards or
+     * backwards direction, or stopped. When started, motors are run at a constant
+     * speed.
+     *
+     * @param Start   - if true, the intake motors are started. If false, they are stopped.
+     * @param Inwards - if Start is true, this controls the motor direction, inwards (true) or
+     *                  outwards (false).
+     */
+    public void setIntakeMotorState(boolean Start, boolean Inwards)
+    {
+        double Speed;
+
+        if(!Start)
+        {
+            Speed = 0.0;
+        }
+        else
+        {
+            Speed = INTAKE_SPEED;
+
+            if(Inwards)
+            {
+                Speed *= -1;
+            }
+        }
+
+        setIntakeSpeed(Speed);
+    }
+
+    public boolean toggleIntakeSwing()
+    {
+        if(intakeIsUp)
+        {
+            setIntakeDown();
+        }
+        else
+        {
+            setIntakeDown();
+        }
+
+        return(intakeIsUp);
+    }
+
+    public void setIntakeUp()
+    {
+        // TODO: Check polarity of this control.
+        intakeSolenoid.set(true);
+        intakeIsUp = true;
+    }
+
+    public void setIntakeDown()
+    {
+        // TODO: Check polarity of this control.
+        intakeSolenoid.set(false);
+        intakeIsUp = false;
+    }
+
+    public void initDefaultCommand()
+    {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
     }
