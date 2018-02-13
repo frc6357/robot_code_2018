@@ -24,11 +24,15 @@ public class IntakeSystem extends Subsystem {
 
     public IntakeSystem()
     {
+        // TODO: Update if we add solenoids to control intake grippers.
+
         intakeSolenoid   = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
 
         intakeLeftMotor  = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
 
+        // TODO: Set current limits sensibly so that we catch case where a cube is
+        // pulled into the mechanism and the motor stalls.
         intakeLeftMotor.configPeakCurrentLimit(35, 10);       /* 35 A */
         intakeLeftMotor.configPeakCurrentDuration(200, 10);   /* 200ms */
         intakeLeftMotor.configContinuousCurrentLimit(30, 10); /* 30A */

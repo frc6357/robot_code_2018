@@ -76,6 +76,9 @@ public class Ports
     public static final int IntakeTiltSolenoidUp    = 6;   // PCM output 6 (forward channel)
     public static final int IntakeTiltSolenoidDown  = 7;   // PCM output 7 (reverse channel)
 
+    // TODO: Add intake gripper solenoids if these are added. Note that this
+    //       may require a second CAN-connected PCM.
+
     // ***************
     // Arm Subsystem
     // ***************
