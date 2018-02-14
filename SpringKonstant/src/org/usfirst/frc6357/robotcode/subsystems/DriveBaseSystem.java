@@ -51,6 +51,7 @@ public class DriveBaseSystem extends Subsystem
     private final Solenoid        baseFrontLiftSolenoid;
     private final Solenoid        baseBackLiftSolenoid;
     private boolean               baseStrafeDeployed;
+    private final StrafingAngleController baseStrafeAngleController;
 
     // An instance of the inertial management unit to allow angle measurements. We make
     // this public to allow the robot to access it to make periodic angle readings.
@@ -88,6 +89,8 @@ public class DriveBaseSystem extends Subsystem
         rightEncoder = new Encoder(Ports.DriveRightEncoderA, Ports.DriveRightEncoderB);
 
         // Configure the IMU.
+        // TODO: Set the appropriate axis here depending upon the final
+        // orientation of the IMU in the robot.
         driveIMU = new IMU();
         driveIMU.setMajorAxis(OrientationAxis.X);
         driveIMU.setMovingAverageSamples(20);
@@ -104,6 +107,9 @@ public class DriveBaseSystem extends Subsystem
 
         // Strafing motor
         baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
+
+        // Strafing angle controller
+        baseStrafeAngleController = new StrafingAngleController(driveIMU);
 
         // Lift system
         baseStrafeSolenoid    = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoidUp, Ports.DriveStrafeSolenoidDown);
@@ -162,6 +168,26 @@ public class DriveBaseSystem extends Subsystem
     }
 
     /**
+     * Get the drive motor speed adjustment to set to counteract unwanted
+     * rotation while strafing.
+     *
+     * @return Returns an absolute speed differential to set between left and
+     *         right drive motors. Apply half this adjustment to the
+     *         left motor speed and negative half to the right motor speed.
+     */
+    public double getStrafeRotateAdjust()
+    {
+        if(baseStrafeDeployed)
+        {
+            return baseStrafeAngleController.getSpeedAdjust();
+        }
+        else
+        {
+            return 0.0;
+        }
+    }
+
+    /**
      * This method is used to deploy or stow the strafing mechanism.
      *
      * @param state
@@ -169,18 +195,27 @@ public class DriveBaseSystem extends Subsystem
      */
     public void deployStrafe(boolean state)
     {
+        double angle;
+
         if(state)
         {
             baseStrafeSolenoid.set(DoubleSolenoid.Value.kForward);
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
+
+            angle = baseStrafeAngleController.getCurrentAngle();
+            baseStrafeAngleController.setAngleSetpoint(angle);
+            baseStrafeAngleController.enable();
         }
         else
         {
             baseStrafeSolenoid.set(DoubleSolenoid.Value.kReverse);
             baseFrontLiftSolenoid.set(false);
             baseBackLiftSolenoid.set(false);
+
+            baseStrafeAngleController.disable();
         }
+
         baseStrafeDeployed = state;
     }
 

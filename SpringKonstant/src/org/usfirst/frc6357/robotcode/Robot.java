@@ -122,6 +122,7 @@ public class Robot extends TimedRobot
     public void teleopPeriodic()
     {
         double driveLeft, driveRight, driveStrafe, robotAngle, climbSpeed, armSpeed;
+        double rotateAdjust, lAdjust, rAdjust;
 
         Scheduler.getInstance().run();
 
@@ -131,14 +132,18 @@ public class Robot extends TimedRobot
         climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
         armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
 
+        robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
+
+        rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
+        lAdjust = rotateAdjust / 2;
+        rAdjust = -lAdjust;
+
         driveBaseSystem.setLeftSpeed(driveLeft);
         driveBaseSystem.setRightSpeed(driveRight);
         driveBaseSystem.setStrafeSpeed(driveStrafe);
 
         climbSystem.setWinchSpeed(climbSpeed);
         armSystem.setArmSpeed(armSpeed);
-
-        robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
 
         SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
         SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
@@ -150,5 +155,7 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Drive Strafe Raw", driveStrafe);
         SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
         SmartDashboard.putNumber("IMU Angle", robotAngle);
+        SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
+        SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
     }
 }
