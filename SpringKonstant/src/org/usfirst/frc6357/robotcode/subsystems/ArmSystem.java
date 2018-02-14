@@ -23,11 +23,13 @@ public class ArmSystem extends Subsystem
     public ArmSystem()
     {
         armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
+        /*
         armMotor.set(0.0);
-        armMotor.configPeakCurrentLimit(35, 10);       /* 35 A */
-        armMotor.configPeakCurrentDuration(200, 10);   /* 200ms */
-        armMotor.configContinuousCurrentLimit(30, 10); /* 30A */
+        armMotor.configPeakCurrentLimit(35, 10);       // 35 A
+        armMotor.configPeakCurrentDuration(200, 10);   // 200ms
+        armMotor.configContinuousCurrentLimit(30, 10); // 30A
         armMotor.enableCurrentLimit(true);
+        */
     }
 
     public void setArmSpeed(double speed)

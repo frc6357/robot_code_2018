@@ -14,7 +14,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  * mechanism upwards into its stowed position. Current limits are set on the motors to cause them
  * to stop automatically when blocked.
  */
-public class IntakeSystem extends Subsystem {
+public class IntakeSystem extends Subsystem 
+{
 
     private static final double INTAKE_SPEED = 0.25;
     public final WPI_TalonSRX intakeLeftMotor;
@@ -34,15 +35,17 @@ public class IntakeSystem extends Subsystem {
         intakeLeftMotor.configContinuousCurrentLimit(30, 10); /* 30A */
         intakeLeftMotor.enableCurrentLimit(true);
 
-        intakeRightMotor.configPeakCurrentLimit(35, 10);       /* 35 A */
-        intakeRightMotor.configPeakCurrentDuration(200, 10);   /* 200ms */
-        intakeRightMotor.configContinuousCurrentLimit(30, 10); /* 30A */
+        /*
+        intakeRightMotor.configPeakCurrentLimit(35, 10);       // 35 A
+        intakeRightMotor.configPeakCurrentDuration(200, 10);   // 200ms
+        intakeRightMotor.configContinuousCurrentLimit(30, 10); // 30A
         intakeRightMotor.enableCurrentLimit(true);
 
         intakeRightMotor.setInverted(true);
         intakeRightMotor.set(ControlMode.Follower, intakeLeftMotor.getDeviceID());
 
         intakeLeftMotor.set(0.0);
+        */
     }
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
