@@ -58,7 +58,7 @@ public class Robot extends TimedRobot
 
         // Add commands to Autonomous Sendable Chooser
 
-        chooser.addDefault("CSV 1", "src/org/usfirst/frc6457/robotcode/commands/AutoSheets/Test.csv");
+        chooser.addDefault("Test", "/home/lvuser/Test.csv");
     }
 
     /**
@@ -80,12 +80,9 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        String test = Robot.class.getResource("Test.csv").getPath();
-        System.out.println(System.getProperty("user.dir"));
         try
         {
-//          autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
-            autonomousCommand = new AutonomousCommand(CSVReader.parse(test));
+          autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
         }
         catch (IOException e)
         {
