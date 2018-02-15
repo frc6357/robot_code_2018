@@ -34,10 +34,6 @@ public class IntakeSystem extends Subsystem
 
         // TODO: Set current limits sensibly so that we catch case where a cube is
         // pulled into the mechanism and the motor stalls.
-        intakeLeftMotor.configPeakCurrentLimit(35, 10);       /* 35 A */
-        intakeLeftMotor.configPeakCurrentDuration(200, 10);   /* 200ms */
-        intakeLeftMotor.configContinuousCurrentLimit(30, 10); /* 30A */
-        intakeLeftMotor.enableCurrentLimit(true);
 
         /*
         intakeRightMotor.configPeakCurrentLimit(35, 10);       // 35 A
