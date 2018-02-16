@@ -140,7 +140,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.setStrafeSpeed(driveStrafe);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.setArmSpeed(armSpeed);
+        armSystem.Periodic(armSpeed);
 
         SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
         SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());

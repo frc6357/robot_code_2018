@@ -1,6 +1,8 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc6357.robotcode.Ports;
 
@@ -19,6 +21,10 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class ArmSystem extends Subsystem
 {
     private final WPI_TalonSRX armMotor;
+    private final DigitalInput limitUpper;
+    private final DigitalInput limitLower;
+    private boolean tripLower = false;
+    private boolean tripUpper = false;
 
     public ArmSystem()
     {
@@ -30,6 +36,57 @@ public class ArmSystem extends Subsystem
         armMotor.configContinuousCurrentLimit(30, 10); // 30A
         armMotor.enableCurrentLimit(true);
         */
+
+        limitUpper = new DigitalInput(Ports.ArmLimitTop);
+        limitLower = new DigitalInput(Ports.ArmLimitBottom);
+    }
+
+    public void Periodic(double speed)
+    {
+        double calcSpeed = speed;
+        boolean upperState, lowerState;
+
+        // Check the state of the limit switches and stop the motor if necessary.
+        // The switches are normally open and the DIO pins on RoboRio are pulled up
+        // so, if we read 1, this means the switch isn't pressed while 0 means that
+        // the switch is pressed.
+        upperState = limitUpper.get();
+        lowerState = limitLower.get();
+
+        if(upperState == false)
+        {
+            tripUpper = true;
+
+            if(calcSpeed > 0.0)
+            {
+                calcSpeed = 0.0;
+            }
+        }
+        else
+        {
+            tripLower = false;
+        }
+
+        if(lowerState == false)
+        {
+            tripLower = true;
+
+            if(calcSpeed < 0.0)
+            {
+                calcSpeed = 0.0;
+            }
+        }
+        else
+        {
+            tripLower = false;
+        }
+
+        setArmSpeed(calcSpeed);
+
+        SmartDashboard.putNumber("ARM speed", calcSpeed);
+        SmartDashboard.putNumber("ARM current", armMotor.getOutputCurrent());
+        SmartDashboard.putBoolean("ARM Upper Limit", tripUpper);
+        SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
     }
 
     public void setArmSpeed(double speed)
