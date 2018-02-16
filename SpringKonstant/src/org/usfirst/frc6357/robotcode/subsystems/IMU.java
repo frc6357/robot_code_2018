@@ -10,7 +10,11 @@ package org.usfirst.frc6357.robotcode.subsystems;
  */
 public class IMU extends ADIS16448_IMU
 {
-    public enum OrientationAxis { X, Y, Z };
+    public enum OrientationAxis
+    {
+        X, Y, Z
+    };
+
     public double AngleAverage = 0.0;
 
     private boolean FirstCall = true;
@@ -18,11 +22,13 @@ public class IMU extends ADIS16448_IMU
     private OrientationAxis MajorAxis = OrientationAxis.X;
 
     /**
-     * Constructor for the IMU class allowing caller to specify both the yaw axis and
-     * algorithm.
+     * Constructor for the IMU class allowing caller to specify both the yaw axis
+     * and algorithm.
      *
-     * @param yaw_axis Which axis is Yaw
-     * @param algorithm Use AHRSAlgorithm.kComplementary or AHRSAlgorithm.kMadgwick
+     * @param yaw_axis
+     *            Which axis is Yaw
+     * @param algorithm
+     *            Use AHRSAlgorithm.kComplementary or AHRSAlgorithm.kMadgwick
      */
     public IMU(Axis yaw_axis, AHRSAlgorithm algorithm)
     {
@@ -30,27 +36,29 @@ public class IMU extends ADIS16448_IMU
     }
 
     /**
-     * Constructor for the IMU class. This variant assumes the kComplementary algorithm.
+     * Constructor for the IMU class. This variant assumes the kComplementary
+     * algorithm.
      *
-     * @param yaw_axis Which axis is Yaw
+     * @param yaw_axis
+     *            Which axis is Yaw
      */
     public IMU(Axis yaw_axis)
     {
-      this(yaw_axis, AHRSAlgorithm.kComplementary);
+        this(yaw_axis, AHRSAlgorithm.kComplementary);
     }
 
     /*
-     * Basic constructor for the IMU class. This variant assumes yaw axis is "Z" and uses
-     * the kComplementary algorithm.
+     * Basic constructor for the IMU class. This variant assumes yaw axis is "Z" and
+     * uses the kComplementary algorithm.
      */
     public IMU()
     {
-      this(Axis.kZ, AHRSAlgorithm.kComplementary);
+        this(Axis.kZ, AHRSAlgorithm.kComplementary);
     }
 
     /**
-     * This function must be called periodically to read the angle reported for the major axis
-     * and update the moving average.
+     * This function must be called periodically to read the angle reported for the
+     * major axis and update the moving average.
      *
      * @return Returns the current moving average for the angle of the major axis.
      */
@@ -58,14 +66,20 @@ public class IMU extends ADIS16448_IMU
     {
         double Angle = 0.0;
 
-        switch(MajorAxis)
+        switch (MajorAxis)
         {
-            case X: Angle = getAngleX(); break;
-            case Y: Angle = getAngleY(); break;
-            case Z: Angle = getAngleZ(); break;
+        case X:
+            Angle = getAngleX();
+            break;
+        case Y:
+            Angle = getAngleY();
+            break;
+        case Z:
+            Angle = getAngleZ();
+            break;
         }
 
-        if(FirstCall)
+        if (FirstCall)
         {
             AngleAverage = Angle;
         }
@@ -73,7 +87,7 @@ public class IMU extends ADIS16448_IMU
         AngleAverage -= AngleAverage / NumAvgSamples;
         AngleAverage += Angle / NumAvgSamples;
 
-        return(AngleAverage);
+        return (AngleAverage);
     }
 
     /**
@@ -83,15 +97,17 @@ public class IMU extends ADIS16448_IMU
      */
     public double getAngle()
     {
-        return(AngleAverage);
+        return (AngleAverage);
     }
 
     /**
-     * This function must be called periodically to read the angle reported for the major axis
-     * and update the moving average.
+     * This function must be called periodically to read the angle reported for the
+     * major axis and update the moving average.
      *
-     * @param axis is the identifier of the major axis whose angle reading will be averaged.
-     *             Valid values are OrientationAxis.X, OrientationAxis.Y and OrientationAxis.Z.
+     * @param axis
+     *            is the identifier of the major axis whose angle reading will be
+     *            averaged. Valid values are OrientationAxis.X, OrientationAxis.Y
+     *            and OrientationAxis.Z.
      *
      * @return None
      */
@@ -102,10 +118,11 @@ public class IMU extends ADIS16448_IMU
     }
 
     /**
-     * Sets the number of samples over which the angle moving average is calculated. The
-     * default is 10.
+     * Sets the number of samples over which the angle moving average is calculated.
+     * The default is 10.
      *
-     * @param count is the number of samples used in the moving average calculation.
+     * @param count
+     *            is the number of samples used in the moving average calculation.
      *
      * @return None
      */

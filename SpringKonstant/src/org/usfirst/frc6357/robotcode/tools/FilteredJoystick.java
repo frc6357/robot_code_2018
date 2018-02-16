@@ -22,7 +22,9 @@ public class FilteredJoystick extends Joystick
 
     /**
      * Default constructor, calls superclass constructor from Joystick
-     * @param joystick_num the port of the joystick being passed
+     * 
+     * @param joystick_num
+     *            the port of the joystick being passed
      */
     public FilteredJoystick(int joystick_num)
     {
@@ -31,18 +33,19 @@ public class FilteredJoystick extends Joystick
     }
 
     /**
-     * This method returns a filtered number from the requested axis
-     * The Filter used is determined from the static mapping
-     * @param axis the axis to get the data from
+     * This method returns a filtered number from the requested axis The Filter used
+     * is determined from the static mapping
+     * 
+     * @param axis
+     *            the axis to get the data from
      * @return the filtered data from the joystick axis
      */
     public double getFilteredAxis(int axis)
     {
-        if(filters[axis] != null)
+        if (filters[axis] != null)
         {
             return filters[axis].filter(getRawAxis(axis));
-        }
-        else
+        } else
         {
             return getRawAxis(axis);
         }
@@ -50,8 +53,11 @@ public class FilteredJoystick extends Joystick
 
     /**
      * Sets a pair between a axis and a filter for user's general control
-     * @param axis - the joystick axis to pair with a filter
-     * @param f - the filter to pair with a axis
+     * 
+     * @param axis
+     *            - the joystick axis to pair with a filter
+     * @param f
+     *            - the filter to pair with a axis
      */
     public void setFilter(int axis, Filter f)
     {
@@ -59,10 +65,11 @@ public class FilteredJoystick extends Joystick
     }
 
     /**
-     * Returns the filter object currently associated with a given joystick axis
-     * or null if no filter is currently in use.
+     * Returns the filter object currently associated with a given joystick axis or
+     * null if no filter is currently in use.
      *
-     * @param axis - The joystick axis whose filter is being queried.
+     * @param axis
+     *            - The joystick axis whose filter is being queried.
      * @return The axis current filter.
      */
     public Filter getFilter(int axis)

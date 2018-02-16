@@ -27,7 +27,8 @@ public class Robot extends TimedRobot
 {
 
     Command autonomousCommand;
-    SendableChooser<String> chooser = new SendableChooser<>(); //Lets you pick from a group of commands, whose references are strings
+    SendableChooser<String> chooser = new SendableChooser<>(); // Lets you pick from a group of commands, whose
+                                                               // references are strings
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
@@ -38,8 +39,8 @@ public class Robot extends TimedRobot
     public static OI oi;
 
     /**
-     * This function is run when the robot is first started up and should be
-     * used for any initialization code.
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
      */
     @Override
     public void robotInit()
@@ -62,8 +63,8 @@ public class Robot extends TimedRobot
     }
 
     /**
-     * This function is called when the disabled button is hit. You can use it
-     * to reset subsystems before shutting down.
+     * This function is called when the disabled button is hit. You can use it to
+     * reset subsystems before shutting down.
      */
     @Override
     public void disabledInit()
@@ -82,15 +83,15 @@ public class Robot extends TimedRobot
     {
         try
         {
-          autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
-        }
-        catch (IOException e)
+            autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
+        } catch (IOException e)
         {
             System.out.println("Exception here: " + e);
         }
 
         // schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
+        if (autonomousCommand != null)
+            autonomousCommand.start();
     }
 
     /**
@@ -109,7 +110,8 @@ public class Robot extends TimedRobot
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null) autonomousCommand.cancel();
+        if (autonomousCommand != null)
+            autonomousCommand.cancel();
     }
 
     /**

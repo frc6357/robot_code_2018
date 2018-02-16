@@ -49,7 +49,7 @@ public class OI
     private FilteredJoystick joystickOperator;
     private FilteredJoystick joystickDriver;
 
-    private FilterDeadband   filterClimbDeadband;
+    private FilterDeadband filterClimbDeadband;
 
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
@@ -63,18 +63,18 @@ public class OI
     {
         // Instantiate the joystick devices.
         joystickOperator = new FilteredJoystick(Ports.OIOperatorJoystick);
-        joystickDriver   = new FilteredJoystick(Ports.OIDriverJoystick);
+        joystickDriver = new FilteredJoystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
-        buttonIntakeIn     = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
-        buttonIntakeOut    = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
-        buttonIntakeSwing  = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
+        buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
+        buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
+        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
 
         buttonStrafeDeploy = new JoystickButton(joystickDriver, Ports.OIDriverStrafeDeploy);
-        buttonStrafeStow   = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
+        buttonStrafeStow = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
 
-        buttonLowGear      = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
-        buttonHighGear     = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
+        buttonLowGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
+        buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
 
         buttonStrafeDeploy.whenPressed(new StrafeDeploy());
         buttonStrafeStow.whenPressed(new StrafeStow());
@@ -104,10 +104,8 @@ public class OI
      *
      * @param port
      *            The axis number for the joystick being queried. This will come
-     *            from Ports.java.
-     * @ param invert
-     *            If true, the returned joystick value will be inverted. If false,
-     *            the unmodified joystick value is returned.
+     *            from Ports.java. @ param invert If true, the returned joystick
+     * value will be inverted. If false, the unmodified joystick value is returned.
      * @return returnType The value of the joystick axis. Note that this may be a
      *         filtered value if we subclass the joystick to allow control of
      *         deadbands or response curves.
@@ -116,7 +114,7 @@ public class OI
     {
         double multiplier = 1.0;
 
-        if(invert)
+        if (invert)
         {
             multiplier = -1.0;
         }
@@ -130,10 +128,8 @@ public class OI
      *
      * @param port
      *            The axis number for the joystick being queried. This will come
-     *            from Ports.java.
-     * @ param invert
-     *            If true, the returned joystick value will be inverted. If false,
-     *            the unmodified joystick value is returned.
+     *            from Ports.java. @ param invert If true, the returned joystick
+     * value will be inverted. If false, the unmodified joystick value is returned.
      * @return returnType The value of the joystick axis. Note that this may be a
      *         filtered value if we subclass the joystick to allow control of
      *         deadbands or response curves.
@@ -142,7 +138,7 @@ public class OI
     {
         double multiplier = 1.0;
 
-        if(invert)
+        if (invert)
         {
             multiplier = -1.0;
         }

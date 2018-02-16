@@ -2,16 +2,17 @@ package org.usfirst.frc6357.robotcode.subsystems;
 
 import org.usfirst.frc6357.robotcode.Ports;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
+import org.usfirst.frc6357.robotcode.subsystems.PID.PositionAndVelocityControlledDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  * The DriveBaseSystem subsystem controls all the basic functions of the speed
@@ -38,8 +39,8 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseBackRight;
 
     // Gear shifter
-    private final DoubleSolenoid  baseGearShiftSolenoid;
-    private boolean               baseHighGear;
+    private final DoubleSolenoid baseGearShiftSolenoid;
+    private boolean baseHighGear;
 
     // Encoders
     private final Encoder rightEncoder;
@@ -47,13 +48,20 @@ public class DriveBaseSystem extends Subsystem
 
     // Strafing system motors and state
     private final SpeedController baseStrafe;
-    private final DoubleSolenoid  baseStrafeSolenoid;
-    private final Solenoid        baseFrontLiftSolenoid;
-    private final Solenoid        baseBackLiftSolenoid;
-    private boolean               baseStrafeDeployed;
+    private final DoubleSolenoid baseStrafeSolenoid;
+    private final Solenoid baseFrontLiftSolenoid;
+    private final Solenoid baseBackLiftSolenoid;
+    private boolean baseStrafeDeployed;
     private final StrafingAngleController baseStrafeAngleController;
 
-    // An instance of the inertial management unit to allow angle measurements. We make
+    // PID for drive
+    private final PositionAndVelocityControlledDrive leftSide;
+    private final PositionAndVelocityControlledDrive rightSide;
+
+    private boolean isInVelocityMode;
+
+    // An instance of the inertial management unit to allow angle measurements. We
+    // make
     // this public to allow the robot to access it to make periodic angle readings.
     public final IMU driveIMU;
 
@@ -66,8 +74,8 @@ public class DriveBaseSystem extends Subsystem
         super();
 
         // TODO: Change these to VictorSPX controllers when we move to the
-        //       new robot chassis. We left them as Talons for now while testing
-        //       on the 2017 robot.
+        // new robot chassis. We left them as Talons for now while testing
+        // on the 2017 robot.
 
         // Left Drive Controllers
         baseFrontLeftMaster = new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
@@ -112,15 +120,23 @@ public class DriveBaseSystem extends Subsystem
         baseStrafeAngleController = new StrafingAngleController(driveIMU);
 
         // Lift system
-        baseStrafeSolenoid    = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoidUp, Ports.DriveStrafeSolenoidDown);
+        baseStrafeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoidUp,
+                Ports.DriveStrafeSolenoidDown);
         baseFrontLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidFront);
-        baseBackLiftSolenoid  = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidBack);
+        baseBackLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidBack);
 
         baseStrafeDeployed = false;
 
         // Gear shifter
-        baseGearShiftSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveGearSolenoidLow, Ports.DriveGearSolenoidHigh);
+        baseGearShiftSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveGearSolenoidLow,
+                Ports.DriveGearSolenoidHigh);
         baseHighGear = true;
+
+        // PID
+        leftSide = new PositionAndVelocityControlledDrive(baseFrontRightMaster, rightEncoder);
+        rightSide = new PositionAndVelocityControlledDrive(baseFrontLeftMaster, leftEncoder);
+
+        isInVelocityMode = false;
 
         // Set initial states of all actuators
         leftEncoder.reset();
@@ -156,6 +172,89 @@ public class DriveBaseSystem extends Subsystem
     }
 
     /**
+     * Enables the PID
+     */
+    public void enable()
+    {
+        leftSide.enable();
+        rightSide.enable();
+    }
+
+    /**
+     * Disables the PID
+     */
+    public void disable()
+    {
+        leftSide.disable();
+        rightSide.disable();
+    }
+
+    /**
+     * Sets the mode to postition mode
+     */
+    public void setPositionMode()
+    {
+        leftSide.setPositionMode();
+        rightSide.setPositionMode();
+
+        leftEncoder.reset();
+        rightEncoder.reset();
+
+        isInVelocityMode = false;
+    }
+
+    /**
+     * Sets the mode to velocity mode
+     */
+    public void setVelocityMode()
+    {
+        leftSide.setVelocityMode();
+        rightSide.setVelocityMode();
+        leftEncoder.reset();
+        rightEncoder.reset();
+
+        isInVelocityMode = true;
+    }
+
+    /**
+     * @return returns true if in velocity
+     */
+    public boolean isInVelocityMode()
+    {
+        return isInVelocityMode;
+    }
+
+    /**
+     * Sets the target velocity for the PID
+     * 
+     * @param speed
+     *            - Speed in feet per second
+     */
+    public void setLeftTargetVelocity(double speed)
+    {
+        leftSide.setSpeedAbsolute(speed);
+    }
+
+    /**
+     * Sets the target velocity for the PID
+     * 
+     * @param speed
+     *            - Speed in feet per second
+     */
+    public void setRightTargetVelocity(double speed)
+    {
+        rightSide.setSpeedAbsolute(speed);
+    }
+
+    /**
+     * Sets the PID set point, which drives the robot straight
+     */
+    public void driveStraight(double distance)
+    {
+        leftSide.setDistanceTarget(distance);
+    }
+
+    /**
      * This method is used to set the speed of the strafing motor.
      *
      * @param speed
@@ -168,20 +267,19 @@ public class DriveBaseSystem extends Subsystem
     }
 
     /**
-     * Get the drive motor speed adjustment to set to counteract unwanted
-     * rotation while strafing.
+     * Get the drive motor speed adjustment to set to counteract unwanted rotation
+     * while strafing.
      *
-     * @return Returns an absolute speed differential to set between left and
-     *         right drive motors. Apply half this adjustment to the
-     *         left motor speed and negative half to the right motor speed.
+     * @return Returns an absolute speed differential to set between left and right
+     *         drive motors. Apply half this adjustment to the left motor speed and
+     *         negative half to the right motor speed.
      */
     public double getStrafeRotateAdjust()
     {
-        if(baseStrafeDeployed)
+        if (baseStrafeDeployed)
         {
             return baseStrafeAngleController.getSpeedAdjust();
-        }
-        else
+        } else
         {
             return 0.0;
         }
@@ -191,13 +289,14 @@ public class DriveBaseSystem extends Subsystem
      * This method is used to deploy or stow the strafing mechanism.
      *
      * @param state
-     *            - state us true to deploy the strafing mechanism or false to stow it.
+     *            - state us true to deploy the strafing mechanism or false to stow
+     *            it.
      */
     public void deployStrafe(boolean state)
     {
         double angle;
 
-        if(state)
+        if (state)
         {
             baseStrafeSolenoid.set(DoubleSolenoid.Value.kForward);
             baseFrontLiftSolenoid.set(true);
@@ -206,8 +305,7 @@ public class DriveBaseSystem extends Subsystem
             angle = baseStrafeAngleController.getCurrentAngle();
             baseStrafeAngleController.setAngleSetpoint(angle);
             baseStrafeAngleController.enable();
-        }
-        else
+        } else
         {
             baseStrafeSolenoid.set(DoubleSolenoid.Value.kReverse);
             baseFrontLiftSolenoid.set(false);
@@ -220,43 +318,45 @@ public class DriveBaseSystem extends Subsystem
     }
 
     /**
-     * This method will toggle the deployment state of the strafe mechanism. It it's currently
-     * deployed, this call will stow it and vice versa.
+     * This method will toggle the deployment state of the strafe mechanism. It it's
+     * currently deployed, this call will stow it and vice versa.
      *
      * @param None
-     * @return Returns the new state of the strafing mechanism, true if deployed, false if stowed.
+     * @return Returns the new state of the strafing mechanism, true if deployed,
+     *         false if stowed.
      */
     public boolean toggleStrafe()
     {
         deployStrafe(!baseStrafeDeployed);
-        return(baseStrafeDeployed);
+        return (baseStrafeDeployed);
     }
 
     /**
      * This method return the current state of the strafing mechanism.
      *
      * @param None
-     * @return Returns the current state of the strafing mechanism, true if deployed, false if stowed.
+     * @return Returns the current state of the strafing mechanism, true if
+     *         deployed, false if stowed.
      */
 
     public boolean getStrafeState()
     {
-        return(baseStrafeDeployed);
+        return (baseStrafeDeployed);
     }
 
     /**
      * This method is used to change between low and high gear ratios.
      *
      * @param state
-     *            - state is true to switch to high gear, false to switch to low gear.
+     *            - state is true to switch to high gear, false to switch to low
+     *            gear.
      */
     public void setHighGear(boolean high)
     {
-        if(high)
+        if (high)
         {
             baseGearShiftSolenoid.set(DoubleSolenoid.Value.kReverse);
-        }
-        else
+        } else
         {
             baseGearShiftSolenoid.set(DoubleSolenoid.Value.kForward);
         }
@@ -268,7 +368,7 @@ public class DriveBaseSystem extends Subsystem
         return leftEncoder.getRaw();
     }
 
-    public double getRightEncoderRaw()  // Returns raw value of the encoder
+    public double getRightEncoderRaw() // Returns raw value of the encoder
     {
         return rightEncoder.getRaw();
     }
@@ -291,8 +391,7 @@ public class DriveBaseSystem extends Subsystem
     @Override
     protected void initDefaultCommand()
     {
-        // TODO Auto-generated method stub
-
+      
     }
 
 }

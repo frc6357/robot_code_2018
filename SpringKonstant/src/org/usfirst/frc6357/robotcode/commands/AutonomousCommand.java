@@ -26,43 +26,58 @@ public class AutonomousCommand extends Command
     }
 
     /**
-     * Overloaded constructor, creates a commandgroup by parsing 2D string array for data
-     * @param s2d the 2D string array containing data from a csv for parsing with the format specified in CSVReader
+     * Overloaded constructor, creates a commandgroup by parsing 2D string array for
+     * data
+     * 
+     * @param s2d
+     *            the 2D string array containing data from a csv for parsing with
+     *            the format specified in CSVReader
      */
     public AutonomousCommand(String[][] s2d)
     {
         requires(Robot.driveBaseSystem);
 
         /*
-         * Should read through the s2d for references and command types, then construct a command group
-         * Format is: line[0] can be ignored, line[boo][0] is function name, line[foo][1 : line[foo].length - 1] are params
-         * Afterwards, will execute command group
+         * Should read through the s2d for references and command types, then construct
+         * a command group Format is: line[0] can be ignored, line[boo][0] is function
+         * name, line[foo][1 : line[foo].length - 1] are params Afterwards, will execute
+         * command group
          */
         new Thread(() ->
         {
-            for(int row=1; row < s2d.length; row++)
+            for (int row = 1; row < s2d.length; row++)
             {
-                switch(s2d[row][0])
+                switch (s2d[row][0])
                 {
-                    case "Drive":
-                        System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
-                        Robot.driveBaseSystem.setLeftSpeed(.5);
-                        Robot.driveBaseSystem.setRightSpeed(.5);
-                        try {Thread.sleep(250 * Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
-                        Robot.driveBaseSystem.setLeftSpeed(0);
-                        Robot.driveBaseSystem.setRightSpeed(0);
-                        break;
-                    case "Turn":
-                        System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
-                        int parsed = Integer.parseInt(s2d[row][1]);
-                        Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
-                        Robot.driveBaseSystem.setRightSpeed((parsed > 0) ? -.5 : .5);
-                        try {Thread.sleep(250 * parsed);} catch(Exception e) {}
-                        Robot.driveBaseSystem.setLeftSpeed(0);
-                        Robot.driveBaseSystem.setRightSpeed(0);
-                        break;
-                    default:
-                        System.out.println("COMMAND UNRECOGNIZED ON LINE " + row);
+                case "Drive":
+                    System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
+                    Robot.driveBaseSystem.setLeftSpeed(.5);
+                    Robot.driveBaseSystem.setRightSpeed(.5);
+                    try
+                    {
+                        Thread.sleep(250 * Integer.parseInt(s2d[row][1]));
+                    } catch (Exception e)
+                    {
+                    }
+                    Robot.driveBaseSystem.setLeftSpeed(0);
+                    Robot.driveBaseSystem.setRightSpeed(0);
+                    break;
+                case "Turn":
+                    System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
+                    int parsed = Integer.parseInt(s2d[row][1]);
+                    Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
+                    Robot.driveBaseSystem.setRightSpeed((parsed > 0) ? -.5 : .5);
+                    try
+                    {
+                        Thread.sleep(250 * parsed);
+                    } catch (Exception e)
+                    {
+                    }
+                    Robot.driveBaseSystem.setLeftSpeed(0);
+                    Robot.driveBaseSystem.setRightSpeed(0);
+                    break;
+                default:
+                    System.out.println("COMMAND UNRECOGNIZED ON LINE " + row);
                 }
             }
         }).start();

@@ -16,7 +16,7 @@ public class IntakeCommand extends Command
     {
         requires(Robot.intakeSystem);
         isStart = start;
-        isIn    = in;
+        isIn = in;
     }
 
     // Called just before this Command runs the first time

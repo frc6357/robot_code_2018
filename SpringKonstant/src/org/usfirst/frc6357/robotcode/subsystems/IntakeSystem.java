@@ -9,12 +9,13 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
- * Subsystem controlling the power cube intake mechanism in the robot. This mechanism comprises
- * two motors connected to TalonSRX motor controllers and a pneumatic actuator to swing the
- * mechanism upwards into its stowed position. Current limits are set on the motors to cause them
- * to stop automatically when blocked.
+ * Subsystem controlling the power cube intake mechanism in the robot. This
+ * mechanism comprises two motors connected to TalonSRX motor controllers and a
+ * pneumatic actuator to swing the mechanism upwards into its stowed position.
+ * Current limits are set on the motors to cause them to stop automatically when
+ * blocked.
  */
-public class IntakeSystem extends Subsystem 
+public class IntakeSystem extends Subsystem
 {
 
     private static final double INTAKE_SPEED = 0.25;
@@ -27,25 +28,25 @@ public class IntakeSystem extends Subsystem
     {
         // TODO: Update if we add solenoids to control intake grippers.
 
-        intakeSolenoid   = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
+        intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
 
-        intakeLeftMotor  = new WPI_TalonSRX(Ports.ArmElevationMotor);
+        intakeLeftMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
 
         // TODO: Set current limits sensibly so that we catch case where a cube is
         // pulled into the mechanism and the motor stalls.
 
         /*
-        intakeRightMotor.configPeakCurrentLimit(35, 10);       // 35 A
-        intakeRightMotor.configPeakCurrentDuration(200, 10);   // 200ms
-        intakeRightMotor.configContinuousCurrentLimit(30, 10); // 30A
-        intakeRightMotor.enableCurrentLimit(true);
-
-        intakeRightMotor.setInverted(true);
-        intakeRightMotor.set(ControlMode.Follower, intakeLeftMotor.getDeviceID());
-
-        intakeLeftMotor.set(0.0);
-        */
+         * intakeRightMotor.configPeakCurrentLimit(35, 10); // 35 A
+         * intakeRightMotor.configPeakCurrentDuration(200, 10); // 200ms
+         * intakeRightMotor.configContinuousCurrentLimit(30, 10); // 30A
+         * intakeRightMotor.enableCurrentLimit(true);
+         * 
+         * intakeRightMotor.setInverted(true);
+         * intakeRightMotor.set(ControlMode.Follower, intakeLeftMotor.getDeviceID());
+         * 
+         * intakeLeftMotor.set(0.0);
+         */
     }
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -53,7 +54,9 @@ public class IntakeSystem extends Subsystem
     /**
      * Sets the raw speed of the intake motors.
      *
-     * @param speed The speed setting for the intake motors. Valid values are in the range -1.0 to 1.0.
+     * @param speed
+     *            The speed setting for the intake motors. Valid values are in the
+     *            range -1.0 to 1.0.
      *
      * @return None
      */
@@ -63,28 +66,29 @@ public class IntakeSystem extends Subsystem
     }
 
     /**
-     * Helper function used to control the state of both intake motors at the
-     * same time. This allows the motors to be started and run in forwards or
-     * backwards direction, or stopped. When started, motors are run at a constant
-     * speed.
+     * Helper function used to control the state of both intake motors at the same
+     * time. This allows the motors to be started and run in forwards or backwards
+     * direction, or stopped. When started, motors are run at a constant speed.
      *
-     * @param Start   - if true, the intake motors are started. If false, they are stopped.
-     * @param Inwards - if Start is true, this controls the motor direction, inwards (true) or
-     *                  outwards (false).
+     * @param Start
+     *            - if true, the intake motors are started. If false, they are
+     *            stopped.
+     * @param Inwards
+     *            - if Start is true, this controls the motor direction, inwards
+     *            (true) or outwards (false).
      */
     public void setIntakeMotorState(boolean Start, boolean Inwards)
     {
         double Speed;
 
-        if(!Start)
+        if (!Start)
         {
             Speed = 0.0;
-        }
-        else
+        } else
         {
             Speed = INTAKE_SPEED;
 
-            if(Inwards)
+            if (Inwards)
             {
                 Speed *= -1;
             }
@@ -100,16 +104,15 @@ public class IntakeSystem extends Subsystem
      */
     public boolean toggleIntakeSwing()
     {
-        if(intakeIsUp)
+        if (intakeIsUp)
         {
             setIntakeDown();
-        }
-        else
+        } else
         {
             setIntakeDown();
         }
 
-        return(intakeIsUp);
+        return (intakeIsUp);
     }
 
     /**
@@ -137,7 +140,6 @@ public class IntakeSystem extends Subsystem
     public void initDefaultCommand()
     {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        // setDefaultCommand(new MySpecialCommand());
     }
 }
-

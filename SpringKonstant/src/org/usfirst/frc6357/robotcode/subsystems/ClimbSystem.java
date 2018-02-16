@@ -7,9 +7,9 @@ import org.usfirst.frc6357.robotcode.Ports;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
- * Subsystem controlling the climb mechanism in the robot. This mechanism comprises a single
- * motor driving a winch, and two normally-open limit switches which will be wired to the
- * TalonSRX motor controller.
+ * Subsystem controlling the climb mechanism in the robot. This mechanism
+ * comprises a single motor driving a winch, and two normally-open limit
+ * switches which will be wired to the TalonSRX motor controller.
  */
 public class ClimbSystem extends Subsystem
 {
