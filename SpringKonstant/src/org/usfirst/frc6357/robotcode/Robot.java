@@ -58,7 +58,7 @@ public class Robot extends TimedRobot
 
         // Add commands to Autonomous Sendable Chooser
 
-        chooser.addDefault("Test", "/home/lvuser/Test.csv");
+        chooser.addDefault("Test", "/home/lvuser/AutoSheets/Test.csv");
     }
 
     /**

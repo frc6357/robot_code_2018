@@ -8,6 +8,7 @@ public class FilterDeadband extends Filter
 {
     private double deadband;    //The deadbanding for the input, equal to distance from zero
     private double slope;       //The slope m of the y=mx line to get careful control
+    private double gain;        //The gain is the maximum value for a graph, and is by default 1
     
     /**
      * The consructor for a filter with a deadband
@@ -15,7 +16,19 @@ public class FilterDeadband extends Filter
      */
     public FilterDeadband(double deadband)
     {
+        gain = 1;
         setDeadband(deadband);
+    }
+    
+    /**
+     * The constructor which allows a user to specify gain
+     * @param deadband deadband the deadbanding zone, equivalent to the distance from zero
+     * @param gain the gain for which to set the max value
+     */
+    public FilterDeadband(double deadband, double gain)
+    {
+        setDeadband(deadband);
+        this.gain = gain;
     }
 
     /**
@@ -29,7 +42,7 @@ public class FilterDeadband extends Filter
     {
         if(!(Math.abs(rawAxis) < deadband))
         {
-            return (slope * (rawAxis - deadband));
+            return (slope * (rawAxis - deadband)) * gain;
         }
         else
         {
@@ -46,5 +59,14 @@ public class FilterDeadband extends Filter
     {
         this.deadband = deadband;
         slope = 1 / (1 - deadband);
+    }
+    
+    /**
+     * Sets the maximum out put of the filter
+     * @param gain the new gain to adjust output
+     */
+    public void setGain(double gain)
+    {
+        this.gain = gain;
     }
 }

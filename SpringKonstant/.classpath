@@ -23,10 +23,10 @@
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/junit-4.12.jar"/>
-	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
-	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
-	<classpathentry kind="var" path="opencv" sourcepath="opencv.sources"/>
-	<classpathentry kind="var" path="cscore" sourcepath="cscore.sources"/>
-	<classpathentry kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
+	<classpathentry exported="true" kind="var" path="wpilib" sourcepath="wpilib.sources"/>
+	<classpathentry exported="true" kind="var" path="networktables" sourcepath="networktables.sources"/>
+	<classpathentry exported="true" kind="var" path="opencv" sourcepath="opencv.sources"/>
+	<classpathentry exported="true" kind="var" path="cscore" sourcepath="cscore.sources"/>
+	<classpathentry exported="true" kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

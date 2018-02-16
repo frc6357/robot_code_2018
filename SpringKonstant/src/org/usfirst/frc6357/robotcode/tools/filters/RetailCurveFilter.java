@@ -8,14 +8,26 @@ package org.usfirst.frc6357.robotcode.tools.filters;
  */
 public class RetailCurveFilter extends Filter
 {
-    private double coefficient;
+    private double coefficient, gain;
     
     /**
-     * Constructor which generates a retail curve with the degree of coef
-     * @param coef the coefficient of the retail curve
+     * Constructor which generates a retail curve with the degree of coef (affects curvature)
+     * @param coef the coefficient of the retail curve (affects curvature)
      */
     public RetailCurveFilter(double coef)
     {
+        gain = 1;
+        coefficient = coef;
+    }
+    
+    /**
+     * Overloaded constructor that allows the user to affect both curvature and max value
+     * @param coef the coefficient with which to adjust curvature
+     * @param gain the gain which which to adjust max value
+     */
+    public RetailCurveFilter(double coef, double gain)
+    {
+        this.gain = gain;
         coefficient = coef;
     }
     
@@ -38,5 +50,14 @@ public class RetailCurveFilter extends Filter
     {
         if(Math.abs(c) > 10) return;
         coefficient = c;
+    }
+    
+    /**
+     * Sets the gain to a new parameter
+     * @param g the new gain with which to adjust output
+     */
+    public void setGain(double g)
+    {
+        gain = g;
     }
 }
