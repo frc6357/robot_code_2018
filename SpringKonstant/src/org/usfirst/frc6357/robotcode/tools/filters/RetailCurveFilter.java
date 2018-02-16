@@ -39,7 +39,7 @@ public class RetailCurveFilter extends Filter
     @Override
     public double filter(double rawAxis)
     {
-        return rawAxis * coefficient/9 + Math.pow(rawAxis, 5) * (9-coefficient)/9;
+        return gain * (rawAxis * coefficient/9 + Math.pow(rawAxis, 5) * (9-coefficient)/9);
     }
 
     /**
