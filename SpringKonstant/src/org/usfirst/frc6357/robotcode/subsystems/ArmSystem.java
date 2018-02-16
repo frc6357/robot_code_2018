@@ -41,6 +41,16 @@ public class ArmSystem extends Subsystem
         limitLower = new DigitalInput(Ports.ArmLimitBottom);
     }
 
+    /*
+     * Call this method from the robot's main periodic callback to update the state
+     * of the arm. Here we set the ARM motor speed based on the desired value passed in
+     * and the states of the two limit switches, stopping the motor if we are commanded
+     * to drive past the limit switch in either direction.
+     *
+     * @param speed - the desired ARM motor speed in the range (-1.0, 1.0).
+     *
+     * @returns None
+     */
     public void Periodic(double speed)
     {
         double calcSpeed = speed;
@@ -89,7 +99,7 @@ public class ArmSystem extends Subsystem
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
     }
 
-    public void setArmSpeed(double speed)
+    private void setArmSpeed(double speed)
     {
         armMotor.set(speed);
     }
