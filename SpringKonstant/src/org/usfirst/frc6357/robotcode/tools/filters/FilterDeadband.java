@@ -7,16 +7,10 @@ package org.usfirst.frc6357.robotcode.tools.filters;
  */
 public class FilterDeadband extends Filter
 {
-<<<<<<< HEAD
-    private double deadband; // The deadbanding for the input, equal to distance from zero
-    private double slope; // The slope m of the y=mx line to get careful control
-
-=======
     private double deadband;    //The deadbanding for the input, equal to distance from zero
     private double slope;       //The slope m of the y=mx line to get careful control
     private double gain;        //The gain is the maximum value for a graph, and is by default 1
     
->>>>>>> fb97cc594c408298ae19283321e6099499704689
     /**
      * The consructor for a filter with a deadband
      * 
@@ -53,16 +47,11 @@ public class FilterDeadband extends Filter
     {
         if (!(Math.abs(rawAxis) < deadband))
         {
-<<<<<<< HEAD
             return (slope * (rawAxis - deadband));
-        } else
-=======
-            return (slope * (rawAxis - deadband)) * gain;
-        }
+        } 
         else
->>>>>>> fb97cc594c408298ae19283321e6099499704689
         {
-            return 0;
+            return (slope * (rawAxis - deadband)) * gain;
         }
     }
 

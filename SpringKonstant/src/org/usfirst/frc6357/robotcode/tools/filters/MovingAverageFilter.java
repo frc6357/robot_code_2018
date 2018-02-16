@@ -54,13 +54,7 @@ public class MovingAverageFilter extends Filter
             average -= average / MAX_VALUES;
             average += rawAxis / MAX_VALUES;
         }
-<<<<<<< HEAD
-
-        return average;
-=======
-        
         return average * gain;
->>>>>>> fb97cc594c408298ae19283321e6099499704689
     }
 
     /**

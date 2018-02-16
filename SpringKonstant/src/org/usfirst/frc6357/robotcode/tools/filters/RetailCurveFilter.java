@@ -7,21 +7,12 @@ package org.usfirst.frc6357.robotcode.tools.filters;
  */
 public class RetailCurveFilter extends Filter
 {
-<<<<<<< HEAD
     private double coefficient;
-
-    /**
-     * Constructor which generates a retail curve with the degree of coef
-     * 
-     * @param coef
-     *            the coefficient of the retail curve
-=======
-    private double coefficient, gain;
+    private double gain;
     
     /**
      * Constructor which generates a retail curve with the degree of coef (affects curvature)
      * @param coef the coefficient of the retail curve (affects curvature)
->>>>>>> fb97cc594c408298ae19283321e6099499704689
      */
     public RetailCurveFilter(double coef)
     {
@@ -50,11 +41,7 @@ public class RetailCurveFilter extends Filter
     @Override
     public double filter(double rawAxis)
     {
-<<<<<<< HEAD
-        return rawAxis * coefficient / 9 + Math.pow(rawAxis, 5) * (9 - coefficient) / 9;
-=======
         return gain * (rawAxis * coefficient/9 + Math.pow(rawAxis, 5) * (9-coefficient)/9);
->>>>>>> fb97cc594c408298ae19283321e6099499704689
     }
 
     /**

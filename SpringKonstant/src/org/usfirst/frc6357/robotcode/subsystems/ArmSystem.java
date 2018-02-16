@@ -31,20 +31,11 @@ public class ArmSystem extends Subsystem
     public ArmSystem()
     {
         armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
-        /*
-<<<<<<< HEAD
-         * armMotor.set(0.0); armMotor.configPeakCurrentLimit(35, 10); // 35 A
-         * armMotor.configPeakCurrentDuration(200, 10); // 200ms
-         * armMotor.configContinuousCurrentLimit(30, 10); // 30A
-         * armMotor.enableCurrentLimit(true);
-         */
-=======
         armMotor.set(0.0);
         armMotor.configPeakCurrentLimit(35, 10);       // 35 A
         armMotor.configPeakCurrentDuration(200, 10);   // 200ms
         armMotor.configContinuousCurrentLimit(30, 10); // 30A
         armMotor.enableCurrentLimit(true);
-        */
 
         limitUpper = new DigitalInput(Ports.ArmLimitTop);
         limitLower = new DigitalInput(Ports.ArmLimitBottom);
@@ -106,7 +97,6 @@ public class ArmSystem extends Subsystem
         SmartDashboard.putNumber("ARM current", armMotor.getOutputCurrent());
         SmartDashboard.putBoolean("ARM Upper Limit", tripUpper);
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
->>>>>>> fb97cc594c408298ae19283321e6099499704689
     }
 
     private void setArmSpeed(double speed)
