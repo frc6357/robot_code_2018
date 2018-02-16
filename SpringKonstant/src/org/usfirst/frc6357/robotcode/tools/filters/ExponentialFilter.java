@@ -12,8 +12,13 @@ package org.usfirst.frc6357.robotcode.tools.filters;
  */
 public class ExponentialFilter extends Filter
 {
+<<<<<<< HEAD
     private double coefficient;
 
+=======
+    private double coefficient; //Coefficient or gain to multiply by
+    
+>>>>>>> fb97cc594c408298ae19283321e6099499704689
     /**
      * Default constructor, gives a coefficient of coef
      * 

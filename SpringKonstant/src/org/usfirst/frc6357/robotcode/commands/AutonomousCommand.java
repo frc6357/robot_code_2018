@@ -49,6 +49,7 @@ public class AutonomousCommand extends Command
             {
                 switch (s2d[row][0])
                 {
+<<<<<<< HEAD
                 case "Drive":
                     System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
                     Robot.driveBaseSystem.setLeftSpeed(.5);
@@ -78,6 +79,55 @@ public class AutonomousCommand extends Command
                     break;
                 default:
                     System.out.println("COMMAND UNRECOGNIZED ON LINE " + row);
+=======
+                    case "Wait":
+                        try {Thread.sleep(Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
+                        break;
+                    case "Drive":
+                        //EVENTUAL FUNCTION: driveBaseSystem.drive(s[1] in feet)
+                        System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
+                        Robot.driveBaseSystem.setLeftSpeed(.5);
+                        Robot.driveBaseSystem.setRightSpeed(.5);
+                        try {Thread.sleep(250 * Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
+                        Robot.driveBaseSystem.setLeftSpeed(0);
+                        Robot.driveBaseSystem.setRightSpeed(0);
+                        break;
+                    case "Turn":
+                        //EVENTUAL FUNCTION: driveBaseSystem.turn(s[1] is degrees)
+                        System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
+                        int parsed = Integer.parseInt(s2d[row][1]);
+                        Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
+                        Robot.driveBaseSystem.setRightSpeed((parsed > 0) ? -.5 : .5);
+                        try {Thread.sleep(250 * parsed);} catch(Exception e) {}
+                        Robot.driveBaseSystem.setLeftSpeed(0);
+                        Robot.driveBaseSystem.setRightSpeed(0);
+                        break;
+                    case "Arm":
+                        //EVENTUAL FUNCTION: Change the height of the arm according to spec: floor, switch, scale middle, scale high
+                        switch(Integer.parseInt(s2d[row][1]))
+                        {
+                            case 0:
+                                //Floor
+                                break;
+                            case 1:
+                                //Switch
+                                break;
+                            case 2:
+                                //Scale
+                                break;
+                            case 3:
+                                //High scale
+                                break;
+                            default:
+                                System.out.println("ERROR TRYING TO PARSE ARM INPUT");
+                        }
+                        break;
+                    case "Box Push":
+                        //EVENTUAL FUNCTION: Push out the box, whatever that command ends up being called
+                        break;
+                    default:
+                        System.out.println("COMMAND UNRECOGNIZED ON LINE " + row);
+>>>>>>> fb97cc594c408298ae19283321e6099499704689
                 }
             }
         }).start();

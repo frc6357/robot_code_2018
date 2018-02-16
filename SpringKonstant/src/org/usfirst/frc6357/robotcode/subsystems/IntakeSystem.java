@@ -1,11 +1,11 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 import org.usfirst.frc6357.robotcode.Ports;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
@@ -63,6 +63,10 @@ public class IntakeSystem extends Subsystem
     public void setIntakeSpeed(double speed)
     {
         intakeLeftMotor.set(speed);
+
+        SmartDashboard.putNumber("Intake speed", speed);
+        SmartDashboard.putNumber("Intake left current",  intakeLeftMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Intake right current", intakeRightMotor.getOutputCurrent());
     }
 
     /**
@@ -124,6 +128,8 @@ public class IntakeSystem extends Subsystem
     {
         intakeSolenoid.set(DoubleSolenoid.Value.kForward);
         intakeIsUp = true;
+        SmartDashboard.putString("Intake", "up");
+
     }
 
     /**
@@ -135,6 +141,7 @@ public class IntakeSystem extends Subsystem
     {
         intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
         intakeIsUp = false;
+        SmartDashboard.putString("Intake", "down");
     }
 
     public void initDefaultCommand()

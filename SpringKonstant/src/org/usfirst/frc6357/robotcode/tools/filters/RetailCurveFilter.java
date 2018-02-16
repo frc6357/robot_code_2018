@@ -7,6 +7,7 @@ package org.usfirst.frc6357.robotcode.tools.filters;
  */
 public class RetailCurveFilter extends Filter
 {
+<<<<<<< HEAD
     private double coefficient;
 
     /**
@@ -14,9 +15,28 @@ public class RetailCurveFilter extends Filter
      * 
      * @param coef
      *            the coefficient of the retail curve
+=======
+    private double coefficient, gain;
+    
+    /**
+     * Constructor which generates a retail curve with the degree of coef (affects curvature)
+     * @param coef the coefficient of the retail curve (affects curvature)
+>>>>>>> fb97cc594c408298ae19283321e6099499704689
      */
     public RetailCurveFilter(double coef)
     {
+        gain = 1;
+        coefficient = coef;
+    }
+    
+    /**
+     * Overloaded constructor that allows the user to affect both curvature and max value
+     * @param coef the coefficient with which to adjust curvature
+     * @param gain the gain which which to adjust max value
+     */
+    public RetailCurveFilter(double coef, double gain)
+    {
+        this.gain = gain;
         coefficient = coef;
     }
 
@@ -30,7 +50,11 @@ public class RetailCurveFilter extends Filter
     @Override
     public double filter(double rawAxis)
     {
+<<<<<<< HEAD
         return rawAxis * coefficient / 9 + Math.pow(rawAxis, 5) * (9 - coefficient) / 9;
+=======
+        return gain * (rawAxis * coefficient/9 + Math.pow(rawAxis, 5) * (9-coefficient)/9);
+>>>>>>> fb97cc594c408298ae19283321e6099499704689
     }
 
     /**
@@ -44,5 +68,14 @@ public class RetailCurveFilter extends Filter
         if (Math.abs(c) > 10)
             return;
         coefficient = c;
+    }
+    
+    /**
+     * Sets the gain to a new parameter
+     * @param g the new gain with which to adjust output
+     */
+    public void setGain(double g)
+    {
+        gain = g;
     }
 }

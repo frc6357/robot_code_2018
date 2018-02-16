@@ -8,7 +8,7 @@ package org.usfirst.frc6357.robotcode.tools.filters;
 public class MovingAverageFilter extends Filter
 {
     private int MAX_VALUES;
-    private double average;
+    private double average, gain;
     private boolean firstPass;
 
     /**
@@ -19,9 +19,21 @@ public class MovingAverageFilter extends Filter
      */
     public MovingAverageFilter(int max)
     {
+        gain = 1;
         MAX_VALUES = max;
     }
 
+    /**
+     * Constructor which allows you to pass both mmaximum number of values and gain
+     * @param max the max number of values calculated in the average
+     * @param g the gain to which you set the filter
+     */
+    public MovingAverageFilter(int max, double g)
+    {
+        MAX_VALUES = max;
+        gain = g;
+    }
+    
     /**
      * Filter which uses a moving average to calculate the rate of acceleration
      * Primarily exists for gentler acceleration and reduced slippage
@@ -42,8 +54,13 @@ public class MovingAverageFilter extends Filter
             average -= average / MAX_VALUES;
             average += rawAxis / MAX_VALUES;
         }
+<<<<<<< HEAD
 
         return average;
+=======
+        
+        return average * gain;
+>>>>>>> fb97cc594c408298ae19283321e6099499704689
     }
 
     /**
@@ -55,5 +72,14 @@ public class MovingAverageFilter extends Filter
     public void setMaxValues(int m)
     {
         MAX_VALUES = m;
+    }
+    
+    /**
+     * Sets the gain to a new parameter
+     * @param g the new gain with which to adjust output
+     */
+    public void setGain(double g)
+    {
+        gain = g;
     }
 }

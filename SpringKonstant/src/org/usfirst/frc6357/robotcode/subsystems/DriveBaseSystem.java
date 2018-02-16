@@ -5,7 +5,6 @@ import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
 import org.usfirst.frc6357.robotcode.subsystems.PID.PositionAndVelocityControlledDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -25,7 +24,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  * means that the speed sent to the master controllers are sent to the other
  * speed controllers on each side.
  *
- * TODO: determine all methods that need to be in the Base class for the drive
  */
 public class DriveBaseSystem extends Subsystem
 {
@@ -73,19 +71,22 @@ public class DriveBaseSystem extends Subsystem
     {
         super();
 
+<<<<<<< HEAD
         // TODO: Change these to VictorSPX controllers when we move to the
         // new robot chassis. We left them as Talons for now while testing
         // on the 2017 robot.
 
+=======
+>>>>>>> fb97cc594c408298ae19283321e6099499704689
         // Left Drive Controllers
-        baseFrontLeftMaster = new WPI_TalonSRX(Ports.DriveLeftFrontMotor);
-        baseCenterLeft = new WPI_TalonSRX(Ports.DriveLeftCenterMotor);
-        baseBackLeft = new WPI_TalonSRX(Ports.DriveLeftRearMotor);
+        baseFrontLeftMaster = new WPI_VictorSPX(Ports.DriveLeftFrontMotor);
+        baseCenterLeft = new WPI_VictorSPX(Ports.DriveLeftCenterMotor);
+        baseBackLeft = new WPI_VictorSPX(Ports.DriveLeftRearMotor);
 
         // Right Drive Controllers
-        baseFrontRightMaster = new WPI_TalonSRX(Ports.DriveRightFrontMotor);
-        baseCenterRight = new WPI_TalonSRX(Ports.DriveRightCenterMotor);
-        baseBackRight = new WPI_TalonSRX(Ports.DriveRightRearMotor);
+        baseFrontRightMaster = new WPI_VictorSPX(Ports.DriveRightFrontMotor);
+        baseCenterRight = new WPI_VictorSPX(Ports.DriveRightCenterMotor);
+        baseBackRight = new WPI_VictorSPX(Ports.DriveRightRearMotor);
 
         // Inverts the speed controllers so they do not spin the wrong way.
         baseBackRight.setInverted(true);
@@ -105,13 +106,13 @@ public class DriveBaseSystem extends Subsystem
 
         // This sets the all the speed controllers on the right side to follow the
         // center speed controller
-        ((WPI_TalonSRX) baseBackRight).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontRightMaster).getDeviceID());
-        ((WPI_TalonSRX) baseCenterRight).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontRightMaster).getDeviceID());
+        ((WPI_VictorSPX) baseBackRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
+        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
 
         // This sets the all the speed controllers on the left side to follow the center
         // speed controller
-        ((WPI_TalonSRX) baseCenterLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
-        ((WPI_TalonSRX) baseBackLeft).set(ControlMode.Follower, ((WPI_TalonSRX) baseFrontLeftMaster).getDeviceID());
+        ((WPI_VictorSPX) baseCenterLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
+        ((WPI_VictorSPX) baseBackLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
 
         // Strafing motor
         baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
