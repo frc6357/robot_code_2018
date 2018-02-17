@@ -35,7 +35,7 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseFrontRightMaster; // Master speed controller
     private final SpeedController baseCenterRight;
     private final SpeedController baseBackRight;
-
+    
     // Gear shifter
     private final DoubleSolenoid baseGearShiftSolenoid;
     private boolean baseHighGear;
@@ -43,6 +43,9 @@ public class DriveBaseSystem extends Subsystem
     // Encoders
     private final Encoder rightEncoder;
     private final Encoder leftEncoder;
+    private final double DISTANCE_PER_PULSE;
+    private final int PULSES_PER_ROTATION;
+    private final int DRIVE_WHEEL_RADIUS;
 
     // Strafing system motors and state
     private final SpeedController baseStrafe;
@@ -131,6 +134,11 @@ public class DriveBaseSystem extends Subsystem
         isInVelocityMode = false;
 
         // Set initial states of all actuators
+        PULSES_PER_ROTATION = 1000;
+        DRIVE_WHEEL_RADIUS = 2; // This is in inches
+        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION; 
+        
+        setEncoderDistancePerPulse();
         leftEncoder.reset();
         rightEncoder.reset();
         deployStrafe(baseStrafeDeployed);
@@ -247,6 +255,16 @@ public class DriveBaseSystem extends Subsystem
     }
 
     /**
+     * Sets the distance per encoder pulse
+     * TODO set this distance
+     * @param distance in any unit
+     */
+    public void setEncoderDistancePerPulse()
+    {
+        leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+        rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
+    }
+    /**
      * This method is used to set the speed of the strafing motor.
      *
      * @param speed
@@ -276,7 +294,7 @@ public class DriveBaseSystem extends Subsystem
             return 0.0;
         }
     }
-
+    
     /**
      * This method is used to deploy or stow the strafing mechanism.
      *
@@ -330,7 +348,6 @@ public class DriveBaseSystem extends Subsystem
      * @return Returns the current state of the strafing mechanism, true if
      *         deployed, false if stowed.
      */
-
     public boolean getStrafeState()
     {
         return (baseStrafeDeployed);
@@ -374,7 +391,7 @@ public class DriveBaseSystem extends Subsystem
     {
         return rightEncoder.getRate();
     }
-
+    
     /**
      * Each subsystem may, but is not required to, have a default command which is
      * scheduled whenever the subsystem is idle. If default command is needed use

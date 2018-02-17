@@ -146,7 +146,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.setStrafeSpeed(driveStrafe);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.Periodic(armSpeed);
+        armSystem.periodic(armSpeed);
 
         SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
         SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
@@ -196,6 +196,6 @@ public class Robot extends TimedRobot
         driveBaseSystem.setStrafeSpeed(driveStrafe);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.Periodic(armSpeed);
+        armSystem.periodic(armSpeed);
     }
 }

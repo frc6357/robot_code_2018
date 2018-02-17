@@ -2,6 +2,7 @@ package org.usfirst.frc6357.robotcode.subsystems.PID;
 
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SpeedController;
 
 /**
@@ -14,7 +15,7 @@ import edu.wpi.first.wpilibj.SpeedController;
  * PID controller is for teleop.
  * 
  */
-public class PositionAndVelocityControlledDrive
+public class PositionAndVelocityControlledDrive implements PIDOutput
 {
     private final SpeedController mySpeedController;
     private final Encoder myEncoder;
@@ -144,13 +145,19 @@ public class PositionAndVelocityControlledDrive
             return false;
         }
     }
-
+    
     /**
      * @return returns the current set point
      */
     public double getSpeedSetPoint()
     {
         return myVelocityControl.getSetpoint();
+    }
+
+    @Override
+    public void pidWrite(double output)
+    {
+        setDistanceTarget(output);
     }
 
 }

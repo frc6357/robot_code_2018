@@ -5,19 +5,19 @@ import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
 /**
- * This class is a PID source for the position PID controller
+ *  This class is a PID source for the arm PID
  */
-public class EncoderPositionDrivePID implements PIDSource
+public class EncoderPositionArmPID implements PIDSource
 {
-    private final Encoder myEncoder;
-
+    private Encoder myEncoder; // Encoder
+    
     /**
-     * Constructor
+     * 
      * @param inEncoder - The encoder
      */
-    public EncoderPositionDrivePID(Encoder inEncoder)
+    public EncoderPositionArmPID(Encoder inEncoder)
     {
-        myEncoder = inEncoder;
+       myEncoder = inEncoder; 
     }
 
     /**
@@ -27,8 +27,9 @@ public class EncoderPositionDrivePID implements PIDSource
     public void setPIDSourceType(PIDSourceType pidSource)
     {
         return;
+        
     }
-
+    
     /**
      * 
      */
