@@ -18,7 +18,7 @@ public class CSVReader
     /**
      * This method parses through the selected CSV file and reads in the data
      * 
-     * @param fileName
+     * @param fileNamen
      *            a string representing the file path for the selected csv
      * @return a 2D array of Strings containing all of the data in the CSV file with
      *         the following format: line[0] is irrelevant (user reference),
@@ -33,7 +33,8 @@ public class CSVReader
         try
         {
             sc = new Scanner(new File(fileName));
-        } catch (FileNotFoundException e)
+        }
+        catch (FileNotFoundException e)
         {
             System.out.println("Auto-plan file not found: " + e);
         }

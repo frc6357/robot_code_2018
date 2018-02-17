@@ -14,8 +14,7 @@ public class FilterDeadband extends Filter
     /**
      * The consructor for a filter with a deadband
      * 
-     * @param deadband
-     *            the deadbanding zone, equivalent to the distance from zero
+     * @param deadband the deadbanding zone, equivalent to the distance from zero
      */
     public FilterDeadband(double deadband)
     {
@@ -25,6 +24,7 @@ public class FilterDeadband extends Filter
     
     /**
      * The constructor which allows a user to specify gain
+     * 
      * @param deadband deadband the deadbanding zone, equivalent to the distance from zero
      * @param gain the gain for which to set the max value
      */
@@ -60,7 +60,7 @@ public class FilterDeadband extends Filter
      * distance to zero Also adjust the slope of the y=mx line for better
      * functionality
      * 
-     * @param deadband
+     * @param deadband the new deadband to set the value to
      */
     public void setDeadband(double deadband)
     {

@@ -12,6 +12,7 @@ public class RetailCurveFilter extends Filter
     
     /**
      * Constructor which generates a retail curve with the degree of coef (affects curvature)
+     * 
      * @param coef the coefficient of the retail curve (affects curvature)
      */
     public RetailCurveFilter(double coef)
@@ -22,6 +23,7 @@ public class RetailCurveFilter extends Filter
     
     /**
      * Overloaded constructor that allows the user to affect both curvature and max value
+     * 
      * @param coef the coefficient with which to adjust curvature
      * @param gain the gain which which to adjust max value
      */
@@ -34,8 +36,7 @@ public class RetailCurveFilter extends Filter
     /**
      * Generates filtered data that follows a retail curve
      * 
-     * @param rawAxis
-     *            the data to be passed in, from -1 to 1
+     * @param rawAxis the data to be passed in, from -1 to 1
      * @return the newly filtered data from -1 to 1
      */
     @Override
@@ -47,8 +48,7 @@ public class RetailCurveFilter extends Filter
     /**
      * Sets the coefficient to a new variable
      * 
-     * @param c
-     *            the coefficient to be passed, between 0 and 10
+     * @param c the coefficient to be passed, between 0 and 10
      */
     public void setCoef(double c)
     {
@@ -59,6 +59,7 @@ public class RetailCurveFilter extends Filter
     
     /**
      * Sets the gain to a new parameter
+     * 
      * @param g the new gain with which to adjust output
      */
     public void setGain(double g)
