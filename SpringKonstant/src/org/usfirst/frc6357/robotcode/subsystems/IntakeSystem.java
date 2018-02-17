@@ -65,7 +65,7 @@ public class IntakeSystem extends Subsystem
         intakeLeftMotor.set(speed);
 
         SmartDashboard.putNumber("Intake speed", speed);
-        SmartDashboard.putNumber("Intake left current",  intakeLeftMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Intake left current", intakeLeftMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake right current", intakeRightMotor.getOutputCurrent());
     }
 
@@ -74,31 +74,32 @@ public class IntakeSystem extends Subsystem
      * time. This allows the motors to be started and run in forwards or backwards
      * direction, or stopped. When started, motors are run at a constant speed.
      *
-     * @param Start
+     * @param start
      *            - if true, the intake motors are started. If false, they are
      *            stopped.
-     * @param Inwards
+     * @param inwards
      *            - if Start is true, this controls the motor direction, inwards
      *            (true) or outwards (false).
      */
-    public void setIntakeMotorState(boolean Start, boolean Inwards)
+    public void setIntakeMotorState(boolean start, boolean inwards)
     {
-        double Speed;
+        double speed;
 
-        if (!Start)
+        if (!start)
         {
-            Speed = 0.0;
-        } else
+            speed = 0.0;
+        }
+        else
         {
-            Speed = INTAKE_SPEED;
+            speed = INTAKE_SPEED;
 
-            if (Inwards)
+            if (inwards)
             {
-                Speed *= -1;
+                speed *= -1;
             }
         }
 
-        setIntakeSpeed(Speed);
+        setIntakeSpeed(speed);
     }
 
     /**
@@ -111,7 +112,8 @@ public class IntakeSystem extends Subsystem
         if (intakeIsUp)
         {
             setIntakeDown();
-        } else
+        }
+        else
         {
             setIntakeDown();
         }

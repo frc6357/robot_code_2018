@@ -1,9 +1,13 @@
-
 package org.usfirst.frc6357.robotcode;
 
 import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
+import org.usfirst.frc6357.robotcode.commands.GearShiftCommand;
+import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
+import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
+import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
+import org.usfirst.frc6357.robotcode.commands.StrafeStow;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
@@ -161,8 +165,6 @@ public class Robot extends TimedRobot
     @Override
     public void testInit()
     {
-
-        
         
     }
     
@@ -172,6 +174,15 @@ public class Robot extends TimedRobot
         double driveLeft, driveRight, driveStrafe, robotAngle, climbSpeed, armSpeed;
         double rotateAdjust, lAdjust, rAdjust;
 
+        SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
+        SmartDashboard.putData("Stow strafe", new StrafeStow());
+        SmartDashboard.putData("Shift Gears up", new GearShiftCommand(true));
+        SmartDashboard.putData("Shift Gears down", new GearShiftCommand(false));
+        SmartDashboard.putData("Turn intake on and inwards", new IntakeCommand(true, true));
+        SmartDashboard.putData("Turn intake on and outwards", new IntakeCommand(true, false));
+        SmartDashboard.putData("Turn intake off", new IntakeCommand(false, false));
+        SmartDashboard.putData("Toggle intake swing", new IntakeSwingToggle());
+        
         Scheduler.getInstance().run();
         
         driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
@@ -187,14 +198,4 @@ public class Robot extends TimedRobot
         climbSystem.setWinchSpeed(climbSpeed);
         armSystem.Periodic(armSpeed);
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }
