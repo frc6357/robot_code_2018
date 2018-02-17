@@ -3,7 +3,6 @@ package org.usfirst.frc6357.robotcode.subsystems.PID;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
-import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
  *
