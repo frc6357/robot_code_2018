@@ -28,15 +28,15 @@ public class Ports
     // *****************
     // Drive Subsystem
     // *****************
-    public static final int DriveLeftFrontMotor = 10; // CAN ID 10
-    public static final int DriveLeftCenterMotor = 11; // CAN ID 11
-    public static final int DriveLeftRearMotor = 15; // CAN ID 15
+    public static final int driveLeftFrontMotor = 10; // CAN ID 10
+    public static final int driveLeftCenterMotor = 11; // CAN ID 11
+    public static final int driveLeftRearMotor = 15; // CAN ID 15
 
-    public static final int DriveRightFrontMotor = 12; // CAN ID 12
-    public static final int DriveRightCenterMotor = 14; // CAN ID 14
-    public static final int DriveRightRearMotor = 16; // CAN ID 16
+    public static final int driveRightFrontMotor = 12; // CAN ID 12
+    public static final int driveRightCenterMotor = 14; // CAN ID 14
+    public static final int driveRightRearMotor = 16; // CAN ID 16
 
-    public static final int DriveStrafeMotor = 17; // CAN ID 17
+    public static final int driveStrafeMotor = 17; // CAN ID 17
 
     // Pneumatics for drive lift mechanisms.
     //
@@ -46,12 +46,13 @@ public class Ports
     //
     // We also use a double solenoid to control both side's low/high gear
     // selection.
-    public static final int DriveStrafeSolenoidUp = 0; // PCM output 0 (forward channel)
-    public static final int DriveStrafeSolenoidDown = 1; // PCM output 1 (reverse channel)
-    public static final int DriveLiftSolenoidFront = 2; // PCM output 2
-    public static final int DriveLiftSolenoidBack = 3; // PCM output 3
-    public static final int DriveGearSolenoidLow = 4; // PDM output 4 (forward channel)
-    public static final int DriveGearSolenoidHigh = 5; // PDM output 5 (reverse channel)
+    public static final int frontButterflyDown = 0; // PCM output 0, pushes down front butterfly
+    public static final int backButterflyDown = 1; // PCM output 1, pushes down back butterfly
+    public static final int hDriveSolenoid = 4; // PCM output 4, engages H-Drive
+    public static final int driveGearShiftHigh = 3; // PCM output 3, front port of drive shift
+    public static final int driveGearShiftLow = 5; // PCM output 5, back port of drive shift
+    public static final int ESolenoidFront = 2; // PDM output 2 (fwd channel), part of fifth unused channel
+    public static final int ESolenoidBack = 6; // PDM output 6 (reverse channel), part of unused fifth channel
 
     public static final int DriveLeftEncoderA = 2; // DIO input 2
     public static final int DriveLeftEncoderB = 3; // DIO input 1

@@ -46,7 +46,7 @@ public class DriveBaseSystem extends Subsystem
 
     // Strafing system motors and state
     private final SpeedController baseStrafe;
-    private final DoubleSolenoid baseStrafeSolenoid;
+    private final Solenoid baseStrafeSolenoid;
     private final Solenoid baseFrontLiftSolenoid;
     private final Solenoid baseBackLiftSolenoid;
     private boolean baseStrafeDeployed;
@@ -72,14 +72,14 @@ public class DriveBaseSystem extends Subsystem
         super();
         
         // Left Drive Controllers
-        baseFrontLeftMaster = new WPI_VictorSPX(Ports.DriveLeftFrontMotor);
-        baseCenterLeft = new WPI_VictorSPX(Ports.DriveLeftCenterMotor);
-        baseBackLeft = new WPI_VictorSPX(Ports.DriveLeftRearMotor);
+        baseFrontLeftMaster = new WPI_VictorSPX(Ports.driveLeftFrontMotor);
+        baseCenterLeft = new WPI_VictorSPX(Ports.driveLeftCenterMotor);
+        baseBackLeft = new WPI_VictorSPX(Ports.driveLeftRearMotor);
 
         // Right Drive Controllers
-        baseFrontRightMaster = new WPI_VictorSPX(Ports.DriveRightFrontMotor);
-        baseCenterRight = new WPI_VictorSPX(Ports.DriveRightCenterMotor);
-        baseBackRight = new WPI_VictorSPX(Ports.DriveRightRearMotor);
+        baseFrontRightMaster = new WPI_VictorSPX(Ports.driveRightFrontMotor);
+        baseCenterRight = new WPI_VictorSPX(Ports.driveRightCenterMotor);
+        baseBackRight = new WPI_VictorSPX(Ports.driveRightRearMotor);
 
         // Inverts the speed controllers so they do not spin the wrong way.
         baseBackRight.setInverted(true);
@@ -108,22 +108,20 @@ public class DriveBaseSystem extends Subsystem
         ((WPI_VictorSPX) baseBackLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
 
         // Strafing motor
-        baseStrafe = new WPI_VictorSPX(Ports.DriveStrafeMotor);
+        baseStrafe = new WPI_VictorSPX(Ports.driveStrafeMotor);
 
         // Strafing angle controller
         baseStrafeAngleController = new StrafingAngleController(driveIMU);
 
         // Lift system
-        baseStrafeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveStrafeSolenoidUp,
-                Ports.DriveStrafeSolenoidDown);
-        baseFrontLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidFront);
-        baseBackLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.DriveLiftSolenoidBack);
+        baseStrafeSolenoid = new Solenoid(Ports.PCM_ID, Ports.hDriveSolenoid);
+        baseFrontLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.frontButterflyDown);
+        baseBackLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.backButterflyDown);
 
         baseStrafeDeployed = false;
 
         // Gear shifter
-        baseGearShiftSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.DriveGearSolenoidLow,
-                Ports.DriveGearSolenoidHigh);
+        baseGearShiftSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
         baseHighGear = true;
 
         // PID
@@ -283,7 +281,7 @@ public class DriveBaseSystem extends Subsystem
      * This method is used to deploy or stow the strafing mechanism.
      *
      * @param state
-     *            - state us true to deploy the strafing mechanism or false to stow
+     *            - state is true to deploy the strafing mechanism or false to stow
      *            it.
      */
     public void deployStrafe(boolean state)
@@ -292,7 +290,7 @@ public class DriveBaseSystem extends Subsystem
 
         if (state)
         {
-            baseStrafeSolenoid.set(DoubleSolenoid.Value.kForward);
+            baseStrafeSolenoid.set(true);
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
 
@@ -301,7 +299,7 @@ public class DriveBaseSystem extends Subsystem
             baseStrafeAngleController.enable();
         } else
         {
-            baseStrafeSolenoid.set(DoubleSolenoid.Value.kReverse);
+            baseStrafeSolenoid.set(false);
             baseFrontLiftSolenoid.set(false);
             baseBackLiftSolenoid.set(false);
 
