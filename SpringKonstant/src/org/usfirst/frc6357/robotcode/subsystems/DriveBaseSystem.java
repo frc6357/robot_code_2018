@@ -70,11 +70,7 @@ public class DriveBaseSystem extends Subsystem
     public DriveBaseSystem()
     {
         super();
-
-        // TODO: Change these to VictorSPX controllers when we move to the
-        // new robot chassis. We left them as Talons for now while testing
-        // on the 2017 robot.
-
+        
         // Left Drive Controllers
         baseFrontLeftMaster = new WPI_VictorSPX(Ports.DriveLeftFrontMotor);
         baseCenterLeft = new WPI_VictorSPX(Ports.DriveLeftCenterMotor);

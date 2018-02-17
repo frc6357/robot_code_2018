@@ -157,4 +157,44 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
         SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
     }
+    
+    @Override
+    public void testInit()
+    {
+
+        
+        
+    }
+    
+    @Override
+    public void testPeriodic()
+    {
+        double driveLeft, driveRight, driveStrafe, robotAngle, climbSpeed, armSpeed;
+        double rotateAdjust, lAdjust, rAdjust;
+
+        Scheduler.getInstance().run();
+        
+        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
+        driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
+        driveStrafe = oi.getDriverJoystickValue(Ports.OIDriverStrafe, true);
+        climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
+        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
+        
+        driveBaseSystem.setLeftSpeed(driveLeft);
+        driveBaseSystem.setRightSpeed(driveRight);
+        driveBaseSystem.setStrafeSpeed(driveStrafe);
+
+        climbSystem.setWinchSpeed(climbSpeed);
+        armSystem.Periodic(armSpeed);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
