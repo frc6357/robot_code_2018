@@ -35,7 +35,7 @@ public class DriveBaseSystem extends Subsystem
     private final SpeedController baseFrontRightMaster; // Master speed controller
     private final SpeedController baseCenterRight;
     private final SpeedController baseBackRight;
-    
+
     // Gear shifter
     private final DoubleSolenoid baseGearShiftSolenoid;
     private boolean baseHighGear;
@@ -73,7 +73,12 @@ public class DriveBaseSystem extends Subsystem
     public DriveBaseSystem()
     {
         super();
-        
+
+        // NB: We are using 3 motors through a gearbox on each side of the robot. In
+        //     this arrangement, the front and rear motors must run in one direction
+        //     and the matchign center motor must run in the opposite direction. Take
+        //     care to ensure that this is correct!
+
         // Left Drive Controllers
         baseFrontLeftMaster = new WPI_VictorSPX(Ports.driveLeftFrontMotor);
         baseCenterLeft = new WPI_VictorSPX(Ports.driveLeftCenterMotor);
@@ -86,8 +91,12 @@ public class DriveBaseSystem extends Subsystem
 
         // Inverts the speed controllers so they do not spin the wrong way.
         baseBackRight.setInverted(true);
-        baseCenterRight.setInverted(true);
+        baseCenterRight.setInverted(false);
         baseFrontRightMaster.setInverted(true);
+
+        baseBackLeft.setInverted(false);
+        baseCenterLeft.setInverted(true);
+        baseFrontLeftMaster.setInverted(false);
 
         // Encoders
         leftEncoder = new Encoder(Ports.DriveLeftEncoderA, Ports.DriveLeftEncoderB);
@@ -136,8 +145,8 @@ public class DriveBaseSystem extends Subsystem
         // Set initial states of all actuators
         PULSES_PER_ROTATION = 1000;
         DRIVE_WHEEL_RADIUS = 2; // This is in inches
-        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION; 
-        
+        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION;
+
         setEncoderDistancePerPulse();
         leftEncoder.reset();
         rightEncoder.reset();
@@ -226,7 +235,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the target velocity for the PID
-     * 
+     *
      * @param speed
      *            - Speed in feet per second
      */
@@ -237,7 +246,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the target velocity for the PID
-     * 
+     *
      * @param speed
      *            - Speed in feet per second
      */
@@ -294,7 +303,7 @@ public class DriveBaseSystem extends Subsystem
             return 0.0;
         }
     }
-    
+
     /**
      * This method is used to deploy or stow the strafing mechanism.
      *
@@ -391,7 +400,7 @@ public class DriveBaseSystem extends Subsystem
     {
         return rightEncoder.getRate();
     }
-    
+
     /**
      * Each subsystem may, but is not required to, have a default command which is
      * scheduled whenever the subsystem is idle. If default command is needed use
@@ -400,7 +409,7 @@ public class DriveBaseSystem extends Subsystem
     @Override
     protected void initDefaultCommand()
     {
-      
+
     }
 
 }

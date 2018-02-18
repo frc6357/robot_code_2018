@@ -28,15 +28,15 @@ public class Ports
     // *****************
     // Drive Subsystem
     // *****************
-    public static final int driveLeftFrontMotor = 10; // CAN ID 10
-    public static final int driveLeftCenterMotor = 11; // CAN ID 11
-    public static final int driveLeftRearMotor = 15; // CAN ID 15
+    public static final int driveLeftFrontMotor   = 11; // CAN ID 11
+    public static final int driveLeftCenterMotor  = 15; // CAN ID 15
+    public static final int driveLeftRearMotor    = 10; // CAN ID 10
 
-    public static final int driveRightFrontMotor = 12; // CAN ID 12
+    public static final int driveRightFrontMotor  = 16; // CAN ID 16
     public static final int driveRightCenterMotor = 14; // CAN ID 14
-    public static final int driveRightRearMotor = 16; // CAN ID 16
+    public static final int driveRightRearMotor   = 12; // CAN ID 12
 
-    public static final int driveStrafeMotor = 17; // CAN ID 17
+    public static final int driveStrafeMotor      = 17; // CAN ID 17
 
     // Pneumatics for drive lift mechanisms.
     //
