@@ -106,7 +106,7 @@ public class DriveBaseSystem extends Subsystem
         // TODO: Set the appropriate axis here depending upon the final
         // orientation of the IMU in the robot.
         driveIMU = new IMU();
-        driveIMU.setMajorAxis(OrientationAxis.X);
+        driveIMU.setMajorAxis(OrientationAxis.Z);
         driveIMU.setMovingAverageSamples(20);
 
         // This sets the all the speed controllers on the right side to follow the
