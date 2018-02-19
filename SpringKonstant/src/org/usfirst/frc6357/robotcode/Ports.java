@@ -23,20 +23,21 @@ public class Ports
     // **********************
     // Assorted peripherals
     // **********************
-    public static final int PCM_ID = 1; // CAN ID 1
+    public static final int pcm1                  = 1;      // PCM 1, CAN ID 1
+    public static final int pcm2                  = 2;      // PCM 2, CAN ID 2
 
     // *****************
     // Drive Subsystem
     // *****************
-    public static final int driveLeftFrontMotor   = 11; // CAN ID 11
-    public static final int driveLeftCenterMotor  = 15; // CAN ID 15
-    public static final int driveLeftRearMotor    = 10; // CAN ID 10
+    public static final int driveLeftFrontMotor   = 11;     // CAN ID 11
+    public static final int driveLeftCenterMotor  = 15;     // CAN ID 15
+    public static final int driveLeftRearMotor    = 10;     // CAN ID 10
 
-    public static final int driveRightFrontMotor  = 16; // CAN ID 16
-    public static final int driveRightCenterMotor = 14; // CAN ID 14
-    public static final int driveRightRearMotor   = 12; // CAN ID 12
+    public static final int driveRightFrontMotor  = 16;     // CAN ID 16
+    public static final int driveRightCenterMotor = 14;     // CAN ID 14
+    public static final int driveRightRearMotor   = 12;     // CAN ID 12
 
-    public static final int driveStrafeMotor      = 17; // CAN ID 17
+    public static final int driveStrafeMotor      = 17;     // CAN ID 17
 
     // Pneumatics for drive lift mechanisms.
     //
@@ -46,39 +47,40 @@ public class Ports
     //
     // We also use a double solenoid to control both side's low/high gear
     // selection.
-    public static final int frontButterflyDown = 0; // PCM output 0, pushes down front butterfly
-    public static final int backButterflyDown = 1; // PCM output 1, pushes down back butterfly
-    public static final int hDriveSolenoid = 4; // PCM output 4, engages H-Drive
-    public static final int driveGearShiftHigh = 3; // PCM output 3, front port of drive shift
-    public static final int driveGearShiftLow = 5; // PCM output 5, back port of drive shift
-    public static final int ESolenoidFront = 2; // PDM output 2 (fwd channel), part of fifth unused channel
-    public static final int ESolenoidBack = 6; // PDM output 6 (reverse channel), part of unused fifth channel
+    public static final int frontButterflyDown      = 0;    // PCM 1 output 0, pushes down front butterfly
+    public static final int backButterflyDown       = 1;    // PCM 1 output 1, pushes down back butterfly
+    public static final int hDriveSolenoid          = 4;    // PCM 1 output 4, engages H-Drive
+    public static final int driveGearShiftHigh      = 3;    // PCM 1 output 3, front port of drive shift
+    public static final int driveGearShiftLow       = 5;    // PCM 1 output 5, back port of drive shift
+    public static final int ESolenoidFront          = 2;    // PDM 1 output 2 (fwd channel), part of fifth unused channel
+    public static final int ESolenoidBack           = 6;    // PDM 1 output 6 (reverse channel), part of unused fifth channel
 
-    public static final int DriveLeftEncoderA = 2; // DIO input 2
-    public static final int DriveLeftEncoderB = 3; // DIO input 1
+    public static final int DriveLeftEncoderA       = 2;    // DIO input 2
+    public static final int DriveLeftEncoderB       = 3;    // DIO input 1
 
-    public static final int DriveRightEncoderA = 0; // DIO input 0
-    public static final int DriveRightEncoderB = 1; // DIO input 1
+    public static final int DriveRightEncoderA      = 0;    // DIO input 0
+    public static final int DriveRightEncoderB      = 1;    // DIO input 1
 
     // *****************
     // Climb Subsystem
     // *****************
-    public static final int ClimbWinchMotor = 20; // CAN ID 20
+    public static final int ClimbWinchMotor         = 20;   // CAN ID 20
 
-    public static final int ClimbTopLimitSwitch = 4; // DIO input 4 - normally open
-    public static final int ClimpBottomLimitSwitch = 5; // DIO input 5 - normally open
+    public static final int ClimbTopLimitSwitch     = 4;    // DIO input 4 - normally open
+    public static final int ClimpBottomLimitSwitch  = 5;    // DIO input 5 - normally open
 
     // ******************
     // Intake Subsystem
     // ******************
-    public static final int IntakeLeftMotor = 30; // CAN ID 30
-    public static final int IntakeRightMotor = 31; // CAN ID 31
+    public static final int IntakeLeftMotor         = 30;   // CAN ID 30
+    public static final int IntakeRightMotor        = 31;   // CAN ID 31
 
-    public static final int IntakeTiltSolenoidUp = 6; // PCM output 6 (forward channel)
-    public static final int IntakeTiltSolenoidDown = 7; // PCM output 7 (reverse channel)
+    public static final int IntakeTiltSolenoidUp    = 6;    // PCM 1 output 6 (forward channel)
+    public static final int IntakeTiltSolenoidDown  = 7;    // PCM 1 output 7 (reverse channel)
 
-    // TODO: Add intake gripper solenoids if these are added. Note that this
-    // may require a second CAN-connected PCM.
+    // TODO: Check the polarity of these two - may need to reverse.
+    public static final int IntakeGripSolenoidIn    = 6;    // PCM 2 output 0 (forward channel)
+    public static final int IntakeGripSolenoidOut   = 7;    // PCM 2 output 1 (reverse channel)
 
     // ***************
     // Arm Subsystem
@@ -94,9 +96,6 @@ public class Ports
     // Driver's and operator's OI channel assignments
     //
 
-    // TODO: Finalize these with the drivers. This assumes the same
-    // Logitech game controllers as were used in 2017.
-    //
     // See the IO subsystem specification for a graphic showing button
     // and axis IDs for the Logitech F310 gamepads in use.
 
