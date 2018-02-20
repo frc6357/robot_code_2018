@@ -10,6 +10,7 @@
 
 package org.usfirst.frc6357.robotcode.commands;
 
+import org.usfirst.frc6357.robotcode.Ports;
 import org.usfirst.frc6357.robotcode.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -53,16 +54,9 @@ public class AutonomousCommand extends Command
                         try {Thread.sleep(Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
                         break;
                     case "Drive":
-                        //EVENTUAL FUNCTION: driveBaseSystem.drive(s[1] in feet)
-                        System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
-                        Robot.driveBaseSystem.setLeftSpeed(.5);
-                        Robot.driveBaseSystem.setRightSpeed(.5);
-                        try {Thread.sleep(250 * Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
-                        Robot.driveBaseSystem.setLeftSpeed(0);
-                        Robot.driveBaseSystem.setRightSpeed(0);
+                        Robot.driveBaseSystem.driveStraight(Double.parseDouble(s2d[row][1]));
                         break;
                     case "Turn":
-                        //EVENTUAL FUNCTION: driveBaseSystem.turn(s[1] is degrees)
                         System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
                         int parsed = Integer.parseInt(s2d[row][1]);
                         Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
@@ -72,27 +66,27 @@ public class AutonomousCommand extends Command
                         Robot.driveBaseSystem.setRightSpeed(0);
                         break;
                     case "Arm":
-                        //EVENTUAL FUNCTION: Change the height of the arm according to spec: floor, switch, scale middle, scale high
                         switch(Integer.parseInt(s2d[row][1]))
                         {
                             case 0:
-                                //Floor
+                                Robot.armSystem.setAngleTarget(Ports.floorAngle);
                                 break;
                             case 1:
-                                //Switch
+                                Robot.armSystem.setAngleTarget(Ports.switchAngle);
                                 break;
                             case 2:
-                                //Scale
+                                Robot.armSystem.setAngleTarget(Ports.midScaleAngle);
                                 break;
                             case 3:
-                                //High scale
+                                Robot.armSystem.setAngleTarget(Ports.highScaleAngle);
                                 break;
                             default:
                                 System.out.println("ERROR TRYING TO PARSE ARM INPUT");
                         }
                         break;
                     case "Box Push":
-                        //EVENTUAL FUNCTION: Push out the box, whatever that command ends up being called
+                        Robot.intakeSystem.setIntakeDown();
+                        Robot.intakeSystem.setIntakeMotorState(true, false);
                         break;
                 }
             }

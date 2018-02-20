@@ -103,8 +103,6 @@ public class DriveBaseSystem extends Subsystem
         rightEncoder = new Encoder(Ports.DriveRightEncoderA, Ports.DriveRightEncoderB);
 
         // Configure the IMU.
-        // TODO: Set the appropriate axis here depending upon the final
-        // orientation of the IMU in the robot.
         driveIMU = new IMU();
         driveIMU.setMajorAxis(OrientationAxis.Z);
         driveIMU.setMovingAverageSamples(20);
@@ -126,14 +124,14 @@ public class DriveBaseSystem extends Subsystem
         baseStrafeAngleController = new StrafingAngleController(driveIMU);
 
         // Lift system
-        baseStrafeSolenoid = new Solenoid(Ports.PCM_ID, Ports.hDriveSolenoid);
-        baseFrontLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.frontButterflyDown);
-        baseBackLiftSolenoid = new Solenoid(Ports.PCM_ID, Ports.backButterflyDown);
+        baseStrafeSolenoid = new Solenoid(Ports.pcm1, Ports.hDriveSolenoid);
+        baseFrontLiftSolenoid = new Solenoid(Ports.pcm1, Ports.frontButterflyDown);
+        baseBackLiftSolenoid = new Solenoid(Ports.pcm1, Ports.backButterflyDown);
 
         baseStrafeDeployed = false;
 
         // Gear shifter
-        baseGearShiftSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
+        baseGearShiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
         baseHighGear = true;
 
         // PID
@@ -257,10 +255,23 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the PID set point, which drives the robot straight
+     * 
+     * @param distance the distance to drive forwards
      */
     public void driveStraight(double distance)
     {
         leftSide.setDistanceTarget(distance);
+        rightSide.setDistanceTarget(distance);
+    }
+    
+    /**
+     * Turns the robot around, with degrees being positive for clockwise
+     * 
+     * @param degrees angle at which to rotate with positive being clockwise
+     */
+    public void turnDegrees(double degrees)
+    {
+        //TODO: Create method for turning the robot degrees
     }
 
     /**

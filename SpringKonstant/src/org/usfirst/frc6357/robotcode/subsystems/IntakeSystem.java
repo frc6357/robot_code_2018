@@ -21,17 +21,25 @@ public class IntakeSystem extends Subsystem
     private static final double INTAKE_SPEED = 0.25;
     public final WPI_TalonSRX intakeLeftMotor;
     public final WPI_TalonSRX intakeRightMotor;
-    public final DoubleSolenoid intakeSolenoid;
+    public final DoubleSolenoid intakeLiftSolenoid;
+    public final DoubleSolenoid intakeGripSolenoid;
     public boolean intakeIsUp = true;
 
     public IntakeSystem()
     {
-        // TODO: Update if we add solenoids to control intake grippers.
+        // Pneumatic control for the intake grippers and lift mechanism.
+        intakeLiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
+        intakeGripSolenoid = new DoubleSolenoid(Ports.pcm2, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
 
+<<<<<<< HEAD
         intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
         
         intakeLeftMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
+=======
+        intakeLeftMotor    = new WPI_TalonSRX(Ports.ArmElevationMotor);
+        intakeRightMotor   = new WPI_TalonSRX(Ports.ArmElevationMotor);
+>>>>>>> 3d446e391a754a95700b4b58c7377ed22339ba17
 
         // TODO: Set current limits sensibly so that we catch case where a cube is
         // pulled into the mechanism and the motor stalls.
@@ -41,10 +49,10 @@ public class IntakeSystem extends Subsystem
          * intakeRightMotor.configPeakCurrentDuration(200, 10); // 200ms
          * intakeRightMotor.configContinuousCurrentLimit(30, 10); // 30A
          * intakeRightMotor.enableCurrentLimit(true);
-         * 
+         *
          * intakeRightMotor.setInverted(true);
          * intakeRightMotor.set(ControlMode.Follower, intakeLeftMotor.getDeviceID());
-         * 
+         *
          * intakeLeftMotor.set(0.0);
          */
     }
@@ -128,7 +136,7 @@ public class IntakeSystem extends Subsystem
      */
     public void setIntakeUp()
     {
-        intakeSolenoid.set(DoubleSolenoid.Value.kForward);
+        intakeLiftSolenoid.set(DoubleSolenoid.Value.kForward);
         intakeIsUp = true;
         SmartDashboard.putString("Intake", "up");
 
@@ -141,7 +149,7 @@ public class IntakeSystem extends Subsystem
      */
     public void setIntakeDown()
     {
-        intakeSolenoid.set(DoubleSolenoid.Value.kReverse);
+        intakeLiftSolenoid.set(DoubleSolenoid.Value.kReverse);
         intakeIsUp = false;
         SmartDashboard.putString("Intake", "down");
     }
