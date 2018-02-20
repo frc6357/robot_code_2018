@@ -8,6 +8,7 @@ import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
 import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
 import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
 import org.usfirst.frc6357.robotcode.commands.StrafeStow;
+import org.usfirst.frc6357.robotcode.commands.TestPidPosition;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
@@ -106,6 +107,7 @@ public class Robot extends TimedRobot
             System.out.println("Exception here: " + e);
         }
 
+       // autonomousCommand = new TestPidPosition();
         // schedule the autonomous command (example)
         if (autonomousCommand != null)
             autonomousCommand.start();

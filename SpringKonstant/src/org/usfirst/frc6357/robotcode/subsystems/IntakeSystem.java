@@ -31,15 +31,10 @@ public class IntakeSystem extends Subsystem
         intakeLiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
         intakeGripSolenoid = new DoubleSolenoid(Ports.pcm2, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
 
-<<<<<<< HEAD
-        intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
+       // intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
         
         intakeLeftMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
-=======
-        intakeLeftMotor    = new WPI_TalonSRX(Ports.ArmElevationMotor);
-        intakeRightMotor   = new WPI_TalonSRX(Ports.ArmElevationMotor);
->>>>>>> 3d446e391a754a95700b4b58c7377ed22339ba17
 
         // TODO: Set current limits sensibly so that we catch case where a cube is
         // pulled into the mechanism and the motor stalls.
