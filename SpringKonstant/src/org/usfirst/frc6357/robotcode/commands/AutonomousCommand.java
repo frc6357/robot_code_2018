@@ -53,13 +53,7 @@ public class AutonomousCommand extends Command
                         try {Thread.sleep(Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
                         break;
                     case "Drive":
-                        //EVENTUAL FUNCTION: driveBaseSystem.drive(s[1] in feet)
-                        System.out.println("Add driving functionality here with param: " + s2d[row][1] + " ft");
-                        Robot.driveBaseSystem.setLeftSpeed(.5);
-                        Robot.driveBaseSystem.setRightSpeed(.5);
-                        try {Thread.sleep(250 * Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
-                        Robot.driveBaseSystem.setLeftSpeed(0);
-                        Robot.driveBaseSystem.setRightSpeed(0);
+                        Robot.driveBaseSystem.driveStraight(Double.parseDouble(s2d[row][1]));
                         break;
                     case "Turn":
                         //EVENTUAL FUNCTION: driveBaseSystem.turn(s[1] is degrees)

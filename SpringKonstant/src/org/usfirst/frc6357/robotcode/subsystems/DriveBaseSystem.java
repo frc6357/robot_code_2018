@@ -255,11 +255,23 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the PID set point, which drives the robot straight
+     * 
+     * @param distance the distance to drive forwards
      */
     public void driveStraight(double distance)
     {
         leftSide.setDistanceTarget(distance);
         rightSide.setDistanceTarget(distance);
+    }
+    
+    /**
+     * Turns the robot around, with degrees being positive for clockwise
+     * 
+     * @param degrees angle at which to rotate with positive being clockwise
+     */
+    public void turnDegrees(double degrees)
+    {
+        //TODO: Create method for turning the robot degrees
     }
 
     /**
