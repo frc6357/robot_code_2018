@@ -137,30 +137,42 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight, driveStrafe, robotAngle, climbSpeed, armSpeed;
+        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed, armSpeed;
         double rotateAdjust, lAdjust, rAdjust;
-
+        
         Scheduler.getInstance().run();
-
+        
         driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
         driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
-        driveStrafe = oi.getDriverJoystickValue(Ports.OIDriverStrafe, true);
+        driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
+        driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
         climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
         armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
+        
 
         robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
 
         rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
         lAdjust = rotateAdjust / 2;
         rAdjust = -lAdjust;
-
+        
         driveBaseSystem.setLeftSpeed(driveLeft);
         driveBaseSystem.setRightSpeed(driveRight);
-        driveBaseSystem.setStrafeSpeed(driveStrafe);
+        driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.periodic(armSpeed);
-
+        //armSystem.periodic(armSpeed);
+        armSystem.setMotorSpeed(armSpeed);
+        
+        SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
+        SmartDashboard.putData("Stow strafe", new StrafeStow());
+        SmartDashboard.putData("Shift Gears up", new GearShiftCommand(true));
+        SmartDashboard.putData("Shift Gears down", new GearShiftCommand(false));
+        SmartDashboard.putData("Turn intake on and inwards", new IntakeCommand(true, true));
+        SmartDashboard.putData("Turn intake on and outwards", new IntakeCommand(true, false));
+        SmartDashboard.putData("Turn intake off", new IntakeCommand(false, false));
+        SmartDashboard.putData("Toggle intake swing", new IntakeSwingToggle());
+        
         SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
         SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
         SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
@@ -168,7 +180,8 @@ public class Robot extends TimedRobot
         SmartDashboard.putData("Auto mode", chooser);
         SmartDashboard.putNumber("Drive Left Raw", driveLeft);
         SmartDashboard.putNumber("Drive Right Raw", driveRight);
-        SmartDashboard.putNumber("Drive Strafe Raw", driveStrafe);
+        SmartDashboard.putNumber("Drive Strafe Right", driveStrafeRight);
+        SmartDashboard.putNumber("Drive Strafe Left", driveStrafeLeft);
         SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
         SmartDashboard.putNumber("IMU Angle", robotAngle);
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
@@ -184,9 +197,32 @@ public class Robot extends TimedRobot
     @Override
     public void testPeriodic()
     {
-        double driveLeft, driveRight, driveStrafe, robotAngle, climbSpeed, armSpeed;
+        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed, armSpeed;
         double rotateAdjust, lAdjust, rAdjust;
+        
+        Scheduler.getInstance().run();
+        
+        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
+        driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
+        driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
+        driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
+        climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
+        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
+        
 
+        robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
+
+        rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
+        lAdjust = rotateAdjust / 2;
+        rAdjust = -lAdjust;
+        
+        driveBaseSystem.setLeftSpeed(driveLeft);
+        driveBaseSystem.setRightSpeed(driveRight);
+        driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
+
+        climbSystem.setWinchSpeed(climbSpeed);
+        armSystem.periodic(armSpeed);
+        
         SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
         SmartDashboard.putData("Stow strafe", new StrafeStow());
         SmartDashboard.putData("Shift Gears up", new GearShiftCommand(true));
@@ -196,19 +232,18 @@ public class Robot extends TimedRobot
         SmartDashboard.putData("Turn intake off", new IntakeCommand(false, false));
         SmartDashboard.putData("Toggle intake swing", new IntakeSwingToggle());
         
-        Scheduler.getInstance().run();
-        
-        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
-        driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
-        driveStrafe = oi.getDriverJoystickValue(Ports.OIDriverStrafe, true);
-        climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
-        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
-        
-        driveBaseSystem.setLeftSpeed(driveLeft);
-        driveBaseSystem.setRightSpeed(driveRight);
-        driveBaseSystem.setStrafeSpeed(driveStrafe);
-
-        climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.periodic(armSpeed);
+        SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
+        SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
+        SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
+        SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
+        SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putNumber("Drive Left Raw", driveLeft);
+        SmartDashboard.putNumber("Drive Right Raw", driveRight);
+        SmartDashboard.putNumber("Drive Strafe Right", driveStrafeRight);
+        SmartDashboard.putNumber("Drive Strafe Left", driveStrafeLeft);
+        SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
+        SmartDashboard.putNumber("IMU Angle", robotAngle);
+        SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
+        SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
     }
 }

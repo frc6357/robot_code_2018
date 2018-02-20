@@ -107,7 +107,8 @@ public class Ports
 
     public static final int OIDriverLeftDrive = 1; // Left Joystick Y
     public static final int OIDriverRightDrive = 5; // Right Joystick Y
-    public static final int OIDriverStrafe = 3; // Lower triggers
+    public static final int OIDriverStrafeRight = 3; // Right Trigger
+    public static final int OIDriverStrafeLeft = 2; // Left Trigger
 
     // This is for testing only. Button B on the driver controller will
     // toggle the strafing wheel. In the final code, it is hoped that this

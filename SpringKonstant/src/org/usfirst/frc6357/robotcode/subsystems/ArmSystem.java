@@ -10,7 +10,6 @@ import org.usfirst.frc6357.robotcode.Ports;
 import org.usfirst.frc6357.robotcode.subsystems.PID.AngularPositionArmPID;
 
 import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
@@ -42,12 +41,14 @@ public class ArmSystem extends Subsystem
 
     public ArmSystem()
     {
+        
         armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         armMotor.set(0.0);
+        /*
         ((TalonSRX) armMotor).configPeakCurrentLimit(35, 10);       // 35 A
         ((TalonSRX) armMotor).configPeakCurrentDuration(200, 10);   // 200ms
         ((TalonSRX) armMotor).configContinuousCurrentLimit(30, 10); // 30A
-        ((TalonSRX) armMotor).enableCurrentLimit(true);
+        ((TalonSRX) armMotor).enableCurrentLimit(true);*/
 
         armEncoder = new Encoder(Ports.ArmEncoderA, Ports.ArmEncoderB);
         
@@ -120,6 +121,11 @@ public class ArmSystem extends Subsystem
         SmartDashboard.putNumber("ARM current", ((BaseMotorController) armMotor).getOutputCurrent());
         SmartDashboard.putBoolean("ARM Upper Limit", tripUpper);
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
+    }
+    
+    public void setMotorSpeed(double speed)
+    {
+        armMotor.set(speed / 4);
     }
     
     //TODO create the math to calculate angle with encoder

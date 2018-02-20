@@ -280,8 +280,10 @@ public class DriveBaseSystem extends Subsystem
      *            - speed is the double number between 1 and -1, usually from the
      *            joystick axis.
      */
-    public void setStrafeSpeed(double speed)
-    {
+    public void setStrafeSpeed(double rightAxis, double leftAxis)
+    {   
+        double speed = leftAxis - rightAxis;
+        
         baseStrafe.set(speed);
     }
 

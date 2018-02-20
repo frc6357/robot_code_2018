@@ -29,7 +29,7 @@ public class IntakeSystem extends Subsystem
         // TODO: Update if we add solenoids to control intake grippers.
 
         intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
-
+        
         intakeLeftMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
 
