@@ -65,19 +65,19 @@ public class Robot extends TimedRobot
         // Add commands to Autonomous Sendable Chooser
 
         chooser.addDefault("Test", "/home/lvuser/AutoSheets/Test.csv");
-        chooser.addObject("Left Start to Left Switch", "/home/lvuser/AutoSheets/CSV 1.csv");
-        chooser.addObject("Left Start to Right Switch", "/home/lvuser/AutoSheets/CSV 2.csv");
-        chooser.addObject("Left Start to Left Scale", "/home/lvuser/AutoSheets/CSV 3.csv");
-        chooser.addObject("Left Start to Right Scale", "/home/lvuser/AutoSheets/CSV 4.csv");
-        chooser.addObject("Right Start to Left Switch", "/home/lvuser/AutoSheets/CSV 5.csv");
-        chooser.addObject("Right Start to Right Switch", "/home/lvuser/AutoSheets/CSV 6.csv");
-        chooser.addObject("Right Start to Left Scale", "/home/lvuser/AutoSheets/CSV 7.csv");
-        chooser.addObject("Right Start to Right Scale", "/home/lvuser/AutoSheets/CSV 8.csv");
-        chooser.addObject("Left Start to Right Switch Alt", "/home/lvuser/AutoSheets/CSV 9.csv");
-        chooser.addObject("Left Start to Right Scale Alt", "/home/lvuser/AutoSheets/CSV 10.csv");
-        chooser.addObject("Right Start to Left Switch Alt", "/home/lvuser/AutoSheets/CSV 11.csv");
-        chooser.addObject("Right Start to Left Scale Alt", "/home/lvuser/AutoSheets/CSV 12.csv");
-        chooser.addObject("Any Start, drive straight", "/home/lvuser/AutoSheets/CSV 13.csv");
+        chooser.addObject("Left Start to Left Switch", "/home/lvuser/AutoSheets/CSV1.csv");
+        chooser.addObject("Left Start to Right Switch", "/home/lvuser/AutoSheets/CSV2.csv");
+        chooser.addObject("Left Start to Left Scale", "/home/lvuser/AutoSheets/CSV3.csv");
+        chooser.addObject("Left Start to Right Scale", "/home/lvuser/AutoSheets/CSV4.csv");
+        chooser.addObject("Right Start to Left Switch", "/home/lvuser/AutoSheets/CSV5.csv");
+        chooser.addObject("Right Start to Right Switch", "/home/lvuser/AutoSheets/CSV6.csv");
+        chooser.addObject("Right Start to Left Scale", "/home/lvuser/AutoSheets/CSV7.csv");
+        chooser.addObject("Right Start to Right Scale", "/home/lvuser/AutoSheets/CSV8.csv");
+        chooser.addObject("Left Start to Right Switch Alt", "/home/lvuser/AutoSheets/CSV9.csv");
+        chooser.addObject("Left Start to Right Scale Alt", "/home/lvuser/AutoSheets/CSV10.csv");
+        chooser.addObject("Right Start to Left Switch Alt", "/home/lvuser/AutoSheets/CSV11.csv");
+        chooser.addObject("Right Start to Left Scale Alt", "/home/lvuser/AutoSheets/CSV12.csv");
+        chooser.addObject("Any Start, drive straight", "/home/lvuser/AutoSheets/CSV13.csv");
     }
 
     /**
