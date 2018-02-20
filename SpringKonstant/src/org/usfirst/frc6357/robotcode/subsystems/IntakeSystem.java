@@ -33,8 +33,8 @@ public class IntakeSystem extends Subsystem
 
        // intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
         
-        intakeLeftMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
-        intakeRightMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
+        intakeLeftMotor = new WPI_TalonSRX(Ports.IntakeLeftMotor);
+        intakeRightMotor = new WPI_TalonSRX(Ports.IntakeRightMotor);
 
         // TODO: Set current limits sensibly so that we catch case where a cube is
         // pulled into the mechanism and the motor stalls.
@@ -50,6 +50,8 @@ public class IntakeSystem extends Subsystem
          *
          * intakeLeftMotor.set(0.0);
          */
+        
+        
     }
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
