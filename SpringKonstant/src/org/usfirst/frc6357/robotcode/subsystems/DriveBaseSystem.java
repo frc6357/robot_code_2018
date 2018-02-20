@@ -271,7 +271,14 @@ public class DriveBaseSystem extends Subsystem
      */
     public void turnDegrees(double degrees)
     {
-        //TODO: Create method for turning the robot degrees
+        leftSide.setDistanceTarget(getTurnDistance(degrees));
+        leftSide.setDistanceTarget(-1 * getTurnDistance(degrees));
+    }
+    
+
+    public double getTurnDistance(double angle) // Turns angle to the distance
+    {
+        return (2 * Math.PI * 11.125 / (12)) * (angle / 360.0);     //TODO finalize math
     }
 
     /**
