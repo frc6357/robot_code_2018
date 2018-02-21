@@ -64,20 +64,7 @@ public class IMU extends ADIS16448_IMU
      */
     public double updatePeriodic()
     {
-        double Angle = 0.0;
-
-        switch (MajorAxis)
-        {
-        case X:
-            Angle = getAngleX();
-            break;
-        case Y:
-            Angle = getAngleY();
-            break;
-        case Z:
-            Angle = getAngleZ();
-            break;
-        }
+        double Angle = getRawAngle();
 
         if (FirstCall)
         {
@@ -98,6 +85,31 @@ public class IMU extends ADIS16448_IMU
     public double getAngle()
     {
         return (AngleAverage);
+    }
+
+    /**
+     * Queries the current, unaveraged angle measurement from the major axis.
+     *
+     * @return Returns the current raw angle reeorted for the major axis.
+     */
+    public double getRawAngle()
+    {
+        double Angle = 0.0;
+
+        switch (MajorAxis)
+        {
+            case X:
+                Angle = getAngleX();
+                break;
+            case Y:
+                Angle = getAngleY();
+                break;
+            case Z:
+                Angle = getAngleZ();
+                break;
+        }
+
+        return(Angle);
     }
 
     /**
