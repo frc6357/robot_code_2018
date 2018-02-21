@@ -87,7 +87,9 @@ public class ArmSystem extends Subsystem
         upperState = limitUpper.get();
         lowerState = limitLower.get();
 
-        if(upperState == false)
+        //TODO check the polarity of the motor speed, joystick
+        // if tripped state is true == do not move the motor upwards
+        if(upperState == true)
         {
             tripUpper = true;
 
@@ -98,10 +100,11 @@ public class ArmSystem extends Subsystem
         }
         else
         {
-            tripLower = false;
+            tripUpper = false;
         }
-
-        if(lowerState == false)
+        
+        //if tripped state is true == do not move the motor down
+        if(lowerState == true)
         {
             tripLower = true;
 
@@ -117,7 +120,6 @@ public class ArmSystem extends Subsystem
 
         setArmSpeed(calcSpeed);
 
-        SmartDashboard.putNumber("ARM speed", calcSpeed);
         SmartDashboard.putNumber("ARM current", ((BaseMotorController) armMotor).getOutputCurrent());
         SmartDashboard.putBoolean("ARM Upper Limit", tripUpper);
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
@@ -168,7 +170,10 @@ public class ArmSystem extends Subsystem
     
     private void setArmSpeed(double speed)
     {
-        armMotor.set(speed / 6);
+        //speed = -1 * speed / 4;
+        SmartDashboard.putNumber("ARM speed", speed);
+        
+        armMotor.set(speed / 2);
     }
 
     public void initDefaultCommand()

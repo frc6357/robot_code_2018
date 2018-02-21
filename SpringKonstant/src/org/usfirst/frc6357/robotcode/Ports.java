@@ -66,8 +66,8 @@ public class Ports
     // *****************
     public static final int ClimbWinchMotor         = 20;   // CAN ID 20
 
-    public static final int ClimbTopLimitSwitch     = 4;    // DIO input 4 - normally open
-    public static final int ClimpBottomLimitSwitch  = 5;    // DIO input 5 - normally open
+    public static final int ClimbTopLimitSwitch     = 4;    // DIO input 4 - normally closed
+    public static final int ClimpBottomLimitSwitch  = 5;    // DIO input 5 - normally closed
 
     // ******************
     // Intake Subsystem
