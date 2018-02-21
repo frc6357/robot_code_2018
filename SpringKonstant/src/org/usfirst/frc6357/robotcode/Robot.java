@@ -226,8 +226,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        //armSystem.periodic(armSpeed);
-        armSystem.setMotorSpeed(armSpeed);
+        armSystem.periodic(armSpeed);
 
         SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
         SmartDashboard.putData("Stow strafe", new StrafeStow());

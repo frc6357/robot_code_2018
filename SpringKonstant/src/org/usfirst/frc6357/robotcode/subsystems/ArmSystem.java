@@ -45,10 +45,10 @@ public class ArmSystem extends Subsystem
         armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         armMotor.set(0.0);
         /*
-        ((TalonSRX) armMotor).configPeakCurrentLimit(35, 10);       // 35 A
-        ((TalonSRX) armMotor).configPeakCurrentDuration(200, 10);   // 200ms
-        ((TalonSRX) armMotor).configContinuousCurrentLimit(30, 10); // 30A
-        ((TalonSRX) armMotor).enableCurrentLimit(true);*/
+        ((WPI_TalonSRX) armMotor).configPeakCurrentLimit(35, 10);       // 35 A
+        ((WPI_TalonSRX) armMotor).configPeakCurrentDuration(200, 10);   // 200ms
+        ((WPI_TalonSRX) armMotor).configContinuousCurrentLimit(30, 10); // 30A
+        ((WPI_TalonSRX) armMotor).enableCurrentLimit(true);*/
 
         armEncoder = new Encoder(Ports.ArmEncoderA, Ports.ArmEncoderB);
         
@@ -123,11 +123,6 @@ public class ArmSystem extends Subsystem
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
     }
     
-    public void setMotorSpeed(double speed)
-    {
-        armMotor.set(speed / 4);
-    }
-    
     //TODO create the math to calculate angle with encoder
     public double getArmAngle()
     {
@@ -171,19 +166,9 @@ public class ArmSystem extends Subsystem
         armEncoder.setDistancePerPulse(ARM_DISTANCE_PER_PULSE);
     }
     
-    public void setArmSpeed(double speed)
+    private void setArmSpeed(double speed)
     {
-        boolean upperState = limitUpper.get();
-        boolean lowerState = limitLower.get();
-        
-        if(upperState == false || lowerState == false)
-        {
-            armMotor.set(0);
-        }
-        else
-        {
-            armMotor.set(speed);
-        }
+        armMotor.set(speed / 6);
     }
 
     public void initDefaultCommand()
