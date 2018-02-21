@@ -16,17 +16,17 @@ public class AutoPositionCheck
 		}
 	}
 	
-	public static String getAllyScale()
+	public static String getAllySwitch()
 	{
 		return data[0];
 	}
 	
-	public static String getSwitch()
+	public static String getScale()
 	{
 		return data[1];
 	}
 	
-	public static String getEnemyScale()
+	public static String getEnemySwitch()
 	{
 		return data[2];
 	}

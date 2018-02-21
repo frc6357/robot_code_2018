@@ -13,6 +13,7 @@ import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
+import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -32,9 +33,11 @@ public class Robot extends TimedRobot
 {
 
     Command autonomousCommand;
-    SendableChooser<String> chooser = new SendableChooser<>(); // Lets you pick from a group of commands, whose
+    SendableChooser<String> chooserStart = new SendableChooser<>(); // Lets you pick from a group of commands, whose
                                                                // references are strings
-
+    SendableChooser<String> chooserEnd = new SendableChooser<>();
+    SendableChooser<String> chooserAlt = new SendableChooser<>();
+    
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
     public static ClimbSystem climbSystem;
@@ -64,20 +67,16 @@ public class Robot extends TimedRobot
 
         // Add commands to Autonomous Sendable Chooser
 
-        chooser.addDefault("Test", "/home/lvuser/AutoSheets/Test.csv");
-        chooser.addObject("Left Start to Left Switch", "/home/lvuser/AutoSheets/CSV1.csv");
-        chooser.addObject("Left Start to Right Switch", "/home/lvuser/AutoSheets/CSV2.csv");
-        chooser.addObject("Left Start to Left Scale", "/home/lvuser/AutoSheets/CSV3.csv");
-        chooser.addObject("Left Start to Right Scale", "/home/lvuser/AutoSheets/CSV4.csv");
-        chooser.addObject("Right Start to Left Switch", "/home/lvuser/AutoSheets/CSV5.csv");
-        chooser.addObject("Right Start to Right Switch", "/home/lvuser/AutoSheets/CSV6.csv");
-        chooser.addObject("Right Start to Left Scale", "/home/lvuser/AutoSheets/CSV7.csv");
-        chooser.addObject("Right Start to Right Scale", "/home/lvuser/AutoSheets/CSV8.csv");
-        chooser.addObject("Left Start to Right Switch Alt", "/home/lvuser/AutoSheets/CSV9.csv");
-        chooser.addObject("Left Start to Right Scale Alt", "/home/lvuser/AutoSheets/CSV10.csv");
-        chooser.addObject("Right Start to Left Switch Alt", "/home/lvuser/AutoSheets/CSV11.csv");
-        chooser.addObject("Right Start to Left Scale Alt", "/home/lvuser/AutoSheets/CSV12.csv");
-        chooser.addObject("Any Start, drive straight", "/home/lvuser/AutoSheets/CSV13.csv");
+        chooserStart.addDefault("Middle", "M");
+        chooserStart.addObject("Left", "L");
+        chooserStart.addObject("Right", "R");
+        
+        chooserEnd.addDefault("Drive straight", "Drive");
+        chooserEnd.addObject("Switch", "Switch");
+        chooserEnd.addObject("Scale", "Scale");
+        
+        chooserAlt.addDefault("No", "False");
+        chooserAlt.addObject("Yes", "True");
     }
 
     /**
@@ -101,7 +100,7 @@ public class Robot extends TimedRobot
     {
         try
         {
-            autonomousCommand = new AutonomousCommand(CSVReader.parse(chooser.getSelected()));
+            autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile()));
         } catch (IOException e)
         {
             System.out.println("Exception here: " + e);
@@ -111,6 +110,68 @@ public class Robot extends TimedRobot
         // schedule the autonomous command (example)
         if (autonomousCommand != null)
             autonomousCommand.start();
+    }
+    
+    private String getSelectedFile()
+    {
+        AutoPositionCheck.getGameData();
+        
+        if(chooserEnd.getSelected().equals("Drive"))
+        {
+            return "/home/lvuser/AutoSheets/CSV13.csv";
+        }
+        switch(chooserStart.getSelected())
+        {
+            case "L":
+                switch(chooserEnd.getSelected())
+                {
+                    case "Switch":
+                       if(AutoPositionCheck.getAllySwitch().equals("L")) 
+                           return "/home/lvuser/AutoSheets/CSV1.csv";
+                       else
+                       {
+                           if(chooserAlt.getSelected().equals("False"))
+                               return "/home/lvuser/AutoSheets/CSV2.csv";
+                           else
+                               return "/home/lvuser/AutoSheets/CSV9.csv";
+                       }
+                    case "Scale":
+                       if(AutoPositionCheck.getScale().equals("L"))
+                           return "/home/lvuser/AutoSheets/CSV3.csv";
+                       else
+                       {
+                           if(chooserAlt.getSelected().equals("False"))
+                               return "/home/lvuser/AutoSheets/CSV4.csv";
+                           else
+                               return "/home/lvuser/AutoSheets/CSV10.csv";
+                       }
+                }
+            case "R":
+                switch(chooserEnd.getSelected())
+                {
+                    case "Switch":
+                        if(AutoPositionCheck.getAllySwitch().equals("R")) 
+                            return "/home/lvuser/AutoSheets/CSV6.csv";
+                        else
+                        {
+                            if(chooserAlt.getSelected().equals("False"))
+                                return "/home/lvuser/AutoSheets/CSV5.csv";
+                            else
+                                return "/home/lvuser/AutoSheets/CSV11.csv";
+                        }
+                    case "Scale":
+                        if(AutoPositionCheck.getScale().equals("L"))
+                        {
+                            if(chooserAlt.getSelected().equals("False"))
+                                return "/home/lvuser/AutoSheets/CSV3.csv";
+                            else
+                                return "/home/lvuser/AutoSheets/CSV12.csv";
+                        }
+                        else
+                            return "/home/lvuser/AutoSheets/CSV4.csv";
+                }
+        }
+        return "/home/lvuser/AutoSheets/Test.csv";
     }
 
     /**
@@ -179,7 +240,9 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
         SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
         SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
-        SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putData("Auto Start point", chooserStart);
+        SmartDashboard.putData("Auto End point", chooserEnd);
+        SmartDashboard.putData("Use alternate (Early cross) path (if possible)?", chooserAlt);
         SmartDashboard.putNumber("Drive Left Raw", driveLeft);
         SmartDashboard.putNumber("Drive Right Raw", driveRight);
         SmartDashboard.putNumber("Drive Strafe Right", driveStrafeRight);
@@ -238,7 +301,7 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
         SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
         SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
-        SmartDashboard.putData("Auto mode", chooser);
+        SmartDashboard.putData("Auto mode", chooserStart);
         SmartDashboard.putNumber("Drive Left Raw", driveLeft);
         SmartDashboard.putNumber("Drive Right Raw", driveRight);
         SmartDashboard.putNumber("Drive Strafe Right", driveStrafeRight);
