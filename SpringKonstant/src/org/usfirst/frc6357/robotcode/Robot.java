@@ -67,6 +67,7 @@ public class Robot extends TimedRobot
 
         // Add commands to Autonomous Sendable Chooser
 
+
         chooserStart.addDefault("Middle", "M");
         chooserStart.addObject("Left", "L");
         chooserStart.addObject("Right", "R");
@@ -77,6 +78,7 @@ public class Robot extends TimedRobot
         
         chooserAlt.addDefault("No", "False");
         chooserAlt.addObject("Yes", "True");
+
     }
 
     /**
@@ -251,6 +253,10 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("IMU Angle", robotAngle);
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
         SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
+        
+        /*
+         * int player = (curPlayer%2==0) ? 1 : 2;
+         */
     }
 
     @Override

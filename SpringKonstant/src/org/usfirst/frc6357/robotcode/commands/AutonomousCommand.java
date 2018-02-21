@@ -37,6 +37,10 @@ public class AutonomousCommand extends Command
     public AutonomousCommand(String[][] s2d)
     {
         requires(Robot.driveBaseSystem);
+        Robot.driveBaseSystem.setPositionMode();
+        Robot.driveBaseSystem.enable();
+        
+        //Robot.driveBaseSystem.deployStrafe(true);
 
         // TODO: Consider reworking this to use a real state machine updated in the
         // execute() method. I suspect that's what you're supposed to do rather than

@@ -75,9 +75,9 @@ public class DriveBaseSystem extends Subsystem
         super();
 
         // NB: We are using 3 motors through a gearbox on each side of the robot. In
-        //     this arrangement, the front and rear motors must run in one direction
-        //     and the matchign center motor must run in the opposite direction. Take
-        //     care to ensure that this is correct!
+        // this arrangement, the front and rear motors must run in one direction
+        // and the matchign center motor must run in the opposite direction. Take
+        // care to ensure that this is correct!
 
         // Left Drive Controllers
         baseFrontLeftMaster = new WPI_VictorSPX(Ports.driveLeftFrontMotor);
@@ -110,7 +110,8 @@ public class DriveBaseSystem extends Subsystem
         // This sets the all the speed controllers on the right side to follow the
         // center speed controller
         ((WPI_VictorSPX) baseBackRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
-        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
+        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower,
+                ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
 
         // This sets the all the speed controllers on the left side to follow the center
         // speed controller
@@ -256,41 +257,44 @@ public class DriveBaseSystem extends Subsystem
     /**
      * Sets the PID set point, which drives the robot straight
      * 
-     * @param distance the distance to drive forwards
+     * @param distance
+     *            the distance to drive forwards
      */
     public void driveStraight(double distance)
     {
         leftSide.setDistanceTarget(distance);
         rightSide.setDistanceTarget(distance);
     }
-    
+
     /**
      * Turns the robot around, with degrees being positive for clockwise
      * 
-     * @param degrees angle at which to rotate with positive being clockwise
+     * @param degrees
+     *            angle at which to rotate with positive being clockwise
      */
     public void turnDegrees(double degrees)
     {
         leftSide.setDistanceTarget(getTurnDistance(degrees));
         leftSide.setDistanceTarget(-1 * getTurnDistance(degrees));
     }
-    
 
     public double getTurnDistance(double angle) // Turns angle to the distance
     {
-        return (2 * Math.PI * 11.125 / (12)) * (angle / 360.0);     //TODO finalize math
+        return (2 * Math.PI * 11.125 / (12)) * (angle / 360.0); // TODO finalize math
     }
 
     /**
-     * Sets the distance per encoder pulse
-     * TODO set this distance
-     * @param distance in any unit
+     * Sets the distance per encoder pulse TODO set this distance
+     * 
+     * @param distance
+     *            in any unit
      */
     public void setEncoderDistancePerPulse()
     {
         leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
     }
+
     /**
      * This method is used to set the speed of the strafing motor.
      *
@@ -299,9 +303,9 @@ public class DriveBaseSystem extends Subsystem
      *            joystick axis.
      */
     public void setStrafeSpeed(double rightAxis, double leftAxis)
-    {   
+    {
         double speed = leftAxis - rightAxis;
-        
+
         baseStrafe.set(speed);
     }
 

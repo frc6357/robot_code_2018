@@ -171,9 +171,19 @@ public class ArmSystem extends Subsystem
         armEncoder.setDistancePerPulse(ARM_DISTANCE_PER_PULSE);
     }
     
-    private void setArmSpeed(double speed)
+    public void setArmSpeed(double speed)
     {
-        armMotor.set(speed);
+        boolean upperState = limitUpper.get();
+        boolean lowerState = limitLower.get();
+        
+        if(upperState == false || lowerState == false)
+        {
+            armMotor.set(0);
+        }
+        else
+        {
+            armMotor.set(speed);
+        }
     }
 
     public void initDefaultCommand()

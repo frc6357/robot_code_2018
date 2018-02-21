@@ -24,14 +24,14 @@ public class IntakeSystem extends Subsystem
     public final DoubleSolenoid intakeLiftSolenoid;
     public final DoubleSolenoid intakeGripSolenoid;
     public boolean intakeIsUp = true;
+    public boolean gripperOpen = true;
 
     public IntakeSystem()
     {
         // Pneumatic control for the intake grippers and lift mechanism.
-        intakeLiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
+        
         intakeGripSolenoid = new DoubleSolenoid(Ports.pcm2, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
-
-       // intakeSolenoid = new DoubleSolenoid(Ports.PCM_ID, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown);
+        intakeLiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown); 
         
         intakeLeftMotor = new WPI_TalonSRX(Ports.IntakeLeftMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.IntakeRightMotor);
@@ -150,7 +150,44 @@ public class IntakeSystem extends Subsystem
         intakeIsUp = false;
         SmartDashboard.putString("Intake", "down");
     }
-
+    
+    /**
+     * Sets the gripper to close or open
+     * Open == True
+     * Close == False
+     * 
+     * @param state - boolean state of the grippers
+     */
+    public void setIntakeGrippers(boolean state)
+    {
+        if(state)
+        {
+            openIntakeGripper();
+        }
+        else
+        {
+            closeIntakeGripper();
+        }
+    }
+    
+    /**
+     * Opens the gripper
+     */
+    public void openIntakeGripper()
+    {
+        intakeGripSolenoid.set(DoubleSolenoid.Value.kReverse);
+        gripperOpen = true;
+    }
+    
+    /**
+     * Closes the gripper
+     */
+    public void closeIntakeGripper()
+    {
+        intakeGripSolenoid.set(DoubleSolenoid.Value.kForward);
+        gripperOpen = false;
+    }
+    
     public void initDefaultCommand()
     {
         // Set the default command for a subsystem here.
