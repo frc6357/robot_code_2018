@@ -1,3 +1,4 @@
+
 *.class
 
 # Mobile Tools for Java (J2ME)
@@ -21,3 +22,4 @@ SpringKonstant/dist/*
 SpringKonstant/.DS_Store
 .DS_Store
 SpringKonstant/.DS_Store
+

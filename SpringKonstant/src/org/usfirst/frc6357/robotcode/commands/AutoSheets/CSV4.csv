@@ -1,0 +1,11 @@
+Command,@param1,@param2,...
+Drive,13.5,,
+Turn,90,,
+Drive,14.25,,
+Turn,-90,,
+Drive,6.075,,
+Turn,-90,,
+Forward,1.425,,
+Arm,3,,
+Spit Out Box,,,
+Arm ,0,,
