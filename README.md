@@ -1,5 +1,10 @@
 # frc6357/robot_code
 
+The Spring Konstant 6357 Git Repo
+-------------------------------
+
+The Spring Konstant is a second year team from Dripping Springs, Texas. Our team is comprised of 40 students. In 2017 we went to World Championships, in Houston. Our team has been heavily involved in our community, striving to influence the next generation of STEM professionals. We have taken part in many community events, such as science night, Founders Day, and STEM day, and we started our very own FTC team this year, Team 13760, at Sycamore Springs Middle School.
+
 GIT and Continuous Integration:
 -------------------------------
 
