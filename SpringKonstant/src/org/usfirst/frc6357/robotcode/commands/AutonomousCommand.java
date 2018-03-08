@@ -39,7 +39,7 @@ public class AutonomousCommand extends Command
         requires(Robot.driveBaseSystem);
         Robot.driveBaseSystem.setPositionMode();
         Robot.driveBaseSystem.enable();
-        
+
         //Robot.driveBaseSystem.deployStrafe(true);
 
         // TODO: Consider reworking this to use a real state machine updated in the
@@ -52,17 +52,22 @@ public class AutonomousCommand extends Command
          * name, line[foo][1 : line[foo].length - 1] are params Afterwards, will execute
          * command group
          */
-        new Thread(() ->
-        {
+        new Thread(() -> {
             final boolean turnByTime = true;
-            final double turnSpeed   = 0.3;
+            final double turnSpeed = 0.3;
 
             for (int row = 1; row < s2d.length; row++)
             {
                 switch (s2d[row][0])
                 {
                     case "Wait":
-                        try {Thread.sleep(Integer.parseInt(s2d[row][1]));} catch(Exception e) {}
+                        try
+                        {
+                            Thread.sleep(Integer.parseInt(s2d[row][1]));
+                        }
+                        catch (Exception e)
+                        {
+                        }
                         break;
                     case "Drive":
                         Robot.driveBaseSystem.driveStraight(Double.parseDouble(s2d[row][1]));
@@ -70,13 +75,19 @@ public class AutonomousCommand extends Command
                     case "Turn":
                         // TODO: Debug the turn by angle code below! If you want to disable it,
                         // set turnByTime to false above.
-                        if(turnByTime)
+                        if (turnByTime)
                         {
                             System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
                             int parsed = Integer.parseInt(s2d[row][1]);
                             Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
                             Robot.driveBaseSystem.setRightSpeed((parsed > 0) ? -.5 : .5);
-                            try {Thread.sleep(250 * parsed);} catch(Exception e) {}
+                            try
+                            {
+                                Thread.sleep(250 * parsed);
+                            }
+                            catch (Exception e)
+                            {
+                            }
                             Robot.driveBaseSystem.setLeftSpeed(0);
                             Robot.driveBaseSystem.setRightSpeed(0);
                         }
@@ -91,8 +102,8 @@ public class AutonomousCommand extends Command
                             // need to deal with the fact that the angle will wrap from
                             // 180.0 to -180.0! To make things a bit easier to handle, we
                             // add 180 to the angle to give us a reading in the 0-360 range.
-                            startAngle  = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
-                            turnAngle   = Double.parseDouble(s2d[row][1]);
+                            startAngle = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
+                            turnAngle = Double.parseDouble(s2d[row][1]);
                             turnedAngle = 0.0;
 
                             if (turnAngle < 0.0)
@@ -100,14 +111,14 @@ public class AutonomousCommand extends Command
                                 // Counter clockwise. Convert our start angle so we always
                                 // look for increasing angles in the math later.
                                 turnClockwise = false;
-                                startAngle    = 360 - startAngle;
-                                direction     = -1.0;
+                                startAngle = 360 - startAngle;
+                                direction = -1.0;
                             }
                             else
                             {
                                 // Clockwise.
                                 turnClockwise = true;
-                                direction     = 1.0;
+                                direction = 1.0;
                             }
 
                             turnAngle = Math.abs(turnAngle);
@@ -115,20 +126,20 @@ public class AutonomousCommand extends Command
                             Robot.driveBaseSystem.setLeftSpeed(turnSpeed * direction);
                             Robot.driveBaseSystem.setRightSpeed(-(turnSpeed * direction));
 
-                            while(turnedAngle < turnAngle)
+                            while (turnedAngle < turnAngle)
                             {
-                                robotAngle  = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
+                                robotAngle = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
 
                                 // If we're turning counter-clockwise, reverse the angle so that everything
                                 // seems to be moving clockwise.
-                                if(turnClockwise == false)
+                                if (turnClockwise == false)
                                 {
                                     robotAngle = 360.0 - robotAngle;
                                 }
 
                                 // Handle the wrap case. This will occur whenever the measured angle is lower
                                 // than the start angle (because we adjusted everything for clockwise rotations).
-                                if(robotAngle < startAngle)
+                                if (robotAngle < startAngle)
                                 {
                                     turnedAngle = (360.0 - startAngle) + robotAngle;
                                 }
@@ -143,7 +154,7 @@ public class AutonomousCommand extends Command
                         }
                         break;
                     case "Arm":
-                        switch(Integer.parseInt(s2d[row][1]))
+                        switch (Integer.parseInt(s2d[row][1]))
                         {
                             case 0:
                                 Robot.armSystem.setArmSpeed(-0.75);
@@ -151,7 +162,7 @@ public class AutonomousCommand extends Command
                                 {
                                 	Thread.sleep(Ports.floorTime);
                                 }
-                                catch(Exception e)
+                                catch (Exception e)
                                 {
                                 }
                                 Robot.armSystem.setArmSpeed(0);
