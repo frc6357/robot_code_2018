@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_161"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/cscore.jar" sourcepath="wpilib/java/current/lib/cscore-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/ntcore.jar" sourcepath="wpilib/java/current/lib/ntcore-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/opencv.jar" sourcepath="wpilib/java/current/lib/opencv-sources.jar"/>
