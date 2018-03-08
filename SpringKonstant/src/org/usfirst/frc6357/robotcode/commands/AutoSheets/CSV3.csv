@@ -1,7 +1,6 @@
 Command,@param1,@param2,...
-Drive,20.25,,
+Drive,306,,
 Turn,90,,
-Drive,0.7125,,
 Arm,3,,
-Spit Out Box,,,
+Box Push,,,
 Arm,0,,
