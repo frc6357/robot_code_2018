@@ -146,16 +146,48 @@ public class AutonomousCommand extends Command
                         switch(Integer.parseInt(s2d[row][1]))
                         {
                             case 0:
-                                Robot.armSystem.setAngleTarget(Ports.floorAngle);
+                                Robot.armSystem.setArmSpeed(-0.75);
+                                try
+                                {
+                                	Thread.sleep(Ports.floorTime);
+                                }
+                                catch(Exception e)
+                                {
+                                }
+                                Robot.armSystem.setArmSpeed(0);
                                 break;
                             case 1:
-                                Robot.armSystem.setAngleTarget(Ports.switchAngle);
+                            	Robot.armSystem.setArmSpeed(0.75);
+                                try
+                                {
+                                	Thread.sleep(Ports.switchTime);
+                                }
+                                catch(Exception e)
+                                {
+                                }
+                                Robot.armSystem.setArmSpeed(0);
                                 break;
                             case 2:
-                                Robot.armSystem.setAngleTarget(Ports.midScaleAngle);
+                            	Robot.armSystem.setArmSpeed(0.75);
+                                try
+                                {
+                                	Thread.sleep(Ports.midScaleTime);
+                                }
+                                catch(Exception e)
+                                {
+                                }
+                                Robot.armSystem.setArmSpeed(0);
                                 break;
                             case 3:
-                                Robot.armSystem.setAngleTarget(Ports.highScaleAngle);
+                            	Robot.armSystem.setArmSpeed(0.75);
+                                try
+                                {
+                                	Thread.sleep(Ports.highScaleTime);
+                                }
+                                catch(Exception e)
+                                {
+                                }
+                                Robot.armSystem.setArmSpeed(0);
                                 break;
                             default:
                                 System.out.println("ERROR TRYING TO PARSE ARM INPUT");
@@ -164,6 +196,7 @@ public class AutonomousCommand extends Command
                     case "Box Push":
                         Robot.intakeSystem.setIntakeDown();
                         Robot.intakeSystem.setIntakeMotorState(true, false);
+                        Robot.intakeSystem.setIntakeUp();
                         break;
                 }
             }

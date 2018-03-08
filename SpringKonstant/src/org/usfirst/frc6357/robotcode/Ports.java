@@ -92,10 +92,10 @@ public class Ports
     public static final int ArmLimitTop = 8; // DIO input 8
     public static final int ArmLimitBottom = 9; // DIO input 9
     
-    public static final double floorAngle = 0;  //Angle towards the floor
-    public static final double switchAngle = 15;    //Angle to raise arm to switch
-    public static final double midScaleAngle = 60;  //Angle to reach the middle of the scale
-    public static final double highScaleAngle = 75; //Angle to reach the top of the scale
+    public static final int floorTime = 3500; //Time for robot to lower to the floor, in milliseconds
+    public static final int switchTime = 1000;    //Time from floor to switch
+    public static final int midScaleTime = 2500;  //Time from floor to middle of scale
+    public static final int highScaleTime = 3500; //Time from floor to top of scale
 
     //
     // Driver's and operator's OI channel assignments

@@ -111,7 +111,7 @@ public class ArmSystem extends Subsystem
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
     }
     
-    private void setArmSpeed(double speed)
+    public void setArmSpeed(double speed)
     {
         SmartDashboard.putNumber("ARM speed", speed);
         

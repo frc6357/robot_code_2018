@@ -100,6 +100,8 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
+    	intakeSystem.setIntakeUp();
+    	intakeSystem.setIntakeGrippers(false);
         driveBaseSystem.deployStrafe(false);
         try
         {
