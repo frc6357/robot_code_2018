@@ -274,8 +274,28 @@ public class DriveBaseSystem extends Subsystem
      */
     public void turnDegrees(double degrees)
     {
-        leftSide.setDistanceTarget(getTurnDistance(degrees));
-        leftSide.setDistanceTarget(-1 * getTurnDistance(degrees));
+        double curAngle, targetAngle;
+        
+        curAngle = driveIMU.getAngle();
+        targetAngle = curAngle + degrees;
+        
+        if(degrees > 0)
+        {
+            leftSide.setDistanceTarget(50);
+            rightSide.setDistanceTarget(-50);
+        }
+        
+        if(degrees < 0)
+        {
+            leftSide.setDistanceTarget(-50);
+            rightSide.setDistanceTarget(50);
+        }
+        
+        if(curAngle == targetAngle)
+        {
+            leftSide.setDistanceTarget(0);
+            rightSide.setDistanceTarget(0);
+        }
     }
 
     public double getTurnDistance(double angle) // Turns angle to the distance

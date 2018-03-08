@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc6357.robotcode.Ports;
@@ -26,43 +27,28 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 public class ArmSystem extends Subsystem
 {
-    private final AngularPositionArmPID armPIDController;
-    
     private final SpeedController armMotor;
     private final DigitalInput limitUpper;
     private final DigitalInput limitLower;
     private boolean tripLower = false;
     private boolean tripUpper = false;
-    private final Encoder armEncoder;
-    
-    private final double ARM_DISTANCE_PER_PULSE;
-    private final double ARM_ANGLE_MAX;
-    private final double ARM_ANGLE_MIN;
 
     public ArmSystem()
     {
         
         armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
         armMotor.set(0.0);
+        
         /*
         ((WPI_TalonSRX) armMotor).configPeakCurrentLimit(35, 10);       // 35 A
         ((WPI_TalonSRX) armMotor).configPeakCurrentDuration(200, 10);   // 200ms
         ((WPI_TalonSRX) armMotor).configContinuousCurrentLimit(30, 10); // 30A
         ((WPI_TalonSRX) armMotor).enableCurrentLimit(true);*/
 
-        armEncoder = new Encoder(Ports.ArmEncoderA, Ports.ArmEncoderB);
+        //armEncoder = new Encoder(Ports.ArmEncoderA, Ports.ArmEncoderB);
         
         limitUpper = new DigitalInput(Ports.ArmLimitTop);
         limitLower = new DigitalInput(Ports.ArmLimitBottom);
-        
-        armPIDController = new AngularPositionArmPID(armMotor, armEncoder);
-        
-        ARM_DISTANCE_PER_PULSE = 10;
-        ARM_ANGLE_MAX = 90; //TODO set this value
-        ARM_ANGLE_MIN = 0; //TODO set this value
-        
-        setEncoderDistancePerPulse();
-        armEncoder.reset();
     }
 
     /*
@@ -125,52 +111,8 @@ public class ArmSystem extends Subsystem
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
     }
     
-    //TODO create the math to calculate angle with encoder
-    public double getArmAngle()
-    {
-        double armAngle;
-        
-        armAngle = 0;
-        return armAngle; 
-    }
-    
-    //TODO add math here
-    public double getDistanceOfAngle(double angle)
-    {
-        
-        return 0;
-    }
-    
-    public void setAngleTarget(double angle)
-    {
-        
-        armPIDController.setDistanceTarget(getDistanceOfAngle(angle));
-    }
-    
-    public boolean checkAngleBounds()
-    { 
-        boolean isInBounds = true;
-        
-        if(getArmAngle() >=  ARM_ANGLE_MAX)
-        {
-            return false;
-        }
-        else if(getArmAngle() <= ARM_ANGLE_MIN)
-        {
-            return false;
-        }
-        
-        return isInBounds;
-    }
-    
-    public void setEncoderDistancePerPulse()
-    {
-        armEncoder.setDistancePerPulse(ARM_DISTANCE_PER_PULSE);
-    }
-    
     private void setArmSpeed(double speed)
     {
-        //speed = -1 * speed / 4;
         SmartDashboard.putNumber("ARM speed", speed);
         
         armMotor.set(speed / 2);

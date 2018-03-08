@@ -88,7 +88,7 @@ public class VelocityControlledDrive implements PIDOutput
      */
     public void pidWrite(double output)
     {
-        setSpeedAbsoluteFps(output);
+        mySpeedController.set(output);
     }
     
     /**

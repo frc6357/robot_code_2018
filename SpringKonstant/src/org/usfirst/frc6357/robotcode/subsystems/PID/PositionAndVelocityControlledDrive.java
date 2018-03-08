@@ -146,6 +146,10 @@ public class PositionAndVelocityControlledDrive implements PIDOutput
         }
     }
     
+    public void reset()
+    {
+        myPidController.reset();
+    }
     /**
      * @return returns the current set point
      */
@@ -157,7 +161,7 @@ public class PositionAndVelocityControlledDrive implements PIDOutput
     @Override
     public void pidWrite(double output)
     {
-        setDistanceTarget(output);
+        mySpeedController.set(output);
     }
 
 }

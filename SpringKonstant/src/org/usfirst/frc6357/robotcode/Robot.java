@@ -88,7 +88,7 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit()
     {
-
+        driveBaseSystem.deployStrafe(false);
     }
 
     @Override
@@ -100,6 +100,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
+        driveBaseSystem.deployStrafe(false);
         try
         {
             autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile()));
@@ -194,6 +195,8 @@ public class Robot extends TimedRobot
         // this line or comment it out.
         if (autonomousCommand != null)
             autonomousCommand.cancel();
+        
+        driveBaseSystem.deployStrafe(true);
     }
 
     /**
@@ -252,10 +255,6 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("IMU Angle", robotAngle);
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
         SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
-        
-        /*
-         * int player = (curPlayer%2==0) ? 1 : 2;
-         */
     }
 
     @Override
@@ -315,5 +314,10 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("IMU Angle", robotAngle);
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
         SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
+    }
+    
+    public void updateSmartDashboard()
+    {
+        
     }
 }
