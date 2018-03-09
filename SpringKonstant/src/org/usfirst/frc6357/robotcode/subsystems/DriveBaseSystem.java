@@ -272,26 +272,25 @@ public class DriveBaseSystem extends Subsystem
      * @param degrees
      *            angle at which to rotate with positive being clockwise
      */
-    public void turnDegrees(double degrees)
+    public void turnDegrees(double angle)
     {
-        double curAngle, targetAngle;
+        double targetAngle;
         
-        curAngle = driveIMU.getAngle();
-        targetAngle = curAngle + degrees;
+        targetAngle = angle;
         
-        if(degrees > 0)
+        if(targetAngle > 0)
         {
             leftSide.setDistanceTarget(50);
             rightSide.setDistanceTarget(-50);
         }
         
-        if(degrees < 0)
+        if(targetAngle < 0)
         {
             leftSide.setDistanceTarget(-50);
             rightSide.setDistanceTarget(50);
         }
         
-        if(curAngle == targetAngle)
+        if(targetAngle == targetAngle)
         {
             leftSide.setDistanceTarget(0);
             rightSide.setDistanceTarget(0);

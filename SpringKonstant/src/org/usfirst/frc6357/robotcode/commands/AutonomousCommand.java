@@ -37,8 +37,6 @@ public class AutonomousCommand extends Command
     public AutonomousCommand(String[][] s2d)
     {
         requires(Robot.driveBaseSystem);
-        Robot.driveBaseSystem.setPositionMode();
-        Robot.driveBaseSystem.enable();
 
         //Robot.driveBaseSystem.deployStrafe(true);
 
@@ -53,7 +51,7 @@ public class AutonomousCommand extends Command
          * command group
          */
         new Thread(() -> {
-            final boolean turnByTime = true;
+            final boolean turnByTime = false;
             final double turnSpeed = 0.3;
 
             for (int row = 1; row < s2d.length; row++)
@@ -70,9 +68,13 @@ public class AutonomousCommand extends Command
                         }
                         break;
                     case "Drive":
+                        Robot.driveBaseSystem.setPositionMode();
+                        Robot.driveBaseSystem.enable();
                         Robot.driveBaseSystem.driveStraight(Double.parseDouble(s2d[row][1]));
                         break;
                     case "Turn":
+                       
+                        Robot.driveBaseSystem.disable();
                         // TODO: Debug the turn by angle code below! If you want to disable it,
                         // set turnByTime to false above.
                         if (turnByTime)
