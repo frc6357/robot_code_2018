@@ -133,7 +133,7 @@ public class Ports
 
     public static final int OIOperatorClimbWinch = 4; // Right joystick Y
 
-    public static final int OIOperatorIntakeIn = 1; // Button A
-    public static final int OIOperatorIntakeOut = 4; // Button Y
+    public static final int OIOperatorIntakeIn = 3; // Right Trigger
+    public static final int OIOperatorIntakeOut = 2; // Left Trigger
     public static final int OIOperatorIntakeSwing = 3; // Button X
 }

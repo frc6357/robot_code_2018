@@ -65,46 +65,16 @@ public class IntakeSystem extends Subsystem
      *
      * @return None
      */
-    public void setIntakeSpeed(double speed)
+    public void setIntakeSpeed(double leftAxis, double rightAxis)
     {
+    	double speed = leftAxis - rightAxis;
+    	
         intakeLeftMotor.set(speed);
+        intakeRightMotor.set(speed);
 
         SmartDashboard.putNumber("Intake speed", speed);
         SmartDashboard.putNumber("Intake left current", intakeLeftMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake right current", intakeRightMotor.getOutputCurrent());
-    }
-
-    /**
-     * Helper function used to control the state of both intake motors at the same
-     * time. This allows the motors to be started and run in forwards or backwards
-     * direction, or stopped. When started, motors are run at a constant speed.
-     *
-     * @param start
-     *            - if true, the intake motors are started. If false, they are
-     *            stopped.
-     * @param inwards
-     *            - if Start is true, this controls the motor direction, inwards
-     *            (true) or outwards (false).
-     */
-    public void setIntakeMotorState(boolean start, boolean inwards)
-    {
-        double speed;
-
-        if (!start)
-        {
-            speed = 0.0;
-        }
-        else
-        {
-            speed = INTAKE_SPEED;
-
-            if (inwards)
-            {
-                speed *= -1;
-            }
-        }
-
-        setIntakeSpeed(speed);
     }
 
     /**

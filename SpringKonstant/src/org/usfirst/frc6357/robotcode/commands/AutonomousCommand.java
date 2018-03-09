@@ -208,7 +208,15 @@ public class AutonomousCommand extends Command
                         break;
                     case "Box Push":
                         Robot.intakeSystem.setIntakeDown();
-                        Robot.intakeSystem.setIntakeMotorState(true, false);
+                        Robot.intakeSystem.setIntakeSpeed(-1, 0);
+                        try 
+                        {
+                        	Thread.sleep(2000);
+                        } 
+                        catch (Exception e) 
+                        {
+                        }
+                        Robot.intakeSystem.setIntakeSpeed(0, 0);
                         Robot.intakeSystem.setIntakeUp();
                         break;
                 }
