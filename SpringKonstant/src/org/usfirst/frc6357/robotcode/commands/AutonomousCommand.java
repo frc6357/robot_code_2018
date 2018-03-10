@@ -23,7 +23,26 @@ public class AutonomousCommand extends Command
 {
     public AutonomousCommand()
     {
-
+    	requires(Robot.driveBaseSystem);
+        
+    	
+    	Robot.driveBaseSystem.leftEncoder.reset();
+    	Robot.driveBaseSystem.rightEncoder.reset();
+    	new Thread(() -> 
+    	{
+    		Robot.driveBaseSystem.setLeftSpeed(.4);
+            Robot.driveBaseSystem.setRightSpeed(.4);
+            try
+            {
+            	Thread.sleep(4360);
+            }
+            catch(Exception e)
+            {
+            	
+            }
+            Robot.driveBaseSystem.setLeftSpeed(0);
+            Robot.driveBaseSystem.setRightSpeed(0);
+    	}).start();
     }
 
     /**
@@ -50,7 +69,7 @@ public class AutonomousCommand extends Command
          * name, line[foo][1 : line[foo].length - 1] are params Afterwards, will execute
          * command group
          */
-        new Thread(() -> {
+        /*new Thread(() -> {
             final boolean turnByTime = false;
             final double turnSpeed = 0.3;
 
@@ -221,7 +240,8 @@ public class AutonomousCommand extends Command
                         break;
                 }
             }
-        }).start();
+        }).start();*/
+ 
     }
 
     // Called just before this Command runs the first time

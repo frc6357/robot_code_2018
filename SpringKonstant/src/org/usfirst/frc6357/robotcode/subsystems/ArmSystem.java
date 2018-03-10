@@ -2,6 +2,7 @@ package org.usfirst.frc6357.robotcode.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -27,18 +28,21 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 public class ArmSystem extends Subsystem
 {
-    private final SpeedController armMotor;
+    //private final SpeedController armMotor;
+    private final DoubleSolenoid armSolenoid;
     private final DigitalInput limitUpper;
     private final DigitalInput limitLower;
     private boolean tripLower = false;
     private boolean tripUpper = false;
+    private boolean armState = false; 	// false == down, true == up
 
     public ArmSystem()
     {
         
-        armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
-        armMotor.set(0.0);
+      // armMotor = new WPI_TalonSRX(Ports.ArmElevationMotor);
+      // armMotor.set(0.0);
         
+        armSolenoid = new DoubleSolenoid (Ports.pcm1, Ports.ArmSolenoidUp, Ports.ArmSolenoidDown);        
         /*
         ((WPI_TalonSRX) armMotor).configPeakCurrentLimit(35, 10);       // 35 A
         ((WPI_TalonSRX) armMotor).configPeakCurrentDuration(200, 10);   // 200ms
@@ -106,16 +110,31 @@ public class ArmSystem extends Subsystem
 
         setArmSpeed(calcSpeed);
 
-        SmartDashboard.putNumber("ARM current", ((BaseMotorController) armMotor).getOutputCurrent());
+        //SmartDashboard.putNumber("ARM current", ((BaseMotorController) armMotor).getOutputCurrent());
         SmartDashboard.putBoolean("ARM Upper Limit", tripUpper);
         SmartDashboard.putBoolean("ARM Lower Limit", tripLower);
+    }
+    
+    public void armUp()
+    {
+    		armSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+    
+    public void armDown()
+    {
+    	armSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+    
+    public void setArmState(boolean state)
+    {
+    	armState = state;
     }
     
     public void setArmSpeed(double speed)
     {
         SmartDashboard.putNumber("ARM speed", speed);
         
-        armMotor.set(speed / 2);
+        //.set(speed / 2);
     }
 
     public void initDefaultCommand()

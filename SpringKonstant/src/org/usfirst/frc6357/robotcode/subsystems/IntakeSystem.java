@@ -21,8 +21,8 @@ public class IntakeSystem extends Subsystem
     private static final double INTAKE_SPEED = 0.25;
     public final WPI_TalonSRX intakeLeftMotor;
     public final WPI_TalonSRX intakeRightMotor;
-    public final DoubleSolenoid intakeLiftSolenoid;
-    public final DoubleSolenoid intakeGripSolenoid;
+   // public final DoubleSolenoid intakeLiftSolenoid;
+   // public final DoubleSolenoid intakeGripSolenoid;
     public boolean intakeIsUp = true;
     public boolean gripperOpen = true;
 
@@ -30,8 +30,8 @@ public class IntakeSystem extends Subsystem
     {
         // Pneumatic control for the intake grippers and lift mechanism.
         
-        intakeGripSolenoid = new DoubleSolenoid(Ports.pcm2, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
-        intakeLiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown); 
+       // intakeGripSolenoid = new DoubleSolenoid(Ports.pcm, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
+        //intakeLiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.IntakeTiltSolenoidUp, Ports.IntakeTiltSolenoidDown); 
         
         intakeLeftMotor = new WPI_TalonSRX(Ports.IntakeLeftMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.IntakeRightMotor);
@@ -82,7 +82,7 @@ public class IntakeSystem extends Subsystem
      *
      * @return Returns true if the intake is swung up, false if down.
      */
-    public boolean toggleIntakeSwing()
+  /*  public boolean toggleIntakeSwing()
     {
         if (intakeIsUp)
         {
@@ -94,40 +94,40 @@ public class IntakeSystem extends Subsystem
         }
 
         return (intakeIsUp);
-    }
+    }*/
 
     /**
      * Moves the intake mechanism into the up position.
      *
      * @return None
      */
-    public void setIntakeUp()
+  /*  public void setIntakeUp()
     {
         intakeLiftSolenoid.set(DoubleSolenoid.Value.kForward);
         intakeIsUp = true;
         SmartDashboard.putString("Intake", "up");
 
     }
-
+*/
     /**
      * Moves the intake mechanism into the down position.
      *
      * @return None
      */
-    public void setIntakeDown()
+   /* public void setIntakeDown()
     {
         intakeLiftSolenoid.set(DoubleSolenoid.Value.kReverse);
         intakeIsUp = false;
         SmartDashboard.putString("Intake", "down");
     }
-    
+    */
     /**
      * Sets the gripper to close or open
      * Open == True
      * Close == False
      * 
      * @param state - boolean state of the grippers
-     */
+     *//*
     public void setIntakeGrippers(boolean state)
     {
         if(state)
@@ -138,12 +138,12 @@ public class IntakeSystem extends Subsystem
         {
             closeIntakeGripper();
         }
-    }
+    }*/
     
     /**
      * Opens the gripper
      */
-    public void openIntakeGripper()
+   /* public void openIntakeGripper()
     {
         intakeGripSolenoid.set(DoubleSolenoid.Value.kReverse);
         gripperOpen = true;
@@ -152,11 +152,13 @@ public class IntakeSystem extends Subsystem
     /**
      * Closes the gripper
      */
+    /*
     public void closeIntakeGripper()
     {
         intakeGripSolenoid.set(DoubleSolenoid.Value.kForward);
         gripperOpen = false;
     }
+   */
     
     public void initDefaultCommand()
     {

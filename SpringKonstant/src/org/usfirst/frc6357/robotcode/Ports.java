@@ -86,6 +86,9 @@ public class Ports
     // Arm Subsystem
     // ***************
     public static final int ArmElevationMotor = 40; // CAN ID 40
+    
+    public static final int ArmSolenoidUp = 6;
+    public static final int ArmSolenoidDown = 2;
 
     public static final int ArmEncoderA = 6; // DIO input 6
     public static final int ArmEncoderB = 7; // DIO input 7
@@ -136,4 +139,6 @@ public class Ports
     public static final int OIOperatorIntakeIn = 3; // Right Trigger
     public static final int OIOperatorIntakeOut = 2; // Left Trigger
     public static final int OIOperatorIntakeSwing = 3; // Button X
+    public static final int OIOperatorArmUp = 4;	// A Button
+    public static final int OIOperatorArmDown = 1; // Y Button
 }

@@ -41,8 +41,8 @@ public class DriveBaseSystem extends Subsystem
     private boolean baseHighGear;
 
     // Encoders
-    private final Encoder rightEncoder;
-    private final Encoder leftEncoder;
+    public final Encoder rightEncoder;
+    public final Encoder leftEncoder;
     private final double DISTANCE_PER_PULSE;
     private final int PULSES_PER_ROTATION;
     private final int DRIVE_WHEEL_RADIUS;
@@ -454,5 +454,14 @@ public class DriveBaseSystem extends Subsystem
     {
 
     }
-
+    
+//    public void driveEncoderDistance(double inches)
+//    {
+//    	leftEncoder.reset();
+//    	rightEncoder.reset();
+//    	while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
+//    	{
+//    		
+//    	}
+//    }
 }

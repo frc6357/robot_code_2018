@@ -89,6 +89,7 @@ public class Robot extends TimedRobot
     public void disabledInit()
     {
         driveBaseSystem.deployStrafe(false);
+        armSystem.setArmState(false);
     }
 
     @Override
@@ -100,16 +101,18 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-    	intakeSystem.setIntakeUp();
-    	intakeSystem.setIntakeGrippers(false);
+    	//intakeSystem.setIntakeUp();
+    	//intakeSystem.setIntakeGrippers(false);
         driveBaseSystem.deployStrafe(false);
-        try
+        
+        autonomousCommand = new AutonomousCommand();
+       /* try
         {
             autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile()));
         } catch (IOException e)
         {
             System.out.println("Exception here: " + e);
-        }
+        }*/
 
        // autonomousCommand = new TestPidPosition();
         // schedule the autonomous command (example)
@@ -233,8 +236,8 @@ public class Robot extends TimedRobot
         driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.periodic(armSpeed);
         intakeSystem.setIntakeSpeed(intakeSpeedOut, intakeSpeedIn);
+        
 
         SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
         SmartDashboard.putData("Stow strafe", new StrafeStow());
@@ -260,6 +263,9 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("IMU Angle", robotAngle);
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
         SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
+        
+        SmartDashboard.putNumber("Encoder Distance Per Pulse", driveBaseSystem.leftEncoder.getDistancePerPulse());
+        SmartDashboard.putNumber("Encoder Distance", driveBaseSystem.leftEncoder.getDistance());
     }
 
     @Override

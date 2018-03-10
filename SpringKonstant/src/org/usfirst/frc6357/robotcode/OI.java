@@ -58,6 +58,8 @@ public class OI
     private Button buttonStrafeStow;
     private Button buttonLowGear;
     private Button buttonHighGear;
+    private Button buttonArmUp;
+    private Button buttonArmDown;
 
     public OI()
     {
@@ -66,6 +68,9 @@ public class OI
         joystickDriver = new FilteredJoystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
+        buttonArmUp = new JoystickButton(joystickOperator, Ports.OIOperatorArmUp);
+        buttonArmDown = new JoystickButton(joystickOperator, Ports.OIOperatorArmDown);
+        
         buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
         buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
@@ -75,7 +80,11 @@ public class OI
 
         buttonLowGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
         buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
-
+        
+        
+        buttonArmUp.whenPressed(new ArmUp());
+        buttonArmDown.whenPressed(new ArmDown());
+        
         buttonStrafeDeploy.whenPressed(new StrafeDeploy());
         buttonStrafeStow.whenPressed(new StrafeStow());
 
