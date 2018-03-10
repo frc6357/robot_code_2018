@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  * to the left drive and negative half to the right drive. 4. When strafing
  * ends, call disable().
  */
+@Deprecated
 public class StrafingAngleController extends Subsystem implements PIDSource, PIDOutput
 {
     static final double kP = 0.01;

@@ -14,6 +14,11 @@ import org.usfirst.frc6357.robotcode.tools.filters.Filter;
 
 import edu.wpi.first.wpilibj.Joystick;
 
+/**
+ * This class is an extension of Joystick which allows the user
+ * to assign inputs filters. These filters will affect the output
+ * that each axis returns. 
+ */
 public class FilteredJoystick extends Joystick
 {
     static final int MAX_AXES = 16;

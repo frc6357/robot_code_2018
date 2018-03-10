@@ -7,8 +7,8 @@ package org.usfirst.frc6357.robotcode.tools.filters;
  */
 public class RetailCurveFilter extends Filter
 {
-    private double coefficient;
-    private double gain;
+    private double coefficient; //The coefficient by which the output is multiplied
+    private double gain; //The maximum value that the output can return
     
     /**
      * Constructor which generates a retail curve with the degree of coef (affects curvature)
