@@ -5,7 +5,7 @@ import org.usfirst.frc6357.robotcode.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ *This class initalizes the methods to test the PID Position to collect data for autonomous
  */
 public class TestPidPosition extends Command {
 
