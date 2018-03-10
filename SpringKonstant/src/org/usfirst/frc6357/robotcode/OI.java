@@ -60,6 +60,7 @@ public class OI
     private Button buttonHighGear;
     private Button buttonArmUp;
     private Button buttonArmDown;
+    private Button buttonGripper;
 
     public OI()
     {
@@ -81,6 +82,7 @@ public class OI
         buttonLowGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
         buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
         
+        buttonGripper = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle);
         
         buttonArmUp.whenPressed(new ArmUp());
         buttonArmDown.whenPressed(new ArmDown());
@@ -97,6 +99,9 @@ public class OI
         buttonIntakeIn.whenReleased(new IntakeCommand(false, true));
         buttonIntakeOut.whenPressed(new IntakeCommand(true, false));
         buttonIntakeOut.whenReleased(new IntakeCommand(false, false));
+        
+        buttonGripper.whileHeld(new OpenGripper());
+        buttonGripper.whenReleased(new CloseGripper());
 
         // Set deadbands and response curves for various joystick axes.
         filterClimbDeadband = new FilterDeadband(0.1);
@@ -104,6 +109,7 @@ public class OI
 
         // SmartDashboard insertions for autonomous command chooser.
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+        SmartDashboard.putData("Open Gripper" , new OpenGripper());
     }
 
     /**

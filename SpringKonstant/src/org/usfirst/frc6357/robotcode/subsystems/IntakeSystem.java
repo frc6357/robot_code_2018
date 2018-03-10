@@ -1,12 +1,12 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-
 import org.usfirst.frc6357.robotcode.Ports;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Subsystem controlling the power cube intake mechanism in the robot. This
@@ -18,6 +18,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 public class IntakeSystem extends Subsystem
 {
 
+	private final Solenoid grippers;
+	
     private static final double INTAKE_SPEED = 0.25;
     public final WPI_TalonSRX intakeLeftMotor;
     public final WPI_TalonSRX intakeRightMotor;
@@ -35,6 +37,8 @@ public class IntakeSystem extends Subsystem
         
         intakeLeftMotor = new WPI_TalonSRX(Ports.IntakeLeftMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.IntakeRightMotor);
+        
+        grippers = new Solenoid(Ports.pcm1, Ports.hDriveSolenoid);
 
         // TODO: Set current limits sensibly so that we catch case where a cube is
         // pulled into the mechanism and the motor stalls.
@@ -75,6 +79,16 @@ public class IntakeSystem extends Subsystem
         SmartDashboard.putNumber("Intake speed", speed);
         SmartDashboard.putNumber("Intake left current", intakeLeftMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake right current", intakeRightMotor.getOutputCurrent());
+    }
+    
+    public void openGripper()
+    {
+    	grippers.set(true);
+    }
+    
+    public void closeGripper()
+    {
+    	grippers.set(false);
     }
 
     /**

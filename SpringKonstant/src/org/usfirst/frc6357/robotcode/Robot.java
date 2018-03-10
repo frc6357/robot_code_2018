@@ -89,13 +89,18 @@ public class Robot extends TimedRobot
     public void disabledInit()
     {
         driveBaseSystem.deployStrafe(false);
-        armSystem.setArmState(false);
+        driveBaseSystem.leftEncoder.reset();
+        driveBaseSystem.rightEncoder.reset();
     }
 
     @Override
     public void disabledPeriodic()
     {
         Scheduler.getInstance().run();
+        SmartDashboard.putNumber("Distance Per Pulse",  driveBaseSystem.leftEncoder.getDistancePerPulse());
+        SmartDashboard.putNumber("Distance (getDistance())", driveBaseSystem.leftEncoder.getDistance());
+        SmartDashboard.putNumber("Raw value", driveBaseSystem.leftEncoder.get());
+        SmartDashboard.putNumber("Rate", driveBaseSystem.leftEncoder.getRate());
     }
 
     @Override
@@ -103,7 +108,10 @@ public class Robot extends TimedRobot
     {
     	//intakeSystem.setIntakeUp();
     	//intakeSystem.setIntakeGrippers(false);
+    	driveBaseSystem.leftEncoder.reset();
+    	driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false);
+        intakeSystem.closeGripper();
         
         autonomousCommand = new AutonomousCommand();
        /* try

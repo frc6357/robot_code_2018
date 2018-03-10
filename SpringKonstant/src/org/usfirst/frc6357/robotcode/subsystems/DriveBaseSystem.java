@@ -1,6 +1,7 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import org.usfirst.frc6357.robotcode.Ports;
+import org.usfirst.frc6357.robotcode.Robot;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
 import org.usfirst.frc6357.robotcode.subsystems.PID.PositionAndVelocityControlledDrive;
 
@@ -43,13 +44,13 @@ public class DriveBaseSystem extends Subsystem
     // Encoders
     public final Encoder rightEncoder;
     public final Encoder leftEncoder;
-    private final double DISTANCE_PER_PULSE;
-    private final int PULSES_PER_ROTATION;
-    private final int DRIVE_WHEEL_RADIUS;
-
+    private final int PULSES_PER_ROTATION = 256;
+    private final int DRIVE_WHEEL_RADIUS = 2;
+    private final double DISTANCE_PER_PULSE = 2 * DRIVE_WHEEL_RADIUS * Math.PI / PULSES_PER_ROTATION;
+    
     // Strafing system motors and state
     private final SpeedController baseStrafe;
-    private final Solenoid baseStrafeSolenoid;
+//    private final Solenoid baseStrafeSolenoid;
     private final Solenoid baseFrontLiftSolenoid;
     private final Solenoid baseBackLiftSolenoid;
     private boolean baseStrafeDeployed;
@@ -110,8 +111,7 @@ public class DriveBaseSystem extends Subsystem
         // This sets the all the speed controllers on the right side to follow the
         // center speed controller
         ((WPI_VictorSPX) baseBackRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
-        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower,
-                ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
+        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
 
         // This sets the all the speed controllers on the left side to follow the center
         // speed controller
@@ -125,7 +125,7 @@ public class DriveBaseSystem extends Subsystem
         baseStrafeAngleController = new StrafingAngleController(driveIMU);
 
         // Lift system
-        baseStrafeSolenoid = new Solenoid(Ports.pcm1, Ports.hDriveSolenoid);
+//        baseStrafeSolenoid = new Solenoid(Ports.pcm1, Ports.hDriveSolenoid);
         baseFrontLiftSolenoid = new Solenoid(Ports.pcm1, Ports.frontButterflyDown);
         baseBackLiftSolenoid = new Solenoid(Ports.pcm1, Ports.backButterflyDown);
 
@@ -141,10 +141,10 @@ public class DriveBaseSystem extends Subsystem
 
         isInVelocityMode = false;
 
-        // Set initial states of all actuators
-        PULSES_PER_ROTATION = 1000;
-        DRIVE_WHEEL_RADIUS = 2; // This is in inches
-        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION;
+//        // Set initial states of all actuators
+//        PULSES_PER_ROTATION = 1000;
+//        DRIVE_WHEEL_RADIUS = 2; // This is in inches
+//        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION;
 
         setEncoderDistancePerPulse();
         leftEncoder.reset();
@@ -274,27 +274,30 @@ public class DriveBaseSystem extends Subsystem
      */
     public void turnDegrees(double angle)
     {
-        double targetAngle;
+        double currentAngle = driveIMU.updatePeriodic() + 180;
+        double targetAngle = currentAngle + angle;
+        if(targetAngle < 0) targetAngle += 360;
+        if(targetAngle > 360) targetAngle -= 360;
         
-        targetAngle = angle;
         
-        if(targetAngle > 0)
+        while(Math.abs(targetAngle - currentAngle) > .05)
         {
-            leftSide.setDistanceTarget(50);
-            rightSide.setDistanceTarget(-50);
+        	if(angle > 0)	//If turning right
+        	{
+        		setRightSpeed(-.5);
+        		setLeftSpeed(.5);
+        	}
+        	else
+        	{
+        		setRightSpeed(.5);
+        		setLeftSpeed(-.5);
+        	}
+        	currentAngle = driveIMU.updatePeriodic() + 180;
         }
-        
-        if(targetAngle < 0)
-        {
-            leftSide.setDistanceTarget(-50);
-            rightSide.setDistanceTarget(50);
-        }
-        
-        if(targetAngle == targetAngle)
-        {
-            leftSide.setDistanceTarget(0);
-            rightSide.setDistanceTarget(0);
-        }
+        setRightSpeed(0);
+        setLeftSpeed(0);
+        rightEncoder.reset();
+        leftEncoder.reset();
     }
 
     public double getTurnDistance(double angle) // Turns angle to the distance
@@ -360,7 +363,7 @@ public class DriveBaseSystem extends Subsystem
 
         if (state)
         {
-            baseStrafeSolenoid.set(true);
+//            baseStrafeSolenoid.set(true);
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
 
@@ -369,7 +372,7 @@ public class DriveBaseSystem extends Subsystem
             baseStrafeAngleController.enable();
         } else
         {
-            baseStrafeSolenoid.set(false);
+//            baseStrafeSolenoid.set(false);
             baseFrontLiftSolenoid.set(false);
             baseBackLiftSolenoid.set(false);
 
@@ -455,13 +458,25 @@ public class DriveBaseSystem extends Subsystem
 
     }
     
-//    public void driveEncoderDistance(double inches)
-//    {
-//    	leftEncoder.reset();
-//    	rightEncoder.reset();
-//    	while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
-//    	{
-//    		
-//    	}
-//    }
+    public void driveEncoderDistance(double inches)
+    {
+    	while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
+		{
+			Robot.driveBaseSystem.setLeftSpeed(.5);
+			Robot.driveBaseSystem.setRightSpeed(.5);
+		}
+		Robot.driveBaseSystem.setLeftSpeed(0);
+		Robot.driveBaseSystem.setRightSpeed(0);
+    }
+    
+    public void driveEncoderDistance(double inches, double speed)
+    {
+    	while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
+		{
+			Robot.driveBaseSystem.setLeftSpeed(speed);
+			Robot.driveBaseSystem.setRightSpeed(speed);
+		}
+		Robot.driveBaseSystem.setLeftSpeed(0);
+		Robot.driveBaseSystem.setRightSpeed(0);
+    }
 }

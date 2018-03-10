@@ -10,239 +10,255 @@
 
 package org.usfirst.frc6357.robotcode.commands;
 
-import org.usfirst.frc6357.robotcode.Ports;
 import org.usfirst.frc6357.robotcode.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
-//import org.usfirst.frc6357.robotcode.Robot;
 
 /**
- *
+ * This class is the class that is called during the Autonomous period The end goal of this class is to have it take in data that has been
+ * parsed from CSV or Excel sheets in the CSVReader class, and then use this data to generate anonymous autonomous commands; this allows for
+ * quick changes and lots of plans.
  */
 public class AutonomousCommand extends Command
 {
+    // Default Constructor
     public AutonomousCommand()
     {
-    	requires(Robot.driveBaseSystem);
-        
-    	
-    	Robot.driveBaseSystem.leftEncoder.reset();
-    	Robot.driveBaseSystem.rightEncoder.reset();
-    	new Thread(() -> 
-    	{
-    		Robot.driveBaseSystem.setLeftSpeed(.4);
-            Robot.driveBaseSystem.setRightSpeed(.4);
-            try
+        requires(Robot.driveBaseSystem);
+        boolean useTimedMethod = true; // True if using old method of simply
+                                       // driving for a period of time
+
+        if (useTimedMethod)
+        {
+            new Thread(() -> // Thread which simply powers motors for a brief
+                             // period of time
             {
-            	Thread.sleep(4360);
-            }
-            catch(Exception e)
-            {
-            	
-            }
-            Robot.driveBaseSystem.setLeftSpeed(0);
-            Robot.driveBaseSystem.setRightSpeed(0);
-    	}).start();
+                Robot.driveBaseSystem.setLeftSpeed(.4);
+                Robot.driveBaseSystem.setRightSpeed(.4);
+                try
+                {
+                    Thread.sleep(4360);
+                }
+                catch (Exception e)
+                {
+
+                }
+                Robot.driveBaseSystem.setLeftSpeed(0);
+                Robot.driveBaseSystem.setRightSpeed(0);
+            }).start();
+        }
+        else // If not using old method, then attempt to use encoders
+        {
+            Robot.driveBaseSystem.driveEncoderDistance(120); // Drive 10 feet
+            Robot.driveBaseSystem.turnDegrees(180); // Turn 180 degrees
+        }
     }
 
     /**
-     * Overloaded constructor, creates a commandgroup by parsing 2D string array for
-     * data
+     * Overloaded constructor, creates a commandgroup by parsing 2D string array for data
      *
      * @param s2d
-     *            the 2D string array containing data from a csv for parsing with
-     *            the format specified in CSVReader
+     *            the 2D string array containing data from a csv for parsing with the format specified in CSVReader
      */
-    public AutonomousCommand(String[][] s2d)
-    {
-        requires(Robot.driveBaseSystem);
-
-        //Robot.driveBaseSystem.deployStrafe(true);
-
-        // TODO: Consider reworking this to use a real state machine updated in the
-        // execute() method. I suspect that's what you're supposed to do rather than
-        // spawning an independent thread (but I could be completely wrong).
-
-        /*
-         * Should read through the s2d for references and command types, then construct
-         * a command group Format is: line[0] can be ignored, line[boo][0] is function
-         * name, line[foo][1 : line[foo].length - 1] are params Afterwards, will execute
-         * command group
-         */
-        /*new Thread(() -> {
-            final boolean turnByTime = false;
-            final double turnSpeed = 0.3;
-
-            for (int row = 1; row < s2d.length; row++)
-            {
-                switch (s2d[row][0])
-                {
-                    case "Wait":
-                        try
-                        {
-                            Thread.sleep(Integer.parseInt(s2d[row][1]));
-                        }
-                        catch (Exception e)
-                        {
-                        }
-                        break;
-                    case "Drive":
-                        Robot.driveBaseSystem.setPositionMode();
-                        Robot.driveBaseSystem.enable();
-                        Robot.driveBaseSystem.driveStraight(Double.parseDouble(s2d[row][1]));
-                        break;
-                    case "Turn":
-                       
-                        Robot.driveBaseSystem.disable();
-                        // TODO: Debug the turn by angle code below! If you want to disable it,
-                        // set turnByTime to false above.
-                        if (turnByTime)
-                        {
-                            System.out.println("Add turning functionality here with param: " + s2d[row][1] + " deg");
-                            int parsed = Integer.parseInt(s2d[row][1]);
-                            Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
-                            Robot.driveBaseSystem.setRightSpeed((parsed > 0) ? -.5 : .5);
-                            try
-                            {
-                                Thread.sleep(250 * parsed);
-                            }
-                            catch (Exception e)
-                            {
-                            }
-                            Robot.driveBaseSystem.setLeftSpeed(0);
-                            Robot.driveBaseSystem.setRightSpeed(0);
-                        }
-                        else
-                        {
-                            // Turn by angle using the IMU to measure where we are.
-                            double startAngle, turnAngle, robotAngle, turnedAngle;
-                            boolean turnClockwise;
-                            double direction;
-
-                            // Figure out where we need to start and end. Note that we
-                            // need to deal with the fact that the angle will wrap from
-                            // 180.0 to -180.0! To make things a bit easier to handle, we
-                            // add 180 to the angle to give us a reading in the 0-360 range.
-                            startAngle = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
-                            turnAngle = Double.parseDouble(s2d[row][1]);
-                            turnedAngle = 0.0;
-
-                            if (turnAngle < 0.0)
-                            {
-                                // Counter clockwise. Convert our start angle so we always
-                                // look for increasing angles in the math later.
-                                turnClockwise = false;
-                                startAngle = 360 - startAngle;
-                                direction = -1.0;
-                            }
-                            else
-                            {
-                                // Clockwise.
-                                turnClockwise = true;
-                                direction = 1.0;
-                            }
-
-                            turnAngle = Math.abs(turnAngle);
-
-                            Robot.driveBaseSystem.setLeftSpeed(turnSpeed * direction);
-                            Robot.driveBaseSystem.setRightSpeed(-(turnSpeed * direction));
-
-                            while (turnedAngle < turnAngle)
-                            {
-                                robotAngle = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
-
-                                // If we're turning counter-clockwise, reverse the angle so that everything
-                                // seems to be moving clockwise.
-                                if (turnClockwise == false)
-                                {
-                                    robotAngle = 360.0 - robotAngle;
-                                }
-
-                                // Handle the wrap case. This will occur whenever the measured angle is lower
-                                // than the start angle (because we adjusted everything for clockwise rotations).
-                                if (robotAngle < startAngle)
-                                {
-                                    turnedAngle = (360.0 - startAngle) + robotAngle;
-                                }
-                                else
-                                {
-                                    turnedAngle = robotAngle - startAngle;
-                                }
-                            }
-
-                            Robot.driveBaseSystem.setLeftSpeed(0);
-                            Robot.driveBaseSystem.setRightSpeed(0);
-                        }
-                        break;
-                    case "Arm":
-                        switch (Integer.parseInt(s2d[row][1]))
-                        {
-                            case 0:
-                                Robot.armSystem.setArmSpeed(-0.75);
-                                try
-                                {
-                                	Thread.sleep(Ports.floorTime);
-                                }
-                                catch (Exception e)
-                                {
-                                }
-                                Robot.armSystem.setArmSpeed(0);
-                                break;
-                            case 1:
-                            	Robot.armSystem.setArmSpeed(0.75);
-                                try
-                                {
-                                	Thread.sleep(Ports.switchTime);
-                                }
-                                catch(Exception e)
-                                {
-                                }
-                                Robot.armSystem.setArmSpeed(0);
-                                break;
-                            case 2:
-                            	Robot.armSystem.setArmSpeed(0.75);
-                                try
-                                {
-                                	Thread.sleep(Ports.midScaleTime);
-                                }
-                                catch(Exception e)
-                                {
-                                }
-                                Robot.armSystem.setArmSpeed(0);
-                                break;
-                            case 3:
-                            	Robot.armSystem.setArmSpeed(0.75);
-                                try
-                                {
-                                	Thread.sleep(Ports.highScaleTime);
-                                }
-                                catch(Exception e)
-                                {
-                                }
-                                Robot.armSystem.setArmSpeed(0);
-                                break;
-                            default:
-                                System.out.println("ERROR TRYING TO PARSE ARM INPUT");
-                        }
-                        break;
-                    case "Box Push":
-                        Robot.intakeSystem.setIntakeDown();
-                        Robot.intakeSystem.setIntakeSpeed(-1, 0);
-                        try 
-                        {
-                        	Thread.sleep(2000);
-                        } 
-                        catch (Exception e) 
-                        {
-                        }
-                        Robot.intakeSystem.setIntakeSpeed(0, 0);
-                        Robot.intakeSystem.setIntakeUp();
-                        break;
-                }
-            }
-        }).start();*/
- 
-    }
+    // public AutonomousCommand(String[][] s2d)
+    // {
+    // requires(Robot.driveBaseSystem);
+    //
+    // //Robot.driveBaseSystem.deployStrafe(true);
+    //
+    // // TODO: Consider reworking this to use a real state machine updated in
+    // the
+    // // execute() method. I suspect that's what you're supposed to do rather
+    // than
+    // // spawning an independent thread (but I could be completely wrong).
+    //
+    // /*
+    // * Should read through the s2d for references and command types, then
+    // construct
+    // * a command group Format is: line[0] can be ignored, line[boo][0] is
+    // function
+    // * name, line[foo][1 : line[foo].length - 1] are params Afterwards, will
+    // execute
+    // * command group
+    // */
+    // new Thread(() -> {
+    // final boolean turnByTime = false;
+    // final double turnSpeed = 0.3;
+    //
+    // for (int row = 1; row < s2d.length; row++)
+    // {
+    // switch (s2d[row][0])
+    // {
+    // case "Wait":
+    // try
+    // {
+    // Thread.sleep(Integer.parseInt(s2d[row][1]));
+    // }
+    // catch (Exception e)
+    // {
+    // }
+    // break;
+    // case "Drive":
+    // Robot.driveBaseSystem.setPositionMode();
+    // Robot.driveBaseSystem.enable();
+    // Robot.driveBaseSystem.driveStraight(Double.parseDouble(s2d[row][1]));
+    // break;
+    // case "Turn":
+    //
+    // Robot.driveBaseSystem.disable();
+    // // TODO: Debug the turn by angle code below! If you want to disable it,
+    // // set turnByTime to false above.
+    // if (turnByTime)
+    // {
+    // System.out.println("Add turning functionality here with param: " +
+    // s2d[row][1] + " deg");
+    // int parsed = Integer.parseInt(s2d[row][1]);
+    // Robot.driveBaseSystem.setLeftSpeed((parsed > 0) ? .5 : -.5);
+    // Robot.driveBaseSystem.setRightSpeed((parsed > 0) ? -.5 : .5);
+    // try
+    // {
+    // Thread.sleep(250 * parsed);
+    // }
+    // catch (Exception e)
+    // {
+    // }
+    // Robot.driveBaseSystem.setLeftSpeed(0);
+    // Robot.driveBaseSystem.setRightSpeed(0);
+    // }
+    // else
+    // {
+    // // Turn by angle using the IMU to measure where we are.
+    // double startAngle, turnAngle, robotAngle, turnedAngle;
+    // boolean turnClockwise;
+    // double direction;
+    //
+    // // Figure out where we need to start and end. Note that we
+    // // need to deal with the fact that the angle will wrap from
+    // // 180.0 to -180.0! To make things a bit easier to handle, we
+    // // add 180 to the angle to give us a reading in the 0-360 range.
+    // startAngle = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
+    // turnAngle = Double.parseDouble(s2d[row][1]);
+    // turnedAngle = 0.0;
+    //
+    // if (turnAngle < 0.0)
+    // {
+    // // Counter clockwise. Convert our start angle so we always
+    // // look for increasing angles in the math later.
+    // turnClockwise = false;
+    // startAngle = 360 - startAngle;
+    // direction = -1.0;
+    // }
+    // else
+    // {
+    // // Clockwise.
+    // turnClockwise = true;
+    // direction = 1.0;
+    // }
+    //
+    // turnAngle = Math.abs(turnAngle);
+    //
+    // Robot.driveBaseSystem.setLeftSpeed(turnSpeed * direction);
+    // Robot.driveBaseSystem.setRightSpeed(-(turnSpeed * direction));
+    //
+    // while (turnedAngle < turnAngle)
+    // {
+    // robotAngle = Robot.driveBaseSystem.driveIMU.getRawAngle() + 180.0;
+    //
+    // // If we're turning counter-clockwise, reverse the angle so that
+    // everything
+    // // seems to be moving clockwise.
+    // if (turnClockwise == false)
+    // {
+    // robotAngle = 360.0 - robotAngle;
+    // }
+    //
+    // // Handle the wrap case. This will occur whenever the measured angle is
+    // lower
+    // // than the start angle (because we adjusted everything for clockwise
+    // rotations).
+    // if (robotAngle < startAngle)
+    // {
+    // turnedAngle = (360.0 - startAngle) + robotAngle;
+    // }
+    // else
+    // {
+    // turnedAngle = robotAngle - startAngle;
+    // }
+    // }
+    //
+    // Robot.driveBaseSystem.setLeftSpeed(0);
+    // Robot.driveBaseSystem.setRightSpeed(0);
+    // }
+    // break;
+    // case "Arm":
+    // switch (Integer.parseInt(s2d[row][1]))
+    // {
+    // case 0:
+    // Robot.armSystem.setArmSpeed(-0.75);
+    // try
+    // {
+    // Thread.sleep(Ports.floorTime);
+    // }
+    // catch (Exception e)
+    // {
+    // }
+    // Robot.armSystem.setArmSpeed(0);
+    // break;
+    // case 1:
+    // Robot.armSystem.setArmSpeed(0.75);
+    // try
+    // {
+    // Thread.sleep(Ports.switchTime);
+    // }
+    // catch(Exception e)
+    // {
+    // }
+    // Robot.armSystem.setArmSpeed(0);
+    // break;
+    // case 2:
+    // Robot.armSystem.setArmSpeed(0.75);
+    // try
+    // {
+    // Thread.sleep(Ports.midScaleTime);
+    // }
+    // catch(Exception e)
+    // {
+    // }
+    // Robot.armSystem.setArmSpeed(0);
+    // break;
+    // case 3:
+    // Robot.armSystem.setArmSpeed(0.75);
+    // try
+    // {
+    // Thread.sleep(Ports.highScaleTime);
+    // }
+    // catch(Exception e)
+    // {
+    // }
+    // Robot.armSystem.setArmSpeed(0);
+    // break;
+    // default:
+    // System.out.println("ERROR TRYING TO PARSE ARM INPUT");
+    // }
+    // break;
+    // case "Box Push":
+    // Robot.intakeSystem.setIntakeDown();
+    // Robot.intakeSystem.setIntakeSpeed(-1, 0);
+    // try
+    // {
+    // Thread.sleep(2000);
+    // }
+    // catch (Exception e)
+    // {
+    // }
+    // Robot.intakeSystem.setIntakeSpeed(0, 0);
+    // Robot.intakeSystem.setIntakeUp();
+    // break;
+    // }
+    // }
+    // }).start();
+    //
+    // }
 
     // Called just before this Command runs the first time
     @Override
@@ -272,8 +288,7 @@ public class AutonomousCommand extends Command
 
     }
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
+    // Called when another command which requires one or more of the same subsystems is scheduled to run
     @Override
     protected void interrupted()
     {

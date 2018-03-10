@@ -141,4 +141,5 @@ public class Ports
     public static final int OIOperatorIntakeSwing = 3; // Button X
     public static final int OIOperatorArmUp = 4;	// A Button
     public static final int OIOperatorArmDown = 1; // Y Button
+    public static final int OIOperatorGripperToggle = 6; // Right Bumper
 }
