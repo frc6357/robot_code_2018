@@ -5,7 +5,7 @@ import org.usfirst.frc6357.robotcode.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ *This class initalizes the variables to toggle the position of the intake on the robot
  */
 public class IntakeSwingToggle extends Command
 {

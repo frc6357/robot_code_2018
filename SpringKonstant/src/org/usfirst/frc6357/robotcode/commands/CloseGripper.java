@@ -5,7 +5,7 @@ import org.usfirst.frc6357.robotcode.Robot;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
- *
+ * This class sets the commands up for when the control calls actions for the gripper
  */
 public class CloseGripper extends Command {
 
