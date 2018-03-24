@@ -27,9 +27,8 @@ public class IntakeSystem extends Subsystem
         intakeLeftMotor = new WPI_TalonSRX(Ports.IntakeLeftMotor);
         intakeRightMotor = new WPI_TalonSRX(Ports.IntakeRightMotor);
 
-        //Pnumantics for the intake grippers
-        grippers = new DoubleSolenoid(Ports.pcm2, Ports.OIOperatorIntakeIn, Ports.OIOperatorIntakeOut);
-
+        //Pneumatics for the intake grippers
+        grippers = new DoubleSolenoid(Ports.IntakeGripPCM, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
     }
 
     /**
@@ -54,40 +53,40 @@ public class IntakeSystem extends Subsystem
 
     /**
      * Sets the state of the grippers on the intake based on a boolean
-     * 
+     *
      * @param state - True == Open Grippers : False == Close Grippers
      */
-    public void setIntakeGrippers(boolean state) 
-    { 
-        if(state) 
-        { 
-            openIntakeGripper(); 
+    public void setIntakeGrippers(boolean state)
+    {
+        if(state)
+        {
+            openIntakeGripper();
         }
-        else 
-        { 
-            closeIntakeGripper(); 
-        } 
+        else
+        {
+            closeIntakeGripper();
+        }
     }
 
     /**
      * Opens the gripper
      */
-     public void openIntakeGripper() 
-     { 
-         grippers.set(DoubleSolenoid.Value.kReverse); 
-         gripperOpen = true; 
+     public void openIntakeGripper()
+     {
+         grippers.set(DoubleSolenoid.Value.kReverse);
+         gripperOpen = true;
      }
-      
-     
+
+
     /** Closes the gripper
-     * 
+     *
      */
-     public void closeIntakeGripper() 
-     { 
-         grippers.set(DoubleSolenoid.Value.kForward); 
-         gripperOpen = false; 
+     public void closeIntakeGripper()
+     {
+         grippers.set(DoubleSolenoid.Value.kForward);
+         gripperOpen = false;
      }
-     
+
 
     public void initDefaultCommand()
     {

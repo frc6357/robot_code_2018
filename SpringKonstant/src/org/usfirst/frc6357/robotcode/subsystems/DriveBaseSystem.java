@@ -50,7 +50,7 @@ public class DriveBaseSystem extends Subsystem
 
     // Strafing system motors and state
     private final SpeedController baseStrafe;
-//    private final Solenoid baseStrafeSolenoid;
+    //private final Solenoid baseStrafeSolenoid;
     private final Solenoid baseFrontLiftSolenoid;
     private final Solenoid baseBackLiftSolenoid;
     private boolean baseStrafeDeployed;
@@ -125,14 +125,14 @@ public class DriveBaseSystem extends Subsystem
         baseStrafeAngleController = new StrafingAngleController(driveIMU);
 
         // Lift system
-//        baseStrafeSolenoid = new Solenoid(Ports.pcm1, Ports.hDriveSolenoid);
-        baseFrontLiftSolenoid = new Solenoid(Ports.pcm1, Ports.frontButterflyDown);
-        baseBackLiftSolenoid = new Solenoid(Ports.pcm1, Ports.backButterflyDown);
+        //baseStrafeSolenoid = new Solenoid(Ports.drivePCM, Ports.hDriveSolenoid);
+        baseFrontLiftSolenoid = new Solenoid(Ports.drivePCM, Ports.frontButterflyDown);
+        baseBackLiftSolenoid = new Solenoid(Ports.drivePCM, Ports.backButterflyDown);
 
         baseStrafeDeployed = false;
 
         // Gear shifter
-        baseGearShiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
+        baseGearShiftSolenoid = new DoubleSolenoid(Ports.drivePCM, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
         baseHighGear = true;
 
         // PID
@@ -362,7 +362,7 @@ public class DriveBaseSystem extends Subsystem
 
         if (state)
         {
-//            baseStrafeSolenoid.set(true);
+            //baseStrafeSolenoid.set(true);
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
 
@@ -371,7 +371,7 @@ public class DriveBaseSystem extends Subsystem
             baseStrafeAngleController.enable();
         } else
         {
-//            baseStrafeSolenoid.set(false);
+            //baseStrafeSolenoid.set(false);
             baseFrontLiftSolenoid.set(false);
             baseBackLiftSolenoid.set(false);
 
