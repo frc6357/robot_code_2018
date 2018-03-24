@@ -47,6 +47,7 @@ public class Ports
     //
     // We also use a double solenoid to control both side's low/high gear
     // selection.
+    public static final int drivePCM                    = pcm1;
     public static final int frontButterflyDown          = 0; // PCM 1 output 0, pushes down front butterfly
     public static final int backButterflyDown           = 1; // PCM 1 output 1, pushes down back butterfly
     public static final int hDriveSolenoid              = 4; // PCM 1 output 4, engages H-Drive
@@ -77,18 +78,18 @@ public class Ports
 
     // TODO: Check the polarity of these two - may need to reverse.
     public static final int IntakeGripPCM               = pcm2;
-    public static final int IntakeGripSolenoidIn        = 6; // PCM 2 output 0 (forward channel)
-    public static final int IntakeGripSolenoidOut       = 7; // PCM 2 output 1 (reverse channel)
+    public static final int IntakeGripSolenoidIn        = 0; // PCM 2 output 0 (forward channel)
+    public static final int IntakeGripSolenoidOut       = 1; // PCM 2 output 1 (reverse channel)
 
     // ***************
     // Arm Subsystem
     // ***************
-    public static final int ArmShoulderPCM              = pcm1;
+    public static final int ArmShoulderPCM              = pcm2;
     public static final int ArmElbowPCM                 = pcm2;
-    public static final int ArmShoulderUp               = 6; // PCM 1 output 6 (forward channel)
-    public static final int ArmShoulderDown             = 2; // PCM 1 output 2 (reverse channel)
-    public static final int ArmElbowUp                  = 6; // PCM 2 output 6 (forward channel)
-    public static final int ArmElbowDown                = 7; // PCM 2 output 7 (reverse channel)
+    public static final int ArmShoulderUp               = 2; // PCM 2 output 2 (forward channel)
+    public static final int ArmShoulderDown             = 3; // PCM 2 output 3 (reverse channel)
+    public static final int ArmElbowUp                  = 4; // PCM 2 output 4 (forward channel)
+    public static final int ArmElbowDown                = 5; // PCM 2 output 5 (reverse channel)
 
     public static final int ArmLimitTop                 = 8; // DIO input 8
     public static final int ArmLimitBottom              = 9; // DIO input 9
