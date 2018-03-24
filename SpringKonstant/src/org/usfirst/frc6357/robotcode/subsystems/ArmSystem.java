@@ -3,6 +3,7 @@ package org.usfirst.frc6357.robotcode.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import org.usfirst.frc6357.robotcode.Ports;
 
@@ -41,6 +42,9 @@ public class ArmSystem extends Subsystem
     // after we've read the same switch condition twice in a row.
     private boolean LastUpperPressed    = false;
     private boolean LastLowerPressed    = false;
+    
+    public final boolean UP = true;
+    public final boolean DOWN = false;
 
     public ArmSystem()
     {
@@ -206,7 +210,16 @@ public class ArmSystem extends Subsystem
             armElbowDown();
         }
     }
-
+    
+    public double getGameTime()
+    {
+        double gameTime;
+        
+        gameTime = DriverStation.getInstance().getMatchTime();
+        
+        return gameTime;
+    }
+    
     public void initDefaultCommand()
     {
         // Set the default command for a subsystem here.

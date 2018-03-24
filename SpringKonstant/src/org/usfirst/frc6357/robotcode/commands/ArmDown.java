@@ -3,6 +3,7 @@ package org.usfirst.frc6357.robotcode.commands;
 import org.usfirst.frc6357.robotcode.Robot;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -23,7 +24,21 @@ public class ArmDown extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
-        Robot.armSystem.setArmShoulderState(false);
+        if(!DriverStation.getInstance().isAutonomous())
+            if(Robot.armSystem.getGameTime() < 30.0)
+            {
+                Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
+            }
+            else
+            {
+                Robot.armSystem.setArmElbowState(Robot.armSystem.DOWN);
+                Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
+            }
+        else if(DriverStation.getInstance().isAutonomous())
+        {
+            Robot.armSystem.setArmElbowState(Robot.armSystem.DOWN);
+            Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
+        }
     }
 
     // Make this return true when this Command no longer needs to run execute()

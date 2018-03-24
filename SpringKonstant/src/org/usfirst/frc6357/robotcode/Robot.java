@@ -15,6 +15,7 @@ import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -33,7 +34,7 @@ public class Robot extends TimedRobot
     SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
     SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
     SendableChooser<String> chooserAlt = new SendableChooser<>();// Allows the user to select alternate path if available
-
+      
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
     public static ClimbSystem climbSystem;
