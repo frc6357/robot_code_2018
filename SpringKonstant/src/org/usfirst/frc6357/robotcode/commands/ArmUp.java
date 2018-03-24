@@ -19,14 +19,18 @@ public class ArmUp extends Command
     // Called just before this Command runs the first time
     protected void initialize()
     {
-        
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
         if(!DriverStation.getInstance().isAutonomous())
-            if(Robot.armSystem.getGameTime() < 30.0)
+            // In automonous and teleop, we must ensure that we do not move the arm upwards
+            // while the intake is in the DOWN position. We enforce this by explicitly moving
+            // the intake into the UP position as we start moving the arm. This restriction
+            // does not apply if we're in the endgame period.
+            if(DriverStation.getInstance().getMatchTime() < 30.0)
             {
                 Robot.armSystem.setArmShoulderState(Robot.armSystem.UP);
             }

@@ -1,6 +1,6 @@
 package org.usfirst.frc6357.robotcode;
 
-import java.io.IOException;
+//import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
 import org.usfirst.frc6357.robotcode.commands.GearShiftCommand;
@@ -13,9 +13,7 @@ import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
-import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -34,7 +32,7 @@ public class Robot extends TimedRobot
     SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
     SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
     SendableChooser<String> chooserAlt = new SendableChooser<>();// Allows the user to select alternate path if available
-      
+
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
     public static ClimbSystem climbSystem;
@@ -209,7 +207,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed, armSpeed, intakeSpeed;
+        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed;
         double rotateAdjust, lAdjust, rAdjust, intakeSpeedIn, intakeSpeedOut;
 
         Scheduler.getInstance().run();
@@ -279,7 +277,7 @@ public class Robot extends TimedRobot
     @Override
     public void testPeriodic()
     {
-        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed, armSpeed;
+        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed;
         double rotateAdjust, lAdjust, rAdjust;
 
         Scheduler.getInstance().run();

@@ -25,17 +25,28 @@ public class ArmDown extends Command {
     protected void execute()
     {
         if(!DriverStation.getInstance().isAutonomous())
-            if(Robot.armSystem.getGameTime() < 30.0)
+        {
+            // If we are in the end-game period, we can violate the 16" extension
+            // rule so we don't need to enforce that the intake is in the UP position
+            // when the arm is moving.
+            if(DriverStation.getInstance().getMatchTime() < 30.0)
             {
                 Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
             }
             else
             {
+                // TODO: This is wrong. As coded, it will force the intake into
+                // the down position whenever we move the arm down. This is guaranteed
+                // to violate game rules!
                 Robot.armSystem.setArmElbowState(Robot.armSystem.DOWN);
                 Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
             }
-        else if(DriverStation.getInstance().isAutonomous())
+        }
+        else
         {
+            // TODO: It autonomous, this forces the intake into the DOWN position whenever
+            // we start lowering the arm. This is guaranteed to violate the 16" extension
+            // rule!
             Robot.armSystem.setArmElbowState(Robot.armSystem.DOWN);
             Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
         }
