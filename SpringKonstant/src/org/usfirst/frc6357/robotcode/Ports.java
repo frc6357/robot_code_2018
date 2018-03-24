@@ -87,9 +87,9 @@ public class Ports
     public static final int ArmShoulderPCM              = pcm2;
     public static final int ArmElbowPCM                 = pcm2;
     public static final int ArmShoulderUp               = 2; // PCM 2 output 2 (forward channel)
-    public static final int ArmShoulderDown             = 3; // PCM 2 output 3 (reverse channel)
+    public static final int ArmShoulderDown             = 3; // PCM 2 output 3 (reverse channel, not connected)
     public static final int ArmElbowUp                  = 4; // PCM 2 output 4 (forward channel)
-    public static final int ArmElbowDown                = 5; // PCM 2 output 5 (reverse channel)
+    public static final int ArmElbowDown                = 5; // PCM 2 output 5 (reverse channel, not connected)
 
     public static final int ArmLimitTop                 = 8; // DIO input 8
     public static final int ArmLimitBottom              = 9; // DIO input 9
