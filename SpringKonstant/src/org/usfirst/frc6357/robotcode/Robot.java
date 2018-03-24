@@ -128,7 +128,7 @@ public class Robot extends TimedRobot
     /**
      * Method which parses through the various choosers and figures out which auto-plan to use Should allow the user to have a simple way to
      * select from lots of plans Deprecated due to CSV files not currently working.
-     * 
+     *
      * @return the String which represents the name of the file to parse
      */
     @Deprecated
@@ -303,7 +303,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
         climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.periodic(armSpeed);
+        armSystem.periodic();
 
         SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
         SmartDashboard.putData("Stow strafe", new StrafeStow());

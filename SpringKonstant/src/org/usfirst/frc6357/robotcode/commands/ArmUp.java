@@ -1,6 +1,7 @@
 package org.usfirst.frc6357.robotcode.commands;
 
 import org.usfirst.frc6357.robotcode.Robot;
+import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -22,13 +23,13 @@ public class ArmUp extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
-        Robot.armSystem.armUp();
+        Robot.armSystem.setArmShoulderState(true);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished()
     {
-        return false;
+        return (Robot.armSystem.getArmShoulderState() == ArmState.UP);
     }
 
     // Called once after isFinished returns true

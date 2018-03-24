@@ -47,7 +47,7 @@ public class DriveBaseSystem extends Subsystem
     private final int PULSES_PER_ROTATION = 256;
     private final int DRIVE_WHEEL_RADIUS = 2;
     private final double DISTANCE_PER_PULSE = 2 * DRIVE_WHEEL_RADIUS * Math.PI / PULSES_PER_ROTATION;
-    
+
     // Strafing system motors and state
     private final SpeedController baseStrafe;
 //    private final Solenoid baseStrafeSolenoid;
@@ -256,7 +256,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the PID set point, which drives the robot straight
-     * 
+     *
      * @param distance
      *            the distance to drive forwards
      */
@@ -268,7 +268,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Turns the robot around, with degrees being positive for clockwise
-     * 
+     *
      * @param degrees
      *            angle at which to rotate with positive being clockwise
      */
@@ -278,21 +278,20 @@ public class DriveBaseSystem extends Subsystem
         double targetAngle = currentAngle + angle;
         if(targetAngle < 0) targetAngle += 360;
         if(targetAngle > 360) targetAngle -= 360;
-        
-        
+
         while(Math.abs(targetAngle - currentAngle) > .05)
         {
-        	if(angle > 0)	//If turning right
-        	{
-        		setRightSpeed(-.5);
-        		setLeftSpeed(.5);
-        	}
-        	else
-        	{
-        		setRightSpeed(.5);
-        		setLeftSpeed(-.5);
-        	}
-        	currentAngle = driveIMU.updatePeriodic() + 180;
+            if(angle > 0)    //If turning right
+            {
+                setRightSpeed(-.5);
+                setLeftSpeed(.5);
+            }
+            else
+            {
+                setRightSpeed(.5);
+                setLeftSpeed(-.5);
+            }
+            currentAngle = driveIMU.updatePeriodic() + 180;
         }
         setRightSpeed(0);
         setLeftSpeed(0);
@@ -307,7 +306,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the distance per encoder pulse TODO set this distance
-     * 
+     *
      * @param distance
      *            in any unit
      */
@@ -457,26 +456,26 @@ public class DriveBaseSystem extends Subsystem
     {
 
     }
-    
+
     public void driveEncoderDistance(double inches)
     {
-    	while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
-		{
-			Robot.driveBaseSystem.setLeftSpeed(.5);
-			Robot.driveBaseSystem.setRightSpeed(.5);
-		}
-		Robot.driveBaseSystem.setLeftSpeed(0);
-		Robot.driveBaseSystem.setRightSpeed(0);
+        while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
+        {
+            Robot.driveBaseSystem.setLeftSpeed(.5);
+            Robot.driveBaseSystem.setRightSpeed(.5);
+        }
+        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setRightSpeed(0);
     }
-    
+
     public void driveEncoderDistance(double inches, double speed)
     {
-    	while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
-		{
-			Robot.driveBaseSystem.setLeftSpeed(speed);
-			Robot.driveBaseSystem.setRightSpeed(speed);
-		}
-		Robot.driveBaseSystem.setLeftSpeed(0);
-		Robot.driveBaseSystem.setRightSpeed(0);
+        while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
+        {
+            Robot.driveBaseSystem.setLeftSpeed(speed);
+            Robot.driveBaseSystem.setRightSpeed(speed);
+        }
+        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setRightSpeed(0);
     }
 }
