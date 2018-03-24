@@ -51,9 +51,8 @@ public class OI
 
     private FilterDeadband filterClimbDeadband;
 
-    private Button buttonIntakeIn; // List of joystick Buttons whose functions are pretty self-explanatory
+    private Button buttonIntakeIn; 
     private Button buttonIntakeOut;
-    private Button buttonIntakeSwing;
     private Button buttonStrafeDeploy;
     private Button buttonStrafeStow;
     private Button buttonLowGear;
@@ -74,7 +73,6 @@ public class OI
 
         buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
-        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
 
         buttonStrafeDeploy = new JoystickButton(joystickDriver, Ports.OIDriverStrafeDeploy);
         buttonStrafeStow = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
@@ -93,8 +91,6 @@ public class OI
 
         buttonLowGear.whenPressed(new GearShiftCommand(false));
         buttonHighGear.whenPressed(new GearShiftCommand(true));
-
-        buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
 
         buttonIntakeIn.whenPressed(new IntakeCommand(true, true));
         buttonIntakeIn.whenReleased(new IntakeCommand(false, true));

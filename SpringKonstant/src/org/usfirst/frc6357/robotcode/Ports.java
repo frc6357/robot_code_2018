@@ -115,11 +115,6 @@ public class Ports
     public static final int OIDriverRightDrive          = 5; // Right Joystick Y
     public static final int OIDriverStrafeRight         = 3; // Right Trigger
     public static final int OIDriverStrafeLeft          = 2; // Left Trigger
-
-    // This is for testing only. Button B on the driver controller will
-    // toggle the strafing wheel. In the final code, it is hoped that this
-    // will be done automatically depending upon the state of the drive
-    // joysticks.
     public static final int OIDriverStrafeDeploy        = 5; // Left bumper
     public static final int OIDriverStrafeStow          = 6; // Right bumper
 
@@ -131,13 +126,10 @@ public class Ports
     // *********************
     public static final int OIOperatorJoystick          = 1;
 
-    public static final int OIOperatorArm               = 1; // Left joystick Y
-
     public static final int OIOperatorClimbWinch        = 4; // Right joystick Y
-
     public static final int OIOperatorIntakeIn          = 3; // Right Trigger
     public static final int OIOperatorIntakeOut         = 2; // Left Trigger
-    public static final int OIOperatorIntakeSwing       = 3; // Button X
+    public static final int OIOperatorXButton           = 3; // Button X ****NOT ASSIGNED TO A FUNCTION TODO: Add a function to X button
     public static final int OIOperatorArmUp             = 4; // A Button
     public static final int OIOperatorArmDown           = 1; // Y Button
     public static final int OIOperatorGripperToggle     = 6; // Right Bumper

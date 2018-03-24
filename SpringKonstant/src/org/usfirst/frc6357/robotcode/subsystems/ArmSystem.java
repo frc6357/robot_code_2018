@@ -3,16 +3,8 @@ package org.usfirst.frc6357.robotcode.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc6357.robotcode.Ports;
-import org.usfirst.frc6357.robotcode.subsystems.PID.AngularPositionArmPID;
-
-import com.ctre.phoenix.motorcontrol.can.BaseMotorController;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /**
  * Subsystem controlling the arm of the robot. This comprises a 2 joint arm
@@ -104,7 +96,8 @@ public class ArmSystem extends Subsystem
                 // now in the fully down position.
                 ShoulderState = ArmState.DOWN;
             }
-
+            LastLowerPressed = Pressed;
+            
             // If neither switch is pressed, the arm is in motion.
             if(!LastUpperPressed && !LastLowerPressed)
             {

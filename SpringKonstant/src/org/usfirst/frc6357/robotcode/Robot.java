@@ -8,7 +8,6 @@ import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
 import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
 import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
 import org.usfirst.frc6357.robotcode.commands.StrafeStow;
-//import org.usfirst.frc6357.robotcode.commands.TestPidPosition;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
@@ -111,7 +110,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.leftEncoder.reset(); // Reset encoder distances to zero
         driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false); // Lift Strafe
-        intakeSystem.closeGripper(); // Close gripper
+        intakeSystem.setIntakeGrippers(false); // Close gripper
 
         autonomousCommand = new AutonomousCommand(); // Select new autoplan
         // Currently unused code which would parse CSV files.
@@ -219,7 +218,6 @@ public class Robot extends TimedRobot
         driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
         driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
         climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
-        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
         intakeSpeedIn = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeIn, false);
         intakeSpeedOut = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeOut, false);
 
@@ -290,7 +288,6 @@ public class Robot extends TimedRobot
         driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
         driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
         climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
-        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
 
         robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
 
