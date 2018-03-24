@@ -25,22 +25,18 @@ public class ArmUp extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
-        if(!DriverStation.getInstance().isAutonomous())
-            // In automonous and teleop, we must ensure that we do not move the arm upwards
-            // while the intake is in the DOWN position. We enforce this by explicitly moving
-            // the intake into the UP position as we start moving the arm. This restriction
-            // does not apply if we're in the endgame period.
-            if(DriverStation.getInstance().getMatchTime() < 30.0)
-            {
-                Robot.armSystem.setArmShoulderState(Robot.armSystem.UP);
-            }
-            else
-            {
-                Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
-                Robot.armSystem.setArmShoulderState(Robot.armSystem.UP);
-            }
-        else if(DriverStation.getInstance().isAutonomous())
+        if(!DriverStation.getInstance().isAutonomous() &&
+           (DriverStation.getInstance().getMatchTime() < 30.0))
         {
+            // If we are in the end-game period, we can violate the 16" extension
+            // rule so we don't need to enforce that the intake is in the UP position
+            // when the arm is moving.
+            Robot.armSystem.setArmShoulderState(Robot.armSystem.UP);
+        }
+        else
+        {
+            // We can't move the arm in either direction unless the intake is
+            // in the up position so force it up before moving.
             Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
             Robot.armSystem.setArmShoulderState(Robot.armSystem.UP);
         }

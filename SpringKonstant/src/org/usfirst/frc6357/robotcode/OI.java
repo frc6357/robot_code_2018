@@ -51,7 +51,7 @@ public class OI
 
     private FilterDeadband filterClimbDeadband;
 
-    private Button buttonIntakeIn; 
+    private Button buttonIntakeIn;
     private Button buttonIntakeOut;
     private Button buttonStrafeDeploy;
     private Button buttonStrafeStow;
@@ -70,6 +70,8 @@ public class OI
         // Create all the buttons we will be using.
         buttonArmUp = new JoystickButton(joystickOperator, Ports.OIOperatorArmUp);
         buttonArmDown = new JoystickButton(joystickOperator, Ports.OIOperatorArmDown);
+
+        // TODO: Add control to move the intake up or down during the endgame.
 
         buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
