@@ -25,12 +25,11 @@ public class ArmSystem extends Subsystem
     public enum ArmState { UP, DOWN, IN_MOTION };
 
     private ArmState ShoulderState;
-    private ArmState ElbowState;
 
     private final DoubleSolenoid armShoulderSolenoid;
     private final DoubleSolenoid armElbowSolenoid;
     private boolean armShoulderSet      = false;      // false == down, true == up
-    private boolean armElbowSet         = false;      // false == down, true -== up
+    private boolean armElbowSet         = false;      // false == down, true == up
 
     private final DigitalInput limitUpper;
     private final DigitalInput limitLower;
@@ -45,6 +44,38 @@ public class ArmSystem extends Subsystem
     public final boolean UP = true;
     public final boolean DOWN = false;
 
+    
+    //************************************************************************
+    //
+    // Constructor
+    //
+    //************************************************************************
+    public ArmSystem()
+    {
+        armShoulderSolenoid = new DoubleSolenoid(Ports.ArmShoulderPCM, Ports.ArmShoulderUp, Ports.ArmShoulderDown);
+        armElbowSolenoid    = new DoubleSolenoid(Ports.ArmElbowPCM, Ports.ArmElbowUp, Ports.ArmElbowDown);
+
+        limitUpper          = new DigitalInput(Ports.ArmLimitTop);
+        limitLower          = new DigitalInput(Ports.ArmLimitBottom);
+
+        LastUpperPressed    = isSwitchPressed(limitUpper);
+        LastLowerPressed    = isSwitchPressed(limitLower);
+
+        // Call the shoulder update function once to read the actual state of the arm.
+        armUpdateShoulderState();
+
+        // We don't expect to start with the arm in the up state but, just in case, this
+        // makes sure that our internal state matches the real state.
+        armShoulderSet = false;    // down
+        if(ShoulderState == ArmState.UP)
+        {
+            armShoulderSet = true; // up
+        }
+        armElbowSet    = true;
+
+        ShoulderState = getArmShoulderState();
+    }
+    
     //************************************************************************
     //
     // Private methods
@@ -138,32 +169,6 @@ public class ArmSystem extends Subsystem
     // Public methods
     //
     //************************************************************************
-    public ArmSystem()
-    {
-        armShoulderSolenoid = new DoubleSolenoid(Ports.ArmShoulderPCM, Ports.ArmShoulderUp, Ports.ArmShoulderDown);
-        armElbowSolenoid    = new DoubleSolenoid(Ports.ArmElbowPCM, Ports.ArmElbowUp, Ports.ArmElbowDown);
-
-        limitUpper          = new DigitalInput(Ports.ArmLimitTop);
-        limitLower          = new DigitalInput(Ports.ArmLimitBottom);
-
-        LastUpperPressed    = isSwitchPressed(limitUpper);
-        LastLowerPressed    = isSwitchPressed(limitLower);
-
-        // Call the shoulder update function once to read the actual state of the arm.
-        armUpdateShoulderState();
-
-        // We don't expect to start with the arm in the up state but, just in case, this
-        // makes sure that our internal state matches the real state.
-        armShoulderSet = false;    // down
-        if(ShoulderState == ArmState.UP)
-        {
-            armShoulderSet = true; // up
-        }
-        armElbowSet    = true;
-
-        ShoulderState = getArmShoulderState();
-        ElbowState    = getArmElbowState();
-    }
 
     /*
      * Call this method from the robot's main periodic callback to update the state
@@ -257,23 +262,15 @@ public class ArmSystem extends Subsystem
     // Returns the current state of the arm elbow. Because the robot (currently) has no
     // feedback on this joint, we merely return the last commanded state.
     //
-    // @returns ArmState.UP if the elbow was last commanded to be in the up position.
-    //          ArmState.DOWN if the elbow was last commanded to be in the down position.
+    // @returns True if the elbow was last commanded to be in the up position.
+    //          False if the elbow was last commanded to be in the down position.
     //
-    public ArmState getArmElbowState()
+    public boolean getArmElbowState()
     {
         // We have no limit switches to sense the position of the
         // elbow so just return the current commanded position.
-        if(armElbowSet)
-        {
-            ElbowState = ArmState.UP;
-        }
-        else
-        {
-            ElbowState = ArmState.DOWN;
-        }
 
-        return ElbowState;
+        return armElbowSet;
     }
     public void initDefaultCommand()
     {

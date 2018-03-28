@@ -116,8 +116,8 @@ public class Ports
     public static final int OIDriverRightDrive          = 5; // Right Joystick Y
     public static final int OIDriverStrafeRight         = 3; // Right Trigger
     public static final int OIDriverStrafeLeft          = 2; // Left Trigger
-    public static final int OIDriverStrafeDeploy        = 5; // Left bumper
-    public static final int OIDriverStrafeStow          = 6; // Right bumper
+    //public static final int OIDriverStrafeDeploy      = 5; // Left bumper **EXTRA BUTTON NOT BEING USED***
+    public static final int OIDriverStrafe              = 6; // Right bumper
 
     public static final int IODriverGearSelectLow       = 1; // Button A
     public static final int IODriverGearSelectHigh      = 4; // Button Y
@@ -130,7 +130,7 @@ public class Ports
     public static final int OIOperatorClimbWinch        = 4; // Right joystick Y
     public static final int OIOperatorIntakeIn          = 3; // Right Trigger
     public static final int OIOperatorIntakeOut         = 2; // Left Trigger
-    public static final int OIOperatorXButton           = 3; // Button X ****NOT ASSIGNED TO A FUNCTION TODO: Add a function to X button
+    public static final int OIOperatorIntakeRotation    = 3; // X Button
     public static final int OIOperatorArmUp             = 4; // A Button
     public static final int OIOperatorArmDown           = 1; // Y Button
     public static final int OIOperatorGripperToggle     = 6; // Right Bumper

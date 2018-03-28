@@ -53,8 +53,8 @@ public class OI
 
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
-    private Button buttonStrafeDeploy;
-    private Button buttonStrafeStow;
+    private Button buttonIntakeSwing;
+    private Button buttonStrafe;
     private Button buttonLowGear;
     private Button buttonHighGear;
     private Button buttonArmUp;
@@ -72,12 +72,12 @@ public class OI
         buttonArmDown = new JoystickButton(joystickOperator, Ports.OIOperatorArmDown);
 
         // TODO: Add control to move the intake up or down during the endgame.
+        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeRotation);
 
         buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
 
-        buttonStrafeDeploy = new JoystickButton(joystickDriver, Ports.OIDriverStrafeDeploy);
-        buttonStrafeStow = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
+        buttonStrafe = new JoystickButton(joystickDriver, Ports.OIDriverStrafe);
 
         buttonLowGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
         buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
@@ -88,8 +88,8 @@ public class OI
         buttonArmUp.whenPressed(new ArmUp());
         buttonArmDown.whenPressed(new ArmDown());
 
-        buttonStrafeDeploy.whenPressed(new StrafeDeploy());
-        buttonStrafeStow.whenPressed(new StrafeStow());
+        buttonStrafe.whileHeld(new StrafeStow());
+        buttonStrafe.whenPressed(new StrafeDeploy());
 
         buttonLowGear.whenPressed(new GearShiftCommand(false));
         buttonHighGear.whenPressed(new GearShiftCommand(true));
@@ -98,6 +98,7 @@ public class OI
         buttonIntakeIn.whenReleased(new IntakeCommand(false, true));
         buttonIntakeOut.whenPressed(new IntakeCommand(true, false));
         buttonIntakeOut.whenReleased(new IntakeCommand(false, false));
+        buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
 
         buttonGripper.whileHeld(new OpenGripper());
         buttonGripper.whenReleased(new CloseGripper());
