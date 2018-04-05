@@ -98,35 +98,6 @@ public class ArmSystem extends Subsystem
         return !input.get();
     }
 
-    // Command the shoulder (the main part of the arm) to start moving into the up position.
-    private void armUp()
-    {
-        armShoulderSet = true;
-        armShoulderSolenoid.set(DoubleSolenoid.Value.kForward);
-    }
-
-    // Command the shoulder (the main part of the arm) to start moving into the down position.
-    private void armDown()
-    {
-        armShoulderSet = false;
-        armShoulderSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
-
-    // Command the elbow to move into the up position.
-    private void armElbowUp()
-    {
-        armElbowSet = true;
-        armElbowSolenoid.set(DoubleSolenoid.Value.kForward);
-    }
-
-    // Command the elbow to move into the down position.
-    private void armElbowDown()
-    {
-        armElbowSet = false;
-        armElbowSolenoid.set(DoubleSolenoid.Value.kReverse);
-    }
-
     // Call this function periodically to update the state of the shoulder based on the
     // current limit switch states.
     private void armUpdateShoulderState()
@@ -181,6 +152,35 @@ public class ArmSystem extends Subsystem
     {
         // Read the limit switches (if enabled) and determine the current state of the arm.
         armUpdateShoulderState();
+    }
+    
+    // Command the shoulder (the main part of the arm) to start moving into the up position.
+    public void armUp()
+    {
+        armShoulderSet = true;
+        armShoulderSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+
+    // Command the shoulder (the main part of the arm) to start moving into the down position.
+    public void armDown()
+    {
+        armShoulderSet = false;
+        armShoulderSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
+
+    // Command the elbow to move into the up position.
+    public void armElbowUp()
+    {
+        armElbowSet = true;
+        armElbowSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+
+    // Command the elbow to move into the down position.
+    public void armElbowDown()
+    {
+        armElbowSet = false;
+        armElbowSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     //

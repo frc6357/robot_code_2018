@@ -83,6 +83,9 @@ public class Robot extends TimedRobot
         driveBaseSystem.deployStrafe(false);
         driveBaseSystem.leftEncoder.reset();
         driveBaseSystem.rightEncoder.reset();
+        armSystem.armDown();
+        armSystem.armElbowUp();
+        intakeSystem.setIntakeGrippers(false); // Close gripper
     }
 
     /**
@@ -109,7 +112,6 @@ public class Robot extends TimedRobot
         driveBaseSystem.leftEncoder.reset(); // Reset encoder distances to zero
         driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false); // Lift Strafe
-        intakeSystem.setIntakeGrippers(false); // Close gripper
 
         autonomousCommand = new AutonomousCommand(); // Select new autoplan
         // Currently unused code which would parse CSV files.
@@ -129,7 +131,6 @@ public class Robot extends TimedRobot
      *
      * @return the String which represents the name of the file to parse
      */
-    @Deprecated
     private String getSelectedFile()
     {
         AutoPositionCheck.getGameData();
