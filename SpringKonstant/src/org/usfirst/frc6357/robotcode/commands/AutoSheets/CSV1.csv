@@ -1,6 +1,6 @@
 Command,@param1,@param2,...
 Drive,142,,
 Turn,90,,
-Arm,1,,
+Arm,Up,,
 Box Push,,,
-Arm,0,,
+Arm,Down,,
