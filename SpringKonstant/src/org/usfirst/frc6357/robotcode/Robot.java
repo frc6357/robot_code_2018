@@ -9,11 +9,15 @@ import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
 import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
 import org.usfirst.frc6357.robotcode.commands.StrafeStow;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
+import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
+import com.mindsensors.CANLight;
+
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -38,6 +42,10 @@ public class Robot extends TimedRobot
     public static ClimbSystem climbSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
+    
+    // For LEDs
+    public static CANLight lights;
+    public static DriverStation ds;
 
     public static OI oi;
 
@@ -52,6 +60,12 @@ public class Robot extends TimedRobot
         climbSystem = new ClimbSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
+        
+        // LED lights with driver station
+        lights = new CANLight(Ports.CANLeds);
+        ds = DriverStation.getInstance();
+        lights.writeRegister(1, 0.25, 255, 0, 255);
+        
 
         // OI must be constructed after subsystems. If the OI creates Commands
         // (which it very likely will), subsystems are not guaranteed to be
@@ -86,6 +100,7 @@ public class Robot extends TimedRobot
         armSystem.armDown();
         armSystem.armElbowUp();
         intakeSystem.setIntakeGrippers(false); // Close gripper
+        
     }
 
     /**
@@ -95,6 +110,20 @@ public class Robot extends TimedRobot
     public void disabledPeriodic()
     {
         Scheduler.getInstance().run();
+        
+        if (ds.getAlliance() == DriverStation.Alliance.Red) 
+        {
+            lights.showRGB(255, 0, 0);
+        }
+        else if (ds.getAlliance() == DriverStation.Alliance.Blue) 
+        {
+            lights.showRGB(0, 0, 255);
+        }
+        else if (ds.getAlliance() == DriverStation.Alliance.Invalid) 
+        {
+            lights.showRGB(255, 200, 0); // yellow
+        }
+        
         SmartDashboard.putNumber("Distance Per Pulse", driveBaseSystem.leftEncoder.getDistancePerPulse());
         SmartDashboard.putNumber("Distance (getDistance())", driveBaseSystem.leftEncoder.getDistance());
         SmartDashboard.putNumber("Raw value", driveBaseSystem.leftEncoder.get());
@@ -226,7 +255,26 @@ public class Robot extends TimedRobot
         rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
         lAdjust = rotateAdjust / 2;
         rAdjust = -lAdjust;
-
+        
+        if(armSystem.getArmShoulderState() == ArmState.UP)
+            lights.flash(1);
+        
+        if(driveBaseSystem.isStrafeDeployed())
+            lights.showRGB(0, 255, 0);          // Green
+        else if (ds.getAlliance() == DriverStation.Alliance.Red) 
+        {
+            lights.showRGB(255, 0, 0);
+        }
+        else if (ds.getAlliance() == DriverStation.Alliance.Blue) 
+        {
+            lights.showRGB(0, 0, 255);
+        }
+        else if (ds.getAlliance() == DriverStation.Alliance.Invalid) 
+        {
+            lights.showRGB(255, 200, 0); // yellow
+        }
+        
+        
         driveBaseSystem.setLeftSpeed(driveLeft); // Listens to input and drives the robot
         driveBaseSystem.setRightSpeed(driveRight);
         driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
@@ -325,9 +373,4 @@ public class Robot extends TimedRobot
         SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
         SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
     }
-
-//    public void updateSmartDashboard()
-//    {
-//
-//    }
 }

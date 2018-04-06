@@ -3,6 +3,7 @@ package org.usfirst.frc6357.robotcode.subsystems;
 import org.usfirst.frc6357.robotcode.Ports;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -15,8 +16,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class IntakeSystem extends Subsystem
 {
+    public final WPI_VictorSPX intakeRightMotor;
     public final WPI_TalonSRX intakeLeftMotor;
-    public final WPI_TalonSRX intakeRightMotor;
     private final DoubleSolenoid grippers;
     public boolean intakeIsUp = true;
     public boolean gripperOpen = true;
@@ -24,8 +25,8 @@ public class IntakeSystem extends Subsystem
     public IntakeSystem()
     {
         //Speed Controllers for Intake
+        intakeRightMotor = new WPI_VictorSPX(Ports.IntakeRightMotor);
         intakeLeftMotor = new WPI_TalonSRX(Ports.IntakeLeftMotor);
-        intakeRightMotor = new WPI_TalonSRX(Ports.IntakeRightMotor);
 
         //Pneumatics for the intake grippers
         grippers = new DoubleSolenoid(Ports.IntakeGripPCM, Ports.IntakeGripSolenoidIn, Ports.IntakeGripSolenoidOut);
@@ -43,11 +44,11 @@ public class IntakeSystem extends Subsystem
     {
         double speed = leftAxis - rightAxis;
 
-        intakeLeftMotor.set(speed);
         intakeRightMotor.set(speed);
+        intakeLeftMotor.set(speed);
 
         SmartDashboard.putNumber("Intake speed", speed);
-        SmartDashboard.putNumber("Intake left current", intakeLeftMotor.getOutputCurrent());
+        SmartDashboard.putNumber("Intake left current", intakeRightMotor.getOutputCurrent());
         SmartDashboard.putNumber("Intake right current", intakeRightMotor.getOutputCurrent());
     }
 

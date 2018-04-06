@@ -2,6 +2,7 @@ package org.usfirst.frc6357.robotcode.subsystems;
 
 import org.usfirst.frc6357.robotcode.Ports;
 import org.usfirst.frc6357.robotcode.Robot;
+import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
 import org.usfirst.frc6357.robotcode.subsystems.PID.PositionAndVelocityControlledDrive;
 
@@ -163,7 +164,10 @@ public class DriveBaseSystem extends Subsystem
      */
     public void setLeftSpeed(double speed)
     {
-        baseFrontLeftMaster.set(speed);
+        if(Robot.armSystem.getArmShoulderState() == ArmState.UP)
+            baseFrontLeftMaster.set(speed / 10);
+        else
+            baseFrontLeftMaster.set(speed);
     }
 
     /**
@@ -176,10 +180,13 @@ public class DriveBaseSystem extends Subsystem
      */
     public void setRightSpeed(double speed)
     {
-        baseFrontRightMaster.set(speed);
+        if(Robot.armSystem.getArmShoulderState() == ArmState.UP)
+            baseFrontRightMaster.set(speed / 10);
+        else
+            baseFrontRightMaster.set(speed);
     }
 
-    /**
+    /**    
      * Enables the PID
      */
     public void enable()
@@ -477,5 +484,10 @@ public class DriveBaseSystem extends Subsystem
         }
         Robot.driveBaseSystem.setLeftSpeed(0);
         Robot.driveBaseSystem.setRightSpeed(0);
+    }
+    
+    public boolean isStrafeDeployed()
+    {
+        return baseStrafeDeployed;
     }
 }

@@ -28,5 +28,7 @@
 	<classpathentry exported="true" kind="var" path="opencv" sourcepath="opencv.sources"/>
 	<classpathentry exported="true" kind="var" path="cscore" sourcepath="cscore.sources"/>
 	<classpathentry exported="true" kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
+	<classpathentry kind="lib" path="/home/hoo761/wpilib/user/java/lib/mindsensors.jar"/>
+	<classpathentry kind="lib" path="/home/hoo761/wpilib/user/java/lib/mindsensors-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
