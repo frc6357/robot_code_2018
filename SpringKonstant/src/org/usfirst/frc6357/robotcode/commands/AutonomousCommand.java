@@ -11,6 +11,7 @@
 package org.usfirst.frc6357.robotcode.commands;
 
 import org.usfirst.frc6357.robotcode.Robot;
+import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
 import edu.wpi.first.wpilibj.command.Command;
 
@@ -27,6 +28,7 @@ public class AutonomousCommand extends Command
         requires(Robot.driveBaseSystem);
         boolean useTimedMethod = true; // True if using old method of simply
                                        // driving for a period of time
+
 
         if (useTimedMethod)
         {
@@ -46,10 +48,30 @@ public class AutonomousCommand extends Command
                 Robot.driveBaseSystem.setRightSpeed(0);
             }).start();
         }
-        else // If not using old method, then attempt to use encoders
+        else // If not using old method, then begin using the new plan
         {
-            Robot.driveBaseSystem.driveEncoderDistance(120); // Drive 10 feet
-            Robot.driveBaseSystem.turnDegrees(180); // Turn 180 degrees
+            //If the robot is started on the same side as our team's switch
+            if(Robot.chooserStart.getSelected() == AutoPositionCheck.getAllySwitch())
+            {
+                //Drive forward 3 feet to get room to turn around
+                Robot.driveBaseSystem.driveEncoderDistance(36);
+                Robot.driveBaseSystem.turnDegrees(180); //Spin around
+                //Drive backwards until you reach the switch (8 feet 10 inches)
+                Robot.driveBaseSystem.driveEncoderDistance(-106, -.5);
+//                Robot.armSystem.armElbowUp(); //Lift elbow, just in case
+//                Robot.armSystem.armUp(); //Lift arm with pneumatics
+//                Robot.intakeSystem.openIntakeGripper(); //Open grippers
+//                Robot.intakeSystem.setIntakeSpeed(-.6, -.6); //Set the gripper motors to reverse (Spit out)
+//                try {Thread.sleep(250);} catch(Exception e) {} //Wait a fourth of a second
+//                Robot.intakeSystem.setIntakeSpeed(0, 0); //Stop the motors
+//                Robot.intakeSystem.closeIntakeGripper(); //Close the grippers
+//                Robot.armSystem.armDown(); //Lower the arm
+            }
+            else //The robot is on the wrong side or in the middle
+            {
+                //Drive forwards 10 feet to cross the auto line
+                Robot.driveBaseSystem.driveEncoderDistance(120);
+            }
         }
     }
     
@@ -58,7 +80,8 @@ public class AutonomousCommand extends Command
     {
         requires(Robot.driveBaseSystem);
         
-        new Thread(() -> {
+        new Thread(() -> 
+        {
             for(int row = 0; row < s2d.length; row++)
             {
                 switch(s2d[row][0])

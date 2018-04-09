@@ -33,9 +33,9 @@ public class Robot extends TimedRobot
 {
 
     Command autonomousCommand;
-    SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
-    SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
-    SendableChooser<String> chooserAlt = new SendableChooser<>();// Allows the user to select alternate path if available
+    public static SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
+    static SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
+    static SendableChooser<String> chooserAlt = new SendableChooser<>();// Allows the user to select alternate path if available
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
@@ -44,8 +44,8 @@ public class Robot extends TimedRobot
     public static IntakeSystem intakeSystem;
     
     // For LEDs
-    public static CANLight lights;
-    public static DriverStation ds;
+//    public static CANLight lights;
+//    public static DriverStation ds;
 
     public static OI oi;
 
@@ -62,9 +62,9 @@ public class Robot extends TimedRobot
         intakeSystem = new IntakeSystem();
         
         // LED lights with driver station
-        lights = new CANLight(Ports.CANLeds);
-        ds = DriverStation.getInstance();
-        lights.writeRegister(1, 0.25, 255, 0, 255);
+//        lights = new CANLight(Ports.CANLeds);
+//        ds = DriverStation.getInstance();
+//        lights.writeRegister(1, 0.25, 255, 0, 255);
         
 
         // OI must be constructed after subsystems. If the OI creates Commands
@@ -100,6 +100,7 @@ public class Robot extends TimedRobot
         armSystem.armDown();
         armSystem.armElbowUp();
         intakeSystem.setIntakeGrippers(false); // Close gripper
+        Robot.driveBaseSystem.setHighGear(false);
         
     }
 
@@ -111,7 +112,7 @@ public class Robot extends TimedRobot
     {
         Scheduler.getInstance().run();
         
-        if (ds.getAlliance() == DriverStation.Alliance.Red) 
+       /* if (ds.getAlliance() == DriverStation.Alliance.Red) 
         {
             lights.showRGB(255, 0, 0);
         }
@@ -122,7 +123,9 @@ public class Robot extends TimedRobot
         else if (ds.getAlliance() == DriverStation.Alliance.Invalid) 
         {
             lights.showRGB(255, 200, 0); // yellow
-        }
+        }*/
+        
+        Robot.driveBaseSystem.setHighGear(false);
         
         SmartDashboard.putNumber("Distance Per Pulse", driveBaseSystem.leftEncoder.getDistancePerPulse());
         SmartDashboard.putNumber("Distance (getDistance())", driveBaseSystem.leftEncoder.getDistance());
@@ -143,6 +146,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.deployStrafe(false); // Lift Strafe
 
         autonomousCommand = new AutonomousCommand(); // Select new autoplan
+        
         // Currently unused code which would parse CSV files.
         /*
          * try { autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile())); } catch (IOException e) {
@@ -160,52 +164,52 @@ public class Robot extends TimedRobot
      *
      * @return the String which represents the name of the file to parse
      */
-    private String getSelectedFile()
-    {
-        AutoPositionCheck.getGameData();
-
-        if (chooserEnd.getSelected().equals("Drive")) { return "/home/lvuser/AutoSheets/CSV13.csv"; }
-        switch (chooserStart.getSelected())
-        {
-            case "L":
-                switch (chooserEnd.getSelected())
-                {
-                    case "Switch":
-                        if (AutoPositionCheck.getAllySwitch().equals("L")) return "/home/lvuser/AutoSheets/CSV1.csv";
-                        else
-                        {
-                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV2.csv";
-                            else return "/home/lvuser/AutoSheets/CSV9.csv";
-                        }
-                    case "Scale":
-                        if (AutoPositionCheck.getScale().equals("L")) return "/home/lvuser/AutoSheets/CSV3.csv";
-                        else
-                        {
-                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV4.csv";
-                            else return "/home/lvuser/AutoSheets/CSV10.csv";
-                        }
-                }
-            case "R":
-                switch (chooserEnd.getSelected())
-                {
-                    case "Switch":
-                        if (AutoPositionCheck.getAllySwitch().equals("R")) return "/home/lvuser/AutoSheets/CSV6.csv";
-                        else
-                        {
-                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV5.csv";
-                            else return "/home/lvuser/AutoSheets/CSV11.csv";
-                        }
-                    case "Scale":
-                        if (AutoPositionCheck.getScale().equals("L"))
-                        {
-                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV3.csv";
-                            else return "/home/lvuser/AutoSheets/CSV12.csv";
-                        }
-                        else return "/home/lvuser/AutoSheets/CSV4.csv";
-                }
-        }
-        return "/home/lvuser/AutoSheets/Test.csv";
-    }
+//    private String getSelectedFile()
+//    {
+//        AutoPositionCheck.getGameData();
+//
+//        if (chooserEnd.getSelected().equals("Drive")) { return "/home/lvuser/AutoSheets/CSV13.csv"; }
+//        switch (chooserStart.getSelected())
+//        {
+//            case "L":
+//                switch (chooserEnd.getSelected())
+//                {
+//                    case "Switch":
+//                        if (AutoPositionCheck.getAllySwitch().equals("L")) return "/home/lvuser/AutoSheets/CSV1.csv";
+//                        else
+//                        {
+//                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV2.csv";
+//                            else return "/home/lvuser/AutoSheets/CSV9.csv";
+//                        }
+//                    case "Scale":
+//                        if (AutoPositionCheck.getScale().equals("L")) return "/home/lvuser/AutoSheets/CSV3.csv";
+//                        else
+//                        {
+//                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV4.csv";
+//                            else return "/home/lvuser/AutoSheets/CSV10.csv";
+//                        }
+//                }
+//            case "R":
+//                switch (chooserEnd.getSelected())
+//                {
+//                    case "Switch":
+//                        if (AutoPositionCheck.getAllySwitch().equals("R")) return "/home/lvuser/AutoSheets/CSV6.csv";
+//                        else
+//                        {
+//                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV5.csv";
+//                            else return "/home/lvuser/AutoSheets/CSV11.csv";
+//                        }
+//                    case "Scale":
+//                        if (AutoPositionCheck.getScale().equals("L"))
+//                        {
+//                            if (chooserAlt.getSelected().equals("False")) return "/home/lvuser/AutoSheets/CSV3.csv";
+//                            else return "/home/lvuser/AutoSheets/CSV12.csv";
+//                        }
+//                        else return "/home/lvuser/AutoSheets/CSV4.csv";
+//                }
+//        }
+//        return "/home/lvuser/AutoSheets/Test.csv";
+//    }
 
     /**
      * This function is called periodically during autonomous
@@ -229,6 +233,7 @@ public class Robot extends TimedRobot
         if (autonomousCommand != null) autonomousCommand.cancel();
 
         driveBaseSystem.deployStrafe(true);
+        Robot.driveBaseSystem.setHighGear(false);
     }
 
     /**
@@ -256,7 +261,7 @@ public class Robot extends TimedRobot
         lAdjust = rotateAdjust / 2;
         rAdjust = -lAdjust;
         
-        if(armSystem.getArmShoulderState() == ArmState.UP)
+       /* if(armSystem.getArmShoulderState() == ArmState.UP)
             lights.flash(1);
         
         if(driveBaseSystem.isStrafeDeployed())
@@ -272,7 +277,7 @@ public class Robot extends TimedRobot
         else if (ds.getAlliance() == DriverStation.Alliance.Invalid) 
         {
             lights.showRGB(255, 200, 0); // yellow
-        }
+        }*/
         
         
         driveBaseSystem.setLeftSpeed(driveLeft); // Listens to input and drives the robot

@@ -60,7 +60,7 @@ public class OI
     private Button buttonArmUp;
     private Button buttonArmDown;
     private Button buttonGripper;
-
+    
     public OI()
     {
         // Instantiate the joystick devices.
@@ -70,7 +70,7 @@ public class OI
         // Create all the buttons we will be using.
         buttonArmUp = new JoystickButton(joystickOperator, Ports.OIOperatorArmUp);
         buttonArmDown = new JoystickButton(joystickOperator, Ports.OIOperatorArmDown);
-
+        
         // TODO: Add control to move the intake up or down during the endgame.
         buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeRotation);
 
@@ -87,7 +87,7 @@ public class OI
         // Assign functions to all Buttons
         buttonArmUp.whenPressed(new ArmUp());
         buttonArmDown.whenPressed(new ArmDown());
-
+        
         buttonStrafe.whileHeld(new StrafeStow());
         buttonStrafe.whenPressed(new StrafeDeploy());
 

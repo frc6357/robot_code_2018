@@ -118,7 +118,7 @@ public class Ports
     public static final int OIDriverRightDrive          = 5; // Right Joystick Y
     public static final int OIDriverStrafeRight         = 3; // Right Trigger
     public static final int OIDriverStrafeLeft          = 2; // Left Trigger
-    //public static final int OIDriverStrafeDeploy      = 5; // Left bumper **EXTRA BUTTON NOT BEING USED***
+    public static final int OIDriverSlow                = 5;         // Left bumper
     public static final int OIDriverStrafe              = 6; // Right bumper
 
     public static final int IODriverGearSelectLow       = 1; // Button A

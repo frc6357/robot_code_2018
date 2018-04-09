@@ -41,6 +41,7 @@ public class DriveBaseSystem extends Subsystem
     // Gear shifter
     private final DoubleSolenoid baseGearShiftSolenoid;
     private boolean baseHighGear;
+    private boolean slowMode;
 
     // Encoders
     public final Encoder rightEncoder;
@@ -57,7 +58,7 @@ public class DriveBaseSystem extends Subsystem
     private boolean baseStrafeDeployed;
     private final StrafingAngleController baseStrafeAngleController;
 
-    // PID for drive
+    // PID for driv
     private final PositionAndVelocityControlledDrive leftSide;
     private final PositionAndVelocityControlledDrive rightSide;
 
@@ -134,13 +135,15 @@ public class DriveBaseSystem extends Subsystem
 
         // Gear shifter
         baseGearShiftSolenoid = new DoubleSolenoid(Ports.drivePCM, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
-        baseHighGear = true;
+        baseHighGear = false;
 
         // PID
         leftSide = new PositionAndVelocityControlledDrive(baseFrontRightMaster, rightEncoder);
         rightSide = new PositionAndVelocityControlledDrive(baseFrontLeftMaster, leftEncoder);
 
         isInVelocityMode = false;
+        
+        slowMode = false;
 
 //        // Set initial states of all actuators
 //        PULSES_PER_ROTATION = 1000;
@@ -166,6 +169,8 @@ public class DriveBaseSystem extends Subsystem
     {
         if(Robot.armSystem.getArmShoulderState() == ArmState.UP)
             baseFrontLeftMaster.set(speed / 10);
+        else if(slowMode)
+            baseFrontLeftMaster.set(speed / 2);
         else
             baseFrontLeftMaster.set(speed);
     }
@@ -182,6 +187,8 @@ public class DriveBaseSystem extends Subsystem
     {
         if(Robot.armSystem.getArmShoulderState() == ArmState.UP)
             baseFrontRightMaster.set(speed / 10);
+        else if(slowMode)
+            baseFrontRightMaster.set(speed / 2);
         else
             baseFrontRightMaster.set(speed);
     }
@@ -416,6 +423,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * This method is used to change between low and high gear ratios.
+     * High gear is push, low gear is pull
      *
      * @param state
      *            - state is true to switch to high gear, false to switch to low
@@ -425,10 +433,10 @@ public class DriveBaseSystem extends Subsystem
     {
         if (high)
         {
-            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kReverse);
+            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kForward);
         } else
         {
-            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kForward);
+            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kReverse);
         }
         baseHighGear = high;
     }
@@ -462,6 +470,16 @@ public class DriveBaseSystem extends Subsystem
     protected void initDefaultCommand()
     {
 
+    }
+    
+    public void setSlowMode(boolean mode)
+    {
+        slowMode = mode;
+    }
+    
+    public boolean getSlowMode()
+    {
+        return slowMode;
     }
 
     public void driveEncoderDistance(double inches)

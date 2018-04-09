@@ -24,12 +24,12 @@ public class IntakeSwingToggle extends Command
     // Called repeatedly when this Command is scheduled to run
     protected void execute()
     {
-        if(!DriverStation.getInstance().isAutonomous() && 
-                ((DriverStation.getInstance().getMatchTime() < 30.0) || 
-                 (Robot.armSystem.getArmShoulderState() == ArmState.DOWN)))
-        {
-               Robot.armSystem.setArmElbowState(!Robot.armSystem.getArmElbowState());
-        }
+//        if(!DriverStation.getInstance().isAutonomous() && 
+//                ((DriverStation.getInstance().getMatchTime() < 30.0) || 
+//                 (Robot.armSystem.getArmShoulderState() == ArmState.DOWN)))
+//        {
+        Robot.armSystem.setArmElbowState(!Robot.armSystem.getArmElbowState());
+//        }
     }
 
     // Make this return true when this Command no longer needs to run execute()
