@@ -13,6 +13,7 @@ import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
+import org.usfirst.frc6357.robotcode.subsystems.LEDs;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
 import com.mindsensors.CANLight;
@@ -42,11 +43,9 @@ public class Robot extends TimedRobot
     public static ClimbSystem climbSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
+    public static LEDs lights;
+   
     
-    // For LEDs
-//    public static CANLight lights;
-//    public static DriverStation ds;
-
     public static OI oi;
 
     /**
@@ -60,13 +59,8 @@ public class Robot extends TimedRobot
         climbSystem = new ClimbSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
-        
-        // LED lights with driver station
-//        lights = new CANLight(Ports.CANLeds);
-//        ds = DriverStation.getInstance();
-//        lights.writeRegister(1, 0.25, 255, 0, 255);
-        
-
+        lights = new LEDs();
+       
         // OI must be constructed after subsystems. If the OI creates Commands
         // (which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
@@ -94,6 +88,7 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit()
     {
+        lights.randomColor();
         driveBaseSystem.deployStrafe(false);
         driveBaseSystem.leftEncoder.reset();
         driveBaseSystem.rightEncoder.reset();
@@ -111,19 +106,6 @@ public class Robot extends TimedRobot
     public void disabledPeriodic()
     {
         Scheduler.getInstance().run();
-        
-       /* if (ds.getAlliance() == DriverStation.Alliance.Red) 
-        {
-            lights.showRGB(255, 0, 0);
-        }
-        else if (ds.getAlliance() == DriverStation.Alliance.Blue) 
-        {
-            lights.showRGB(0, 0, 255);
-        }
-        else if (ds.getAlliance() == DriverStation.Alliance.Invalid) 
-        {
-            lights.showRGB(255, 200, 0); // yellow
-        }*/
         
         Robot.driveBaseSystem.setHighGear(false);
         
@@ -260,25 +242,6 @@ public class Robot extends TimedRobot
         rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
         lAdjust = rotateAdjust / 2;
         rAdjust = -lAdjust;
-        
-       /* if(armSystem.getArmShoulderState() == ArmState.UP)
-            lights.flash(1);
-        
-        if(driveBaseSystem.isStrafeDeployed())
-            lights.showRGB(0, 255, 0);          // Green
-        else if (ds.getAlliance() == DriverStation.Alliance.Red) 
-        {
-            lights.showRGB(255, 0, 0);
-        }
-        else if (ds.getAlliance() == DriverStation.Alliance.Blue) 
-        {
-            lights.showRGB(0, 0, 255);
-        }
-        else if (ds.getAlliance() == DriverStation.Alliance.Invalid) 
-        {
-            lights.showRGB(255, 200, 0); // yellow
-        }*/
-        
         
         driveBaseSystem.setLeftSpeed(driveLeft); // Listens to input and drives the robot
         driveBaseSystem.setRightSpeed(driveRight);

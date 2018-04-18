@@ -1,0 +1,14 @@
+CSV_Key
+
+- CSV1: is a short drive forward just pass the base line
+
+- CSV2: is a longer drive just up to the null zone if it is on our side
+        or else just go to the middle
+
+- CSV3: Place on switch starting on the left
+
+- CSV4: Place on switch starting on the right
+
+- CSV5: Place on scale starting on the left
+
+- CSV6: Place on scale starting on the right
