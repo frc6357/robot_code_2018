@@ -1,6 +1,7 @@
 CSV_Key
 
 Commands:
+Wait,Time(milliseconds -> 1000 per second)
 Drive,Dist(inches)
 Turn,Angle(Deg, clockwise is positive)
 Arm,Up/Down

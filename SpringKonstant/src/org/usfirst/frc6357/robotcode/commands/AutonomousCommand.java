@@ -68,10 +68,36 @@ public class AutonomousCommand extends Command
                         Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
                         Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
                     }
+                    try {Thread.sleep(2800);}
+                    catch(Exception e) {}
+                    break;
+                case "Wrist":
+                    if(s2d[row][1].equals("Up"))
+                        Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
+                    else if(s2d[row][1].equals("Down"))
+                        Robot.armSystem.setArmElbowState(Robot.armSystem.DOWN);
+                    try {Thread.sleep(500);}
+                    catch(Exception e) {}
+                    break;
+                case "Grippers":
+                    if(s2d[row][1].equals("Open"))
+                    {
+                        Robot.intakeSystem.setIntakeGrippers(true);
+                        Robot.intakeSystem.setIntakeSpeed(.5, .5);
+                    }
+                    else if(s2d[row][1].equals("Close"))
+                    {
+                        Robot.intakeSystem.setIntakeGrippers(false);
+                        Robot.intakeSystem.setIntakeSpeed(0, 0);
+                    }
                     break;
                 case "Box Push":
                     Robot.intakeSystem.setIntakeSpeed(-.5, -.5);
                     Robot.intakeSystem.setIntakeGrippers(true);
+                    try {Thread.sleep(250);}
+                    catch (Exception e) {}
+                    Robot.intakeSystem.setIntakeSpeed(0, 0);
+                    Robot.intakeSystem.setIntakeGrippers(false);
                     break;
                 }
             }
