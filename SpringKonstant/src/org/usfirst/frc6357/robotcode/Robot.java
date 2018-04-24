@@ -88,29 +88,7 @@ public class Robot extends TimedRobot
         chooserBox.addObject("Pick up a box", "Y");
         chooserBox.addObject("Test pickup", "T");
         
-        CameraServer.getInstance().startAutomaticCapture();
-        
-        /////////////////CAMERA FEED \\\\\\\\\\\\\\\\
-        
-//        new Thread(() -> 
-//        {
-//            UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-//            camera.setResolution(320, 240);
-//            
-//            
-//            CvSink cvSink = CameraServer.getInstance().getVideo();
-//            CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 320, 240);
-//            
-//            Mat source = new Mat();
-//            Mat output = new Mat();
-//            
-//            while(!Thread.interrupted()) 
-//            {
-//                cvSink.grabFrame(source);
-//                Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-//                outputStream.putFrame(output);
-//            }
-//        }).start();
+        CameraServer.getInstance().startAutomaticCapture();        
     }
 
     /**
@@ -155,43 +133,17 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        // intakeSystem.setIntakeUp();
-        // intakeSystem.setIntakeGrippers(false);
         driveBaseSystem.leftEncoder.reset(); // Reset encoder distances to zero
         driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false); // Lift Strafe
 
-        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
+//        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
         AutoPositionCheck.getGameData();
         
-        //FOR TIMED CSV FILES ON SCALE
-//        if(chooserStart.getSelected().equals(AutoPositionCheck.getScale())) //If starting on the correct side
-//        {
-//            try {
-//                if(chooserStart.getSelected().equals("L"))
-//                    autonomousCommand = new AutonomousCommand(CSVReader.parse("/home/lvuser/AutoSheets/TimedScoreL.csv"));
-//                else
-//                    autonomousCommand = new AutonomousCommand(CSVReader.parse("/home/lvuser/AutoSheets/TimedScoreR.csv"));
-//            }
-//            catch(Exception e) {autonomousCommand = new AutonomousCommand();}
-//        }
-//        else //If starting on the incorrect side
-//        {
-//            try {autonomousCommand = new AutonomousCommand(CSVReader.parse("/home/lvuser/AutoSheets/TimedStop.csv"));}
-//            catch(Exception e) {autonomousCommand = new AutonomousCommand();}
-//        }
-        
-        //FOR JUST TEST CSV
-//        try {autonomousCommand = new AutonomousCommand(CSVReader.parse("/home/lvuser/AutoSheets/Test.csv")); }
-//        catch(Exception e) {}
-        
-        // Currently unused code which would parse CSV files.
-        /*
-         * try { autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile())); } catch (IOException e) {
-         * System.out.println("Exception here: " + e); }
-         */
+        //Code to find desired path and parse it
+        try { autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile())); } 
+        catch (Exception e) {System.out.println("Exception here: " + e); }
 
-        // autonomousCommand = new TestPidPosition();
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
     }
@@ -210,48 +162,31 @@ public class Robot extends TimedRobot
         
         if(start.equals("T"))
             return "/home/lvuser/AutoSheets/Test.csv";
-        
         if(box.equals("T"))
             return "/home/lvuser/AutoSheets/Test2.csv";
-        
         if(end.equals("Auto"))
             return "/home/lvuser/AutoSheets/CSV1.csv";
-        
         if(end.equals("Null"))
-            return start.equals(scale) ? "/home/lvuser/AutoSheets/CSV2.csv" : "/home/lvuser/AutoSheets/CSV18.csv";
+            return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV2.csv" : "/home/lvuser/AutoSheets/CSV18.csv";
         
-        switch(start)
+        switch(start + end + box)
         {
-            case "L":
-                switch(end)
-                {
-                    case "Switch":
-                        if(start.equals(allySwitch))
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV10.csv" : "/home/lvuser/AutoSheets/CSV3.csv";
-                        else
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV11.csv" : "/home/lvuser/AutoSheets/CSV5.csv";
-                    case "Scale":
-                        if(start.equals(scale))
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV14.csv" : "/home/lvuser/AutoSheets/CSV6.csv";
-                        else
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV15.csv" : "/home/lvuser/AutoSheets/CSV7.csv";
-                }
-                break;
-            case "R":
-                switch(end)
-                {
-                    case "Switch":
-                        if(start.equals(allySwitch))
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV12.csv" : "/home/lvuser/AutoSheets/CSV3.csv";
-                        else
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV13.csv" : "/home/lvuser/AutoSheets/CSV4.csv";
-                    case "Scale":
-                        if(start.equals(scale))
-                            return box.equals("Y") ? "/home/lvuser'AutoSheets/CSV16.csv" : "/home/lvuser/AutoSheets/CSV9.csv";
-                        else
-                            return box.equals("Y") ? "/home/lvuser/AutoSheets/CSV17.csv" : "/home/lvuser/AutoSheets/CSV8.csv";
-                }
-                break;
+            case "LSwitchN":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV3.csv" : "/home/lvuser/AutoSheets/CSV5.csv";
+            case "RSwitchN":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV3.csv" : "/home/lvuser/AutoSheets/CSV4.csv";
+            case "LScaleN":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV6.csv" : "/home/lvuser/AutoSheets/CSV7.csv";
+            case "RScaleN":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV8.csv" : "/home/lvuser/AutoSheets/CSV9.csv";
+            case "LSwitchY":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV10.csv" : "/home/lvuser/AutoSheets/CSV11.csv";
+            case "RSwitchY":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV12.csv" : "/home/lvuser/AutoSheets/CSV13.csv";
+            case "LScaleY":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV14.csv" : "/home/lvuser/AutoSheets/CSV15.csv";
+            case "RScaleY":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV16.csv" : "/home/lvuser/AutoSheets/CSV17.csv";
         }
         
         return "/home/lvuser/AutoSheets/CSV1.csv";
@@ -297,7 +232,6 @@ public class Robot extends TimedRobot
         driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
         driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
         driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
-      //  climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
         intakeSpeedIn = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeIn, false);
         intakeSpeedOut = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeOut, false);
 
@@ -311,10 +245,8 @@ public class Robot extends TimedRobot
         driveBaseSystem.setRightSpeed(driveRight);
         driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
-       // climbSystem.setWinchSpeed(climbSpeed);
         intakeSystem.setIntakeSpeed(intakeSpeedOut, intakeSpeedIn);
 
-        
         if(counter % 10 == 0)
         {
             SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw()); // Put data onto Shuffleboard for reading

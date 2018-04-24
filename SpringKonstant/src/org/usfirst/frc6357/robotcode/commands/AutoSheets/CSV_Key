@@ -1,5 +1,13 @@
 CSV_Key
 
+Commands:
+Drive,Dist(inches)
+Turn,Angle(Deg, clockwise is positive)
+Arm,Up/Down
+Wrist,Up/Down
+Box Push
+Grippers,Open/Close
+
 Quick reference:
   START  |    END   | GOAL POS | BOX | FILE
 Anywhere |Test file | Anywhere |  N  | /home/lvuser/AutoSheets/Test.csv
@@ -12,8 +20,8 @@ Right    |Switch    | Right    |  N  | /home/lvuser/AutoSheets/CSV3.csv
 Right    |Switch    | Left     |  N  | /home/lvuser/AutoSheets/CSV4.csv
 Left     |Scale     | Left     |  N  | /home/lvuser/AutoSheets/CSV6.csv
 Left     |Scale     | Right    |  N  | /home/lvuser/AutoSheets/CSV7.csv
-Right    |Scale     | Right    |  N  | /home/lvuser/AutoSheets/CSV9.csv
-Right    |Scale     | Left     |  N  | /home/lvuser/AutoSheets/CSV8.csv
+Right    |Scale     | Right    |  N  | /home/lvuser/AutoSheets/CSV8.csv
+Right    |Scale     | Left     |  N  | /home/lvuser/AutoSheets/CSV9.csv
 Anywhere |Test file | Anywhere |  Y  | /home/lvuser/AutoSheets/Test2.csv
 Left     |Switch    | Left     |  Y  | /home/lvuser/AutoSheets/CSV10.csv
 Left     |Switch    | Right    |  Y  | /home/lvuser/AutoSheets/CSV11.csv
@@ -42,9 +50,9 @@ Right    |Scale     | Left     |  Y  | /home/lvuser/AutoSheets/CSV17.csv
 
 - CSV7: Place on right scale, starting on left
 
-- CSV8: Place on left scale, starting on right
+- CSV8: Place on right scale, starting on right (Possible duplicate of CSV6?)
 
-- CSV9: Place on right scale, starting on right (Possible duplicate of CSV6?)
+- CSV9: Place on left scale, starting on right
 
 - CSV10: Place on left switch, starting on left, then pick up a box
 
@@ -63,9 +71,3 @@ Right    |Scale     | Left     |  Y  | /home/lvuser/AutoSheets/CSV17.csv
 - CSV17: Place on left scale, starting on right, then pick up a boxs
 
 - CSV18: Drive forward almost to the null zone, and if it is not on our side move to the other one
-
-- TimedScoreL - On left; drive to scale, turn left 90 deg, and place box
- 
-- TimedScoreR - On right; drive to scale, turn right 90 deg, and place box
-
-- TimedStop - On wrong side as scale; drive forward about 12 feet
