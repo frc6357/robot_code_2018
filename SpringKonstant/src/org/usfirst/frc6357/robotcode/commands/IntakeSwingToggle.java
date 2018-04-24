@@ -1,9 +1,7 @@
 package org.usfirst.frc6357.robotcode.commands;
 
 import org.usfirst.frc6357.robotcode.Robot;
-import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**

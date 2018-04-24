@@ -1,27 +1,14 @@
 package org.usfirst.frc6357.robotcode;
 
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-
 //import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
-import org.usfirst.frc6357.robotcode.commands.GearShiftCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
-import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
-import org.usfirst.frc6357.robotcode.commands.StrafeStow;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
-import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
-//import org.usfirst.frc6357.robotcode.subsystems.LEDs;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -44,7 +31,6 @@ public class Robot extends TimedRobot
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
-    public static ClimbSystem climbSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
     //public static LEDs lights;
@@ -62,7 +48,6 @@ public class Robot extends TimedRobot
     {
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
-        climbSystem = new ClimbSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
        // lights = new LEDs();
@@ -223,27 +208,20 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed;
-        double rotateAdjust, lAdjust, rAdjust, intakeSpeedIn, intakeSpeedOut;
+        double driveLeft, driveRight, robotAngle;
+        double intakeSpeedIn, intakeSpeedOut;
 
         Scheduler.getInstance().run();
 
         driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true); // Retrieves the status of all buttons and joysticks
         driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
-        driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
-        driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
         intakeSpeedIn = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeIn, false);
         intakeSpeedOut = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeOut, false);
 
         robotAngle = driveBaseSystem.driveIMU.updatePeriodic(); // Retrieve robot angle
 
-        rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
-        lAdjust = rotateAdjust / 2;
-        rAdjust = -lAdjust;
-        
         driveBaseSystem.setLeftSpeed(driveLeft); // Listens to input and drives the robot
         driveBaseSystem.setRightSpeed(driveRight);
-        driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
         intakeSystem.setIntakeSpeed(intakeSpeedOut, intakeSpeedIn);
 

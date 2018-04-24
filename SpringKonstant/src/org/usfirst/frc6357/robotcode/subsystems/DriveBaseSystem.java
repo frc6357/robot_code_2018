@@ -4,7 +4,6 @@ import org.usfirst.frc6357.robotcode.Ports;
 import org.usfirst.frc6357.robotcode.Robot;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
-import org.usfirst.frc6357.robotcode.subsystems.PID.PositionAndVelocityControlledDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -51,17 +50,9 @@ public class DriveBaseSystem extends Subsystem
     private final double DISTANCE_PER_PULSE = 2 * DRIVE_WHEEL_RADIUS * Math.PI / PULSES_PER_ROTATION;
 
     // Strafing system motors and state
-    //private final Solenoid baseStrafeSolenoid;
     private final Solenoid baseFrontLiftSolenoid;
     private final Solenoid baseBackLiftSolenoid;
     private boolean baseStrafeDeployed;
-    private final StrafingAngleController baseStrafeAngleController;
-
-    // PID for driv
-    private final PositionAndVelocityControlledDrive leftSide;
-    private final PositionAndVelocityControlledDrive rightSide;
-
-    private boolean isInVelocityMode;
 
     // An instance of the inertial management unit to allow angle measurements. We
     // make
@@ -119,10 +110,6 @@ public class DriveBaseSystem extends Subsystem
         ((WPI_VictorSPX) baseCenterLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
         ((WPI_VictorSPX) baseBackLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
 
-
-        // Strafing angle controller
-        baseStrafeAngleController = new StrafingAngleController(driveIMU);
-
         // Lift system
         //baseStrafeSolenoid = new Solenoid(Ports.drivePCM, Ports.hDriveSolenoid);
         baseFrontLiftSolenoid = new Solenoid(Ports.drivePCM, Ports.frontButterflyDown);
@@ -134,19 +121,10 @@ public class DriveBaseSystem extends Subsystem
         baseGearShiftSolenoid = new DoubleSolenoid(Ports.drivePCM, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
         baseHighGear = false;
 
-        // PID
-        leftSide = new PositionAndVelocityControlledDrive(baseFrontRightMaster, rightEncoder);
-        rightSide = new PositionAndVelocityControlledDrive(baseFrontLeftMaster, leftEncoder);
-
-        isInVelocityMode = false;
-        
+        // Slow Mode
         slowMode = false;
-
-//        // Set initial states of all actuators
-//        PULSES_PER_ROTATION = 1000;
-//        DRIVE_WHEEL_RADIUS = 2; // This is in inches
-//        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION;
-
+        
+        // Sets Defaults
         setEncoderDistancePerPulse();
         leftEncoder.reset();
         rightEncoder.reset();
@@ -188,93 +166,6 @@ public class DriveBaseSystem extends Subsystem
             baseFrontRightMaster.set(speed / 2);
         else
             baseFrontRightMaster.set(speed);
-    }
-
-    /**    
-     * Enables the PID
-     */
-    public void enable()
-    {
-        leftSide.enable();
-        rightSide.enable();
-    }
-
-    /**
-     * Disables the PID
-     */
-    public void disable()
-    {
-        leftSide.disable();
-        rightSide.disable();
-    }
-
-    /**
-     * Sets the mode to postition mode
-     */
-    public void setPositionMode()
-    {
-        leftSide.setPositionMode();
-        rightSide.setPositionMode();
-
-        leftEncoder.reset();
-        rightEncoder.reset();
-
-        isInVelocityMode = false;
-    }
-
-    /**
-     * Sets the mode to velocity mode
-     */
-    public void setVelocityMode()
-    {
-        leftSide.setVelocityMode();
-        rightSide.setVelocityMode();
-        leftEncoder.reset();
-        rightEncoder.reset();
-
-        isInVelocityMode = true;
-    }
-
-    /**
-     * @return returns true if in velocity
-     */
-    public boolean isInVelocityMode()
-    {
-        return isInVelocityMode;
-    }
-
-    /**
-     * Sets the target velocity for the PID
-     *
-     * @param speed
-     *            - Speed in feet per second
-     */
-    public void setLeftTargetVelocity(double speed)
-    {
-        leftSide.setSpeedAbsolute(speed);
-    }
-
-    /**
-     * Sets the target velocity for the PID
-     *
-     * @param speed
-     *            - Speed in feet per second
-     */
-    public void setRightTargetVelocity(double speed)
-    {
-        rightSide.setSpeedAbsolute(speed);
-    }
-
-    /**
-     * Sets the PID set point, which drives the robot straight
-     *
-     * @param distance
-     *            the distance to drive forwards
-     */
-    public void driveStraight(double distance)
-    {
-        leftSide.setDistanceTarget(distance);
-        rightSide.setDistanceTarget(distance);
     }
 
     /**
@@ -330,39 +221,6 @@ public class DriveBaseSystem extends Subsystem
     }
 
     /**
-     * This method is used to set the speed of the strafing motor.
-     *
-     * @param speed
-     *            - speed is the double number between 1 and -1, usually from the
-     *            joystick axis.
-     */
-    public void setStrafeSpeed(double rightAxis, double leftAxis)
-    {
-        double speed = leftAxis - rightAxis;
-
-//        baseStrafe.set(speed);
-    }
-
-    /**
-     * Get the drive motor speed adjustment to set to counteract unwanted rotation
-     * while strafing.
-     *
-     * @return Returns an absolute speed differential to set between left and right
-     *         drive motors. Apply half this adjustment to the left motor speed and
-     *         negative half to the right motor speed.
-     */
-    public double getStrafeRotateAdjust()
-    {
-        if (baseStrafeDeployed)
-        {
-            return baseStrafeAngleController.getSpeedAdjust();
-        } else
-        {
-            return 0.0;
-        }
-    }
-
-    /**
      * This method is used to deploy or stow the strafing mechanism.
      *
      * @param state
@@ -371,24 +229,16 @@ public class DriveBaseSystem extends Subsystem
      */
     public void deployStrafe(boolean state)
     {
-        double angle;
-
         if (state)
         {
-            //baseStrafeSolenoid.set(true);
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
 
-            angle = baseStrafeAngleController.getCurrentAngle();
-            baseStrafeAngleController.setAngleSetpoint(angle);
-            baseStrafeAngleController.enable();
-        } else
+        } 
+        else
         {
-            //baseStrafeSolenoid.set(false);
             baseFrontLiftSolenoid.set(false);
             baseBackLiftSolenoid.set(false);
-
-            baseStrafeAngleController.disable();
         }
 
         baseStrafeDeployed = state;
