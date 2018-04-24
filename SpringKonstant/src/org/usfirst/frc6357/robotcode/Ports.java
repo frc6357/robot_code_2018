@@ -39,7 +39,7 @@ public class Ports
     public static final int driveRightCenterMotor       = 14; // CAN ID 14
     public static final int driveRightRearMotor         = 12; // CAN ID 12
 
-    public static final int driveStrafeMotor            = 17; // CAN ID 17
+//    public static final int driveStrafeMotor            = 17; // CAN ID 17
 
     // Pneumatics for drive lift mechanisms.
     //
@@ -135,5 +135,6 @@ public class Ports
     public static final int OIOperatorIntakeRotation    = 3; // X Button
     public static final int OIOperatorArmUp             = 4; // A Button
     public static final int OIOperatorArmDown           = 1; // Y Button
+    public static final int OIOperatorGripperToggle2    = 5; // Left Bumper
     public static final int OIOperatorGripperToggle     = 6; // Right Bumper
 }

@@ -51,7 +51,6 @@ public class DriveBaseSystem extends Subsystem
     private final double DISTANCE_PER_PULSE = 2 * DRIVE_WHEEL_RADIUS * Math.PI / PULSES_PER_ROTATION;
 
     // Strafing system motors and state
-    private final SpeedController baseStrafe;
     //private final Solenoid baseStrafeSolenoid;
     private final Solenoid baseFrontLiftSolenoid;
     private final Solenoid baseBackLiftSolenoid;
@@ -120,8 +119,6 @@ public class DriveBaseSystem extends Subsystem
         ((WPI_VictorSPX) baseCenterLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
         ((WPI_VictorSPX) baseBackLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
 
-        // Strafing motor
-        baseStrafe = new WPI_VictorSPX(Ports.driveStrafeMotor);
 
         // Strafing angle controller
         baseStrafeAngleController = new StrafingAngleController(driveIMU);
@@ -288,12 +285,14 @@ public class DriveBaseSystem extends Subsystem
      */
     public void turnDegrees(double angle)
     {
+        driveIMU.reset();
+        
         double currentAngle = driveIMU.updatePeriodic() + 180;
         double targetAngle = currentAngle + angle;
         if(targetAngle < 0) targetAngle += 360;
         if(targetAngle > 360) targetAngle -= 360;
 
-        while(Math.abs(targetAngle - currentAngle) > .05)
+        while(Math.abs(targetAngle - currentAngle) > .5)
         {
             if(angle > 0)    //If turning right
             {
@@ -341,7 +340,7 @@ public class DriveBaseSystem extends Subsystem
     {
         double speed = leftAxis - rightAxis;
 
-        baseStrafe.set(speed);
+//        baseStrafe.set(speed);
     }
 
     /**

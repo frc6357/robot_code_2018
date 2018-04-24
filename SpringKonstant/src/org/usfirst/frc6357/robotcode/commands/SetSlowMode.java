@@ -7,11 +7,17 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class ToggleSlowMode extends Command {
-
-    public ToggleSlowMode() 
+public class SetSlowMode extends Command {
+    private boolean setter;
+    public SetSlowMode() 
     {
         requires(Robot.driveBaseSystem);
+    }
+    
+    public SetSlowMode(boolean choice)
+    {
+        requires(Robot.driveBaseSystem);
+        setter = choice;
     }
 
     // Called just before this Command runs the first time
@@ -23,7 +29,7 @@ public class ToggleSlowMode extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() 
     {
-        Robot.driveBaseSystem.setSlowMode(!Robot.driveBaseSystem.getSlowMode());
+        Robot.driveBaseSystem.setSlowMode(this.setter);
     }
 
     // Make this return true when this Command no longer needs to run execute()

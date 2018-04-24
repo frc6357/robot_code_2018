@@ -60,6 +60,8 @@ public class OI
     private Button buttonArmUp;
     private Button buttonArmDown;
     private Button buttonGripper;
+    private Button buttonGripper2;
+    private Button buttonSlow;
     
     public OI()
     {
@@ -74,6 +76,8 @@ public class OI
         // TODO: Add control to move the intake up or down during the endgame.
         buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeRotation);
 
+        buttonSlow = new JoystickButton(joystickDriver, Ports.OIDriverSlow);
+        
         buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
 
@@ -83,13 +87,14 @@ public class OI
         buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
 
         buttonGripper = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle);
+        buttonGripper2 = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle2);
 
         // Assign functions to all Buttons
         buttonArmUp.whenPressed(new ArmUp());
         buttonArmDown.whenPressed(new ArmDown());
-        
+       
         buttonStrafe.whileHeld(new StrafeStow());
-        buttonStrafe.whenPressed(new StrafeDeploy());
+        buttonStrafe.whenReleased(new StrafeDeploy());
 
         buttonLowGear.whenPressed(new GearShiftCommand(false));
         buttonHighGear.whenPressed(new GearShiftCommand(true));
@@ -102,6 +107,11 @@ public class OI
 
         buttonGripper.whileHeld(new OpenGripper());
         buttonGripper.whenReleased(new CloseGripper());
+        buttonGripper2.whileHeld(new OpenGripper());
+        buttonGripper2.whenReleased(new CloseGripper());
+        
+        buttonSlow.whileHeld(new SetSlowMode(true));
+        buttonSlow.whenReleased(new SetSlowMode(false));
 
         // Set deadbands and response curves for various joystick axes.
         filterClimbDeadband = new FilterDeadband(0.1);

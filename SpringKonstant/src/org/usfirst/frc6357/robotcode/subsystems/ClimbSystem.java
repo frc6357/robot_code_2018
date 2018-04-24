@@ -13,17 +13,17 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
  */
 public class ClimbSystem extends Subsystem
 {
-    private final WPI_TalonSRX climbMotor;
+  //  private final WPI_TalonSRX climbMotor;
 
     public ClimbSystem()
     {
-        climbMotor = new WPI_TalonSRX(Ports.ClimbWinchMotor);
-        climbMotor.set(0.0);
+        //climbMotor = new WPI_TalonSRX(Ports.ClimbWinchMotor);
+       // climbMotor.set(0.0);
     }
 
     public void setWinchSpeed(double speed)
     {
-        climbMotor.set(speed);
+        //climbMotor.set(speed);
     }
 
     public void initDefaultCommand()
