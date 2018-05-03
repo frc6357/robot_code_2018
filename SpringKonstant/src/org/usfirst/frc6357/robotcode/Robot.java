@@ -1,27 +1,15 @@
 package org.usfirst.frc6357.robotcode;
 
-import org.opencv.core.Mat;
-import org.opencv.imgproc.Imgproc;
-
 //import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
-import org.usfirst.frc6357.robotcode.commands.GearShiftCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
-import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
-import org.usfirst.frc6357.robotcode.commands.StrafeStow;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
-//import org.usfirst.frc6357.robotcode.subsystems.LEDs;
+import org.usfirst.frc6357.robotcode.subsystems.SensorSystem;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
-import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -36,7 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 public class Robot extends TimedRobot
 {
-
     Command autonomousCommand;
     public static SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
     public static SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
@@ -44,14 +31,13 @@ public class Robot extends TimedRobot
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
+    public static SensorSystem sensorSystem;
     public static ClimbSystem climbSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
     //public static LEDs lights;
-   
-    
+       
     public static OI oi;
-    
     int counter = 0;
 
     /**
@@ -62,6 +48,7 @@ public class Robot extends TimedRobot
     {
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
+        sensorSystem = new SensorSystem();
         climbSystem = new ClimbSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
@@ -140,9 +127,7 @@ public class Robot extends TimedRobot
 //        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
         AutoPositionCheck.getGameData();
         
-        //Code to find desired path and parse it
-        try { autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile())); } 
-        catch (Exception e) {System.out.println("Exception here: " + e); }
+        autonomousCommand = new AutonomousCommand(chooserStart.getSelected());
 
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
