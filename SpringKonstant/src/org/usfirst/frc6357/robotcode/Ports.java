@@ -63,6 +63,11 @@ public class Ports
 
     public static final int DriveRightEncoderA          = 0; // DIO input 0
     public static final int DriveRightEncoderB          = 1; // DIO input 1
+    
+    public static final int leftUltrasonicInput         = -1; //UNKOWN input, DIO Channel
+    public static final int leftUltrasonicOutput        = -1; //UNKOWN output
+    public static final int rightUltrasonicInput        = -1; //UNKOWN input
+    public static final int rightUltrasonicOutput       = -1; //UNKOWN output
 
     // *****************
     // Climb Subsystem

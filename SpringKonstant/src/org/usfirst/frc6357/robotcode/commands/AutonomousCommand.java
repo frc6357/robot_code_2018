@@ -31,6 +31,33 @@ public class AutonomousCommand extends Command
         }).start();
     }
     
+    // Overloaded Constructor to do the current plan of using the IMU and the US sensors
+    public AutonomousCommand(String startSide)
+    {
+        requires(Robot.driveBaseSystem);
+        requires(Robot.sensorSystem);
+        
+        if(AutoPositionCheck.getScale().equals(startSide)) //Same side, go to scale
+        {
+            //Drive forward with IMU until switch
+            //Ping switch to check distance
+            //Drive forward to scale and just past it
+            //Engage arm and place box upon scale
+        }
+        else if(AutoPositionCheck.getAllySwitch().equals(startSide)) //Same side, go to switch
+        {
+            //Drive forward with IMU until switch
+            //Ping switch to check scale
+            //Turn 90 degrees away from center
+            //Back up into switch
+            //Engage arm and place box upon scale
+        }
+        else //Drive forward
+        {
+            //Drive forward with IMU
+        }
+    }
+    
     //Quick recreation of the auto command with the new files
     public AutonomousCommand(String[][] s2d)
     {
