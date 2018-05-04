@@ -31,7 +31,6 @@ public class Robot extends TimedRobot
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
     public static SensorSystem sensorSystem;
-    public static ClimbSystem climbSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
     //public static LEDs lights;
@@ -48,7 +47,6 @@ public class Robot extends TimedRobot
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
         sensorSystem = new SensorSystem();
-        climbSystem = new ClimbSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
        // lights = new LEDs();

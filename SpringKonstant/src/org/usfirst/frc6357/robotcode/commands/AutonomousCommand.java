@@ -2,6 +2,7 @@
 package org.usfirst.frc6357.robotcode.commands;
 
 import org.usfirst.frc6357.robotcode.Robot;
+import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
 import edu.wpi.first.wpilibj.command.Command;
 
