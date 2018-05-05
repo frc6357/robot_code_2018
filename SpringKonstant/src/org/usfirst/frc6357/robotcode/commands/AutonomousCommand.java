@@ -36,19 +36,24 @@ public class AutonomousCommand extends Command
     public AutonomousCommand(String startSide)
     {
         requires(Robot.driveBaseSystem);
-        requires(Robot.sensorSystem);
+       // requires(Robot.sensorSystem);
+        
+        try {Thread.sleep(100);} //Waits .1 seconds for the high gear to deploy
+        catch(Exception e) {}
         
         if(AutoPositionCheck.getScale().equals(startSide)) //Same side, go to scale
         {
-            Robot.driveBaseSystem.driveTimeDistance(312); //Drive to center of scale
+            Robot.driveBaseSystem.driveTimeDistance(305); //Drive to center of scale
 //            Robot.sensorSystem.getDistanceToCenter(); //Ping to check position 
             Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
             Robot.armSystem.armUp(); //Lift arm for 3 seconds
             try {Thread.sleep(2800);}
             catch(Exception e) {}
-            Robot.intakeSystem.setIntakeSpeed(-.5, -.5); //Open and reverse gripper
             Robot.intakeSystem.setIntakeGrippers(true);
-            try {Thread.sleep(250);}
+            try {Thread.sleep(200);}
+            catch (Exception e) {}
+            Robot.intakeSystem.setIntakeSpeed(0,.5); //Open and reverse gripper
+            try {Thread.sleep(1000);}
             catch (Exception e) {}
             Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
             Robot.intakeSystem.setIntakeGrippers(false);
@@ -56,20 +61,21 @@ public class AutonomousCommand extends Command
         }
         else if(AutoPositionCheck.getAllySwitch().equals(startSide)) //Same side, go to switch
         {
-            Robot.driveBaseSystem.driveTimeDistance(150); //Drive to center of switch
-//            Robot.sensorSystem.getDistanceToCenter();
-            Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
-            Robot.driveBaseSystem.driveTimeDistance(-12); //Back up a foot
-            Robot.armSystem.armUp(); //Lift arm for 3 seconds
-            try {Thread.sleep(2800);}
-            catch(Exception e) {}
-            Robot.intakeSystem.setIntakeSpeed(-.5, -.5); //Open and reverse gripper
-            Robot.intakeSystem.setIntakeGrippers(true);
-            try {Thread.sleep(250);}
-            catch (Exception e) {}
-            Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
-            Robot.intakeSystem.setIntakeGrippers(false);
-            Robot.armSystem.armDown(); //Lower the arm
+        	Robot.driveBaseSystem.driveTimeDistance(140); //Drive to center of scale
+//          Robot.sensorSystem.getDistanceToCenter(); //Ping to check position 
+	        Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
+	        Robot.armSystem.armUp(); //Lift arm for 3 seconds
+	        try {Thread.sleep(2800);}
+	        catch(Exception e) {}
+	        Robot.intakeSystem.setIntakeGrippers(true);
+	        try {Thread.sleep(200);}
+	        catch (Exception e) {}
+	        Robot.intakeSystem.setIntakeSpeed(0,.5); //Open and reverse gripper
+	        try {Thread.sleep(1000);}
+	        catch (Exception e) {}
+	        Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
+	        Robot.intakeSystem.setIntakeGrippers(false);
+	        Robot.armSystem.armDown(); //Lower the arm
         }
         else //Drive forward
         {
@@ -98,7 +104,7 @@ public class AutonomousCommand extends Command
                     }
                     break;
                 case "Drive":
-                    Robot.driveBaseSystem.driveEncoderDistance(Double.parseDouble(s2d[row][1]));
+                    //Find actually viable drive method
                     break;
                 case "Turn":
                     Robot.driveBaseSystem.turnDegrees(Double.parseDouble(s2d[row][1]));

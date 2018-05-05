@@ -30,7 +30,7 @@ public class Robot extends TimedRobot
 
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
-    public static SensorSystem sensorSystem;
+  //  public static SensorSystem sensorSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
     //public static LEDs lights;
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot
     {
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
-        sensorSystem = new SensorSystem();
+      //  sensorSystem = new SensorSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
        // lights = new LEDs();

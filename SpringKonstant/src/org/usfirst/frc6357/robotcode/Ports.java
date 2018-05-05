@@ -101,7 +101,7 @@ public class Ports
     public static final int ArmLimitTop                 = 8; // DIO input 8
     public static final int ArmLimitBottom              = 9; // DIO input 9
 
-   public static final double INCHESPERSECOND           = 50; // Inches the robot travels per second at full speed
+   public static final double INCHESPERSECOND           = 130; // Inches the robot travels per second at full speed
 
     //
     // Driver's and operator's OI channel assignments

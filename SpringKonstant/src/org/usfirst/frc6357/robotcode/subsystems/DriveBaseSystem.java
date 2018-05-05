@@ -177,30 +177,41 @@ public class DriveBaseSystem extends Subsystem
     public void turnDegrees(double angle)
     {
         driveIMU.reset();
-        
+        double turnSpeed = 0;
         double currentAngle = driveIMU.updatePeriodic() + 180;
         double targetAngle = currentAngle + angle;
         if(targetAngle < 0) targetAngle += 360;
         if(targetAngle > 360) targetAngle -= 360;
 
-        while(Math.abs(targetAngle - currentAngle) > .5)
+        for(int i=0; i<60; i++)
         {
+        	turnSpeed = Math.min(Math.abs(targetAngle - currentAngle)/25, 1.0);
             if(angle > 0)    //If turning right
             {
-                setRightSpeed(-.5);
-                setLeftSpeed(.5);
+                setRightSpeed(-.5*turnSpeed);
+                setLeftSpeed(.5*turnSpeed);
             }
             else
             {
-                setRightSpeed(.5);
-                setLeftSpeed(-.5);
+                setRightSpeed(.5*turnSpeed);
+                setLeftSpeed(-.5*turnSpeed);
             }
             currentAngle = driveIMU.updatePeriodic() + 180;
+            if(Math.abs(targetAngle - currentAngle) < 1.0) break;
+            try{Thread.sleep(20);}
+            catch(Exception e) {}
         }
         setRightSpeed(0);
         setLeftSpeed(0);
         rightEncoder.reset();
         leftEncoder.reset();
+    }
+    
+    public void straightDrive(double speed){
+    	double angle = driveIMU.updatePeriodic();
+        Robot.driveBaseSystem.setLeftSpeed(speed - 0.007 * angle);
+        Robot.driveBaseSystem.setRightSpeed(speed + 0.007 * angle);
+    	
     }
 
     public double getTurnDistance(double angle) // Turns angle to the distance
@@ -330,37 +341,38 @@ public class DriveBaseSystem extends Subsystem
     {
         return slowMode;
     }
-
-    public void driveEncoderDistance(double inches)
-    {
-        while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
-        {
-            Robot.driveBaseSystem.setLeftSpeed(.5);
-            Robot.driveBaseSystem.setRightSpeed(.5);
-        }
-        Robot.driveBaseSystem.setLeftSpeed(0);
-        Robot.driveBaseSystem.setRightSpeed(0);
-    }
-
-    public void driveEncoderDistance(double inches, double speed)
-    {
-        while(leftEncoder.getDistance() < inches && rightEncoder.getDistance() < inches)
-        {
-            Robot.driveBaseSystem.setLeftSpeed(speed);
-            Robot.driveBaseSystem.setRightSpeed(speed);
-        }
-        Robot.driveBaseSystem.setLeftSpeed(0);
-        Robot.driveBaseSystem.setRightSpeed(0);
-    }
     
     public void driveTimeDistance(double inches)
     {
-        Robot.driveBaseSystem.setLeftSpeed(inches > 0 ? 1 : -1);
-        Robot.driveBaseSystem.setRightSpeed(inches > 0 ? 1 : -1);
-        try {Thread.sleep((long)(Math.abs(inches)/Ports.INCHESPERSECOND)*1000);}
+    	double driveSpeed = 0.1;
+    	int i = 0;
+    	int accelSteps = 10;
+    	int accelStepTime = 140; // in milliseconds
+    	long totalDriveTime = (long)(Math.abs(inches*1000)/Ports.INCHESPERSECOND);
+    	driveIMU.reset();
+        straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        try {
+        	for(i = 0; i < accelSteps; i++){
+        		Thread.sleep(accelStepTime/4);
+        		driveSpeed = (i+1) * 0.1;
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        		Thread.sleep(accelStepTime/4);
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        		Thread.sleep(accelStepTime/4);
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        		Thread.sleep(accelStepTime/4);
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        	}
+        	driveSpeed = 1.0;
+            Robot.driveBaseSystem.setLeftSpeed(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+            Robot.driveBaseSystem.setRightSpeed(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        	Thread.sleep(totalDriveTime - accelSteps*accelStepTime);
+        }
         catch(Exception e) {}
         Robot.driveBaseSystem.setLeftSpeed(0);
-        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setRightSpeed(0);
+        try {Thread.sleep(3000);}
+        catch(Exception e) {}
     }
     
     public boolean isStrafeDeployed()
