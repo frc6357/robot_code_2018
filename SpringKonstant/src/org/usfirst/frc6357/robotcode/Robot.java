@@ -104,7 +104,7 @@ public class Robot extends TimedRobot
     {
         Scheduler.getInstance().run();
         
-        Robot.driveBaseSystem.setHighGear(false);
+        driveBaseSystem.setHighGear(false);
         
         SmartDashboard.putData("Start Chooser", chooserStart);
         SmartDashboard.putData("End Chooser", chooserEnd);
@@ -120,6 +120,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.leftEncoder.reset(); // Reset encoder distances to zero
         driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false); // Lift Strafe
+        driveBaseSystem.setHighGear(true);
 
 //        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
         AutoPositionCheck.getGameData();

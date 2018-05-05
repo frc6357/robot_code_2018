@@ -101,11 +101,7 @@ public class Ports
     public static final int ArmLimitTop                 = 8; // DIO input 8
     public static final int ArmLimitBottom              = 9; // DIO input 9
 
-    // TODO: Are these still relevant now that the arm is purely pneumatic?
-    public static final int floorTime                   = 3500; //Time for robot to lower to the floor, in milliseconds
-    public static final int switchTime                  = 1000; //Time from floor to switch
-    public static final int midScaleTime                = 2500; //Time from floor to middle of scale
-    public static final int highScaleTime               = 3500; //Time from floor to top of scale
+   public static final double INCHESPERSECOND           = 50; // Inches the robot travels per second at full speed
 
     //
     // Driver's and operator's OI channel assignments

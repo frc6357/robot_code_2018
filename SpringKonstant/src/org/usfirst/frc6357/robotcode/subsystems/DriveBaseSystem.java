@@ -353,6 +353,16 @@ public class DriveBaseSystem extends Subsystem
         Robot.driveBaseSystem.setRightSpeed(0);
     }
     
+    public void driveTimeDistance(double inches)
+    {
+        Robot.driveBaseSystem.setLeftSpeed(inches > 0 ? 1 : -1);
+        Robot.driveBaseSystem.setRightSpeed(inches > 0 ? 1 : -1);
+        try {Thread.sleep((long)(Math.abs(inches)/Ports.INCHESPERSECOND)*1000);}
+        catch(Exception e) {}
+        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setLeftSpeed(0);
+    }
+    
     public boolean isStrafeDeployed()
     {
         return baseStrafeDeployed;

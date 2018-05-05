@@ -40,22 +40,40 @@ public class AutonomousCommand extends Command
         
         if(AutoPositionCheck.getScale().equals(startSide)) //Same side, go to scale
         {
-            //Drive forward with IMU until switch
-            //Ping switch to check distance
-            //Drive forward to scale and just past it
-            //Engage arm and place box upon scale
+            Robot.driveBaseSystem.driveTimeDistance(312); //Drive to center of scale
+//            Robot.sensorSystem.getDistanceToCenter(); //Ping to check position 
+            Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
+            Robot.armSystem.armUp(); //Lift arm for 3 seconds
+            try {Thread.sleep(2800);}
+            catch(Exception e) {}
+            Robot.intakeSystem.setIntakeSpeed(-.5, -.5); //Open and reverse gripper
+            Robot.intakeSystem.setIntakeGrippers(true);
+            try {Thread.sleep(250);}
+            catch (Exception e) {}
+            Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
+            Robot.intakeSystem.setIntakeGrippers(false);
+            Robot.armSystem.armDown(); //Lower the arm
         }
         else if(AutoPositionCheck.getAllySwitch().equals(startSide)) //Same side, go to switch
         {
-            //Drive forward with IMU until switch
-            //Ping switch to check scale
-            //Turn 90 degrees away from center
-            //Back up into switch
-            //Engage arm and place box upon scale
+            Robot.driveBaseSystem.driveTimeDistance(150); //Drive to center of switch
+//            Robot.sensorSystem.getDistanceToCenter();
+            Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
+            Robot.driveBaseSystem.driveTimeDistance(-12); //Back up a foot
+            Robot.armSystem.armUp(); //Lift arm for 3 seconds
+            try {Thread.sleep(2800);}
+            catch(Exception e) {}
+            Robot.intakeSystem.setIntakeSpeed(-.5, -.5); //Open and reverse gripper
+            Robot.intakeSystem.setIntakeGrippers(true);
+            try {Thread.sleep(250);}
+            catch (Exception e) {}
+            Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
+            Robot.intakeSystem.setIntakeGrippers(false);
+            Robot.armSystem.armDown(); //Lower the arm
         }
         else //Drive forward
         {
-            //Drive forward with IMU
+            Robot.driveBaseSystem.driveTimeDistance(300); //Drive 25'
         }
     }
     
