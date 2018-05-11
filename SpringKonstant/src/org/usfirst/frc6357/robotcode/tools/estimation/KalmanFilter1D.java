@@ -22,6 +22,15 @@ public class KalmanFilter1D {
     private SimpleMatrix I;     // The Identity Matrix, 2x2
 
     public KalmanFilter1D(){
+        Initialize(0);
+    }
+
+    /**
+     * This function initializes (or re-initializes) the KF
+     *
+     * @param initialDistance Distance in meters
+     */
+    public void Initialize(double initialDistance){
         state = new SimpleMatrix(2, 1);
         F = new SimpleMatrix(2,2);
         B = new SimpleMatrix(2,1);
@@ -32,6 +41,9 @@ public class KalmanFilter1D {
 
         // state is the state
         // state is a column vector of position and velocity
+        // The initial position is recorded here.
+        // We assume initial velocity is 0
+        state.set(0,0, initialDistance);
 
         // F: The state transition matrix
         // For each state transition, we integrate
@@ -72,6 +84,15 @@ public class KalmanFilter1D {
         R = 0.01;
     }
 
+    /**
+     * This function returns the position result of the prediction
+     * Try to call this at a very regular interval
+     * This can be called while robot is disabled, so long as accel measurement is available
+     *
+     * @param acceleration The new acceleration in m/s/s
+     * @param deltaT The time since the last prediction _or_ update
+     * @return The resultant prediction of position
+     */
     public double predict(double acceleration, double deltaT){
         // Update the state transition matrix with the delta T since last prediction
         F.set(0,1,deltaT);
@@ -87,6 +108,12 @@ public class KalmanFilter1D {
         return H.mult(state).get(0);
     }
 
+    /**
+     * This function returns the position result of the update
+     *
+     * @param observation The measurement from the LiDAR in meters
+     * @return The updated estimate of position
+     */
     public double update(double observation){
         double innovation;
         // Calculate the innovation/measurement residual
