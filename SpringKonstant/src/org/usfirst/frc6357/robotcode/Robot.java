@@ -1,21 +1,15 @@
 package org.usfirst.frc6357.robotcode;
 
-import java.io.IOException;
+//import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
-import org.usfirst.frc6357.robotcode.commands.GearShiftCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeCommand;
-import org.usfirst.frc6357.robotcode.commands.IntakeSwingToggle;
-import org.usfirst.frc6357.robotcode.commands.StrafeDeploy;
-import org.usfirst.frc6357.robotcode.commands.StrafeStow;
-//import org.usfirst.frc6357.robotcode.commands.TestPidPosition;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
-import org.usfirst.frc6357.robotcode.subsystems.ClimbSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
+import org.usfirst.frc6357.robotcode.subsystems.SensorSystem;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
-import org.usfirst.frc6357.robotcode.tools.CSVReader;
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -23,42 +17,40 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.properties file in the
- * project.
+ * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the
+ * TimedRobot documentation. If you change the name of this class or the package after creating this project, you must also update the
+ * build.properties file in the project.
  */
 public class Robot extends TimedRobot
 {
-
     Command autonomousCommand;
-    SendableChooser<String> chooserStart = new SendableChooser<>(); // Lets you pick from a group of commands, whose
-                                                               // references are strings
-    SendableChooser<String> chooserEnd = new SendableChooser<>();
-    SendableChooser<String> chooserAlt = new SendableChooser<>();
-    
+    public static SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
+    public static SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
+    public static SendableChooser<String> chooserBox = new SendableChooser<>(); // Allows the user to choose to attempt to pick up a box
+
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
-    public static ClimbSystem climbSystem;
+  //  public static SensorSystem sensorSystem;
     public static ArmSystem armSystem;
     public static IntakeSystem intakeSystem;
-
+    //public static LEDs lights;
+       
     public static OI oi;
+    int counter = 0;
 
     /**
-     * This function is run when the robot is first started up and should be used
-     * for any initialization code.
+     * This function is run when the robot is first started up and should be used for any initialization code.
      */
     @Override
     public void robotInit()
     {
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
-        climbSystem = new ClimbSystem();
+      //  sensorSystem = new SensorSystem();
         armSystem = new ArmSystem();
         intakeSystem = new IntakeSystem();
-
+       // lights = new LEDs();
+       
         // OI must be constructed after subsystems. If the OI creates Commands
         // (which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
@@ -66,114 +58,121 @@ public class Robot extends TimedRobot
         oi = new OI();
 
         // Add commands to Autonomous Sendable Chooser
-
-
-        chooserStart.addDefault("Middle", "M");
-        chooserStart.addObject("Left", "L");
+        // It is VITAL TO NOTE that if the user picks an illegal combination of choices then the program automatically chooses to cross the auto-line
+        chooserStart.addDefault("Left", "L");
         chooserStart.addObject("Right", "R");
-        
-        chooserEnd.addDefault("Drive straight", "Drive");
+        chooserStart.addObject("TEST", "T");
+
+        chooserEnd.addDefault("Auto Line", "Auto");
+        chooserEnd.addObject("Null Zone", "Null");
         chooserEnd.addObject("Switch", "Switch");
         chooserEnd.addObject("Scale", "Scale");
         
-        chooserAlt.addDefault("No", "False");
-        chooserAlt.addObject("Yes", "True");
-
+        chooserBox.addDefault("Don't pick up a box", "N");
+        chooserBox.addObject("Pick up a box", "Y");
+        chooserBox.addObject("Test pickup", "T");
+        
+        CameraServer.getInstance().startAutomaticCapture();        
     }
 
     /**
-     * This function is called when the disabled button is hit. You can use it to
-     * reset subsystems before shutting down.
+     * This function is called when the disabled button is hit. You can use it to reset subsystems before shutting down.
      */
     @Override
     public void disabledInit()
     {
-
+        //lights.randomColor();
+        driveBaseSystem.deployStrafe(false);
+        driveBaseSystem.leftEncoder.reset();
+        driveBaseSystem.rightEncoder.reset();
+        armSystem.armDown();
+        armSystem.armElbowUp();
+        intakeSystem.setIntakeGrippers(false); // Close gripper
+        Robot.driveBaseSystem.setHighGear(false);
+        
+        SmartDashboard.putData("Start Chooser", chooserStart);
+        SmartDashboard.putData("End Chooser", chooserEnd);
+        SmartDashboard.putData("Box Option", chooserBox);
+        
     }
 
+    /**
+     * This function is called continually while the robot is disabled.
+     */
     @Override
     public void disabledPeriodic()
     {
         Scheduler.getInstance().run();
+        
+        driveBaseSystem.setHighGear(false);
+        
+        SmartDashboard.putData("Start Chooser", chooserStart);
+        SmartDashboard.putData("End Chooser", chooserEnd);
+        SmartDashboard.putData("Box Option", chooserBox);
     }
-
+    
+    /**
+     * This function is called when the autonomous period begins
+     */
     @Override
     public void autonomousInit()
     {
-        try
-        {
-            autonomousCommand = new AutonomousCommand(CSVReader.parse(getSelectedFile()));
-        } catch (IOException e)
-        {
-            System.out.println("Exception here: " + e);
-        }
+        driveBaseSystem.leftEncoder.reset(); // Reset encoder distances to zero
+        driveBaseSystem.rightEncoder.reset();
+        driveBaseSystem.deployStrafe(false); // Lift Strafe
+        driveBaseSystem.setHighGear(true);
 
-       // autonomousCommand = new TestPidPosition();
+//        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
+        AutoPositionCheck.getGameData();
+        
+        autonomousCommand = new AutonomousCommand(chooserStart.getSelected());
+
         // schedule the autonomous command (example)
-        if (autonomousCommand != null)
-            autonomousCommand.start();
+        if (autonomousCommand != null) autonomousCommand.start();
     }
-    
+
+    /**
+     * Method which parses through the various choosers and figures out which auto-plan to use Should allow the user to have a simple way to
+     * select from lots of plans Deprecated due to CSV files not currently working.
+     *
+     * @return the String which represents the name of the file to parse
+     */
     private String getSelectedFile()
     {
         AutoPositionCheck.getGameData();
+        String start = chooserStart.getSelected(), end = chooserEnd.getSelected(), box = chooserBox.getSelected();
+        String scale = AutoPositionCheck.getScale(), allySwitch = AutoPositionCheck.getAllySwitch();
         
-        if(chooserEnd.getSelected().equals("Drive"))
+        if(start.equals("T"))
+            return "/home/lvuser/AutoSheets/Test.csv";
+        if(box.equals("T"))
+            return "/home/lvuser/AutoSheets/Test2.csv";
+        if(end.equals("Auto"))
+            return "/home/lvuser/AutoSheets/CSV1.csv";
+        if(end.equals("Null"))
+            return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV2.csv" : "/home/lvuser/AutoSheets/CSV18.csv";
+        
+        switch(start + end + box)
         {
-            return "/home/lvuser/AutoSheets/CSV13.csv";
+            case "LSwitchN":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV3.csv" : "/home/lvuser/AutoSheets/CSV5.csv";
+            case "RSwitchN":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV3.csv" : "/home/lvuser/AutoSheets/CSV4.csv";
+            case "LScaleN":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV6.csv" : "/home/lvuser/AutoSheets/CSV7.csv";
+            case "RScaleN":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV8.csv" : "/home/lvuser/AutoSheets/CSV9.csv";
+            case "LSwitchY":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV10.csv" : "/home/lvuser/AutoSheets/CSV11.csv";
+            case "RSwitchY":
+                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV12.csv" : "/home/lvuser/AutoSheets/CSV13.csv";
+            case "LScaleY":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV14.csv" : "/home/lvuser/AutoSheets/CSV15.csv";
+            case "RScaleY":
+                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV16.csv" : "/home/lvuser/AutoSheets/CSV17.csv";
         }
-        switch(chooserStart.getSelected())
-        {
-            case "L":
-                switch(chooserEnd.getSelected())
-                {
-                    case "Switch":
-                       if(AutoPositionCheck.getAllySwitch().equals("L")) 
-                           return "/home/lvuser/AutoSheets/CSV1.csv";
-                       else
-                       {
-                           if(chooserAlt.getSelected().equals("False"))
-                               return "/home/lvuser/AutoSheets/CSV2.csv";
-                           else
-                               return "/home/lvuser/AutoSheets/CSV9.csv";
-                       }
-                    case "Scale":
-                       if(AutoPositionCheck.getScale().equals("L"))
-                           return "/home/lvuser/AutoSheets/CSV3.csv";
-                       else
-                       {
-                           if(chooserAlt.getSelected().equals("False"))
-                               return "/home/lvuser/AutoSheets/CSV4.csv";
-                           else
-                               return "/home/lvuser/AutoSheets/CSV10.csv";
-                       }
-                }
-            case "R":
-                switch(chooserEnd.getSelected())
-                {
-                    case "Switch":
-                        if(AutoPositionCheck.getAllySwitch().equals("R")) 
-                            return "/home/lvuser/AutoSheets/CSV6.csv";
-                        else
-                        {
-                            if(chooserAlt.getSelected().equals("False"))
-                                return "/home/lvuser/AutoSheets/CSV5.csv";
-                            else
-                                return "/home/lvuser/AutoSheets/CSV11.csv";
-                        }
-                    case "Scale":
-                        if(AutoPositionCheck.getScale().equals("L"))
-                        {
-                            if(chooserAlt.getSelected().equals("False"))
-                                return "/home/lvuser/AutoSheets/CSV3.csv";
-                            else
-                                return "/home/lvuser/AutoSheets/CSV12.csv";
-                        }
-                        else
-                            return "/home/lvuser/AutoSheets/CSV4.csv";
-                }
-        }
-        return "/home/lvuser/AutoSheets/Test.csv";
+        
+        return "/home/lvuser/AutoSheets/CSV1.csv";
     }
 
     /**
@@ -185,6 +184,9 @@ public class Robot extends TimedRobot
         Scheduler.getInstance().run();
     }
 
+    /**
+     * This function is called at the beginning of teleop
+     */
     @Override
     public void teleopInit()
     {
@@ -192,8 +194,10 @@ public class Robot extends TimedRobot
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null)
-            autonomousCommand.cancel();
+        if (autonomousCommand != null) autonomousCommand.cancel();
+
+        driveBaseSystem.deployStrafe(true);
+        Robot.driveBaseSystem.setHighGear(false);
     }
 
     /**
@@ -202,118 +206,34 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed, armSpeed;
-        double rotateAdjust, lAdjust, rAdjust;
+        double driveLeft, driveRight, robotAngle;
+        double intakeSpeedIn, intakeSpeedOut;
 
         Scheduler.getInstance().run();
 
-        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
+        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true); // Retrieves the status of all buttons and joysticks
         driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
-        driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
-        driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
-        climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
-        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
+        intakeSpeedIn = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeIn, false);
+        intakeSpeedOut = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeOut, false);
 
+        robotAngle = driveBaseSystem.driveIMU.updatePeriodic(); // Retrieve robot angle
 
-        robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
-
-        rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
-        lAdjust = rotateAdjust / 2;
-        rAdjust = -lAdjust;
-
-        driveBaseSystem.setLeftSpeed(driveLeft);
+        driveBaseSystem.setLeftSpeed(driveLeft); // Listens to input and drives the robot
         driveBaseSystem.setRightSpeed(driveRight);
-        driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
 
-        climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.periodic(armSpeed);
+        intakeSystem.setIntakeSpeed(intakeSpeedOut, intakeSpeedIn);
 
-        SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
-        SmartDashboard.putData("Stow strafe", new StrafeStow());
-        SmartDashboard.putData("Shift Gears up", new GearShiftCommand(true));
-        SmartDashboard.putData("Shift Gears down", new GearShiftCommand(false));
-        SmartDashboard.putData("Turn intake on and inwards", new IntakeCommand(true, true));
-        SmartDashboard.putData("Turn intake on and outwards", new IntakeCommand(true, false));
-        SmartDashboard.putData("Turn intake off", new IntakeCommand(false, false));
-        SmartDashboard.putData("Toggle intake swing", new IntakeSwingToggle());
-
-        SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
-        SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
-        SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
-        SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
-        SmartDashboard.putData("Auto Start point", chooserStart);
-        SmartDashboard.putData("Auto End point", chooserEnd);
-        SmartDashboard.putData("Use alternate (Early cross) path (if possible)?", chooserAlt);
-        SmartDashboard.putNumber("Drive Left Raw", driveLeft);
-        SmartDashboard.putNumber("Drive Right Raw", driveRight);
-        SmartDashboard.putNumber("Drive Strafe Right", driveStrafeRight);
-        SmartDashboard.putNumber("Drive Strafe Left", driveStrafeLeft);
-        SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
-        SmartDashboard.putNumber("IMU Angle", robotAngle);
-        SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
-        SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
-        
-        /*
-         * int player = (curPlayer%2==0) ? 1 : 2;
-         */
-    }
-
-    @Override
-    public void testInit()
-    {
-
-    }
-
-    @Override
-    public void testPeriodic()
-    {
-        double driveLeft, driveRight, driveStrafeLeft, driveStrafeRight, robotAngle, climbSpeed, armSpeed;
-        double rotateAdjust, lAdjust, rAdjust;
-
-        Scheduler.getInstance().run();
-
-        driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true);
-        driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
-        driveStrafeRight = oi.getDriverJoystickValue(Ports.OIDriverStrafeRight, true);
-        driveStrafeLeft = oi.getDriverJoystickValue(Ports.OIDriverStrafeLeft, true);
-        climbSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorClimbWinch, false);
-        armSpeed = oi.getOperatorJoystickValue(Ports.OIOperatorArm, false);
-
-
-        robotAngle = driveBaseSystem.driveIMU.updatePeriodic();
-
-        rotateAdjust = driveBaseSystem.getStrafeRotateAdjust();
-        lAdjust = rotateAdjust / 2;
-        rAdjust = -lAdjust;
-
-        driveBaseSystem.setLeftSpeed(driveLeft);
-        driveBaseSystem.setRightSpeed(driveRight);
-        driveBaseSystem.setStrafeSpeed(driveStrafeRight, driveStrafeLeft);
-
-        climbSystem.setWinchSpeed(climbSpeed);
-        armSystem.periodic(armSpeed);
-
-        SmartDashboard.putData("Deploy strafe", new StrafeDeploy());
-        SmartDashboard.putData("Stow strafe", new StrafeStow());
-        SmartDashboard.putData("Shift Gears up", new GearShiftCommand(true));
-        SmartDashboard.putData("Shift Gears down", new GearShiftCommand(false));
-        SmartDashboard.putData("Turn intake on and inwards", new IntakeCommand(true, true));
-        SmartDashboard.putData("Turn intake on and outwards", new IntakeCommand(true, false));
-        SmartDashboard.putData("Turn intake off", new IntakeCommand(false, false));
-        SmartDashboard.putData("Toggle intake swing", new IntakeSwingToggle());
-
-        SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw());
-        SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
-        SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
-        SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
-        SmartDashboard.putData("Auto mode", chooserStart);
-        SmartDashboard.putNumber("Drive Left Raw", driveLeft);
-        SmartDashboard.putNumber("Drive Right Raw", driveRight);
-        SmartDashboard.putNumber("Drive Strafe Right", driveStrafeRight);
-        SmartDashboard.putNumber("Drive Strafe Left", driveStrafeLeft);
-        SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
-        SmartDashboard.putNumber("IMU Angle", robotAngle);
-        SmartDashboard.putNumber("Rotate Adjust L", lAdjust);
-        SmartDashboard.putNumber("Rotate Adjust R", rAdjust);
+        if(counter % 10 == 0)
+        {
+            SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw()); // Put data onto Shuffleboard for reading
+            SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
+            SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
+            SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
+            SmartDashboard.putNumber("Right Encoder Dist", driveBaseSystem.rightEncoder.getDistance());
+            SmartDashboard.putNumber("Left Encoder Dist", driveBaseSystem.leftEncoder.getDistance());
+            SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
+            SmartDashboard.putNumber("IMU Angle", robotAngle);
+        }
+        counter++;
     }
 }

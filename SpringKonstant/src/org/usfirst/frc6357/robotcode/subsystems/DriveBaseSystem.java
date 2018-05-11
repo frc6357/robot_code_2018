@@ -1,8 +1,9 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import org.usfirst.frc6357.robotcode.Ports;
+import org.usfirst.frc6357.robotcode.Robot;
+import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
-import org.usfirst.frc6357.robotcode.subsystems.PID.PositionAndVelocityControlledDrive;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
@@ -39,27 +40,19 @@ public class DriveBaseSystem extends Subsystem
     // Gear shifter
     private final DoubleSolenoid baseGearShiftSolenoid;
     private boolean baseHighGear;
+    private boolean slowMode;
 
     // Encoders
-    private final Encoder rightEncoder;
-    private final Encoder leftEncoder;
-    private final double DISTANCE_PER_PULSE;
-    private final int PULSES_PER_ROTATION;
-    private final int DRIVE_WHEEL_RADIUS;
+    public final Encoder rightEncoder;
+    public final Encoder leftEncoder;
+    private final int PULSES_PER_ROTATION = 256;
+    private final int DRIVE_WHEEL_RADIUS = 2;
+    private final double DISTANCE_PER_PULSE = 2 * DRIVE_WHEEL_RADIUS * Math.PI / PULSES_PER_ROTATION;
 
     // Strafing system motors and state
-    private final SpeedController baseStrafe;
-    private final Solenoid baseStrafeSolenoid;
     private final Solenoid baseFrontLiftSolenoid;
     private final Solenoid baseBackLiftSolenoid;
     private boolean baseStrafeDeployed;
-    private final StrafingAngleController baseStrafeAngleController;
-
-    // PID for drive
-    private final PositionAndVelocityControlledDrive leftSide;
-    private final PositionAndVelocityControlledDrive rightSide;
-
-    private boolean isInVelocityMode;
 
     // An instance of the inertial management unit to allow angle measurements. We
     // make
@@ -110,42 +103,28 @@ public class DriveBaseSystem extends Subsystem
         // This sets the all the speed controllers on the right side to follow the
         // center speed controller
         ((WPI_VictorSPX) baseBackRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
-        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower,
-                ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
+        ((WPI_VictorSPX) baseCenterRight).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontRightMaster).getDeviceID());
 
         // This sets the all the speed controllers on the left side to follow the center
         // speed controller
         ((WPI_VictorSPX) baseCenterLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
         ((WPI_VictorSPX) baseBackLeft).set(ControlMode.Follower, ((WPI_VictorSPX) baseFrontLeftMaster).getDeviceID());
 
-        // Strafing motor
-        baseStrafe = new WPI_VictorSPX(Ports.driveStrafeMotor);
-
-        // Strafing angle controller
-        baseStrafeAngleController = new StrafingAngleController(driveIMU);
-
         // Lift system
-        baseStrafeSolenoid = new Solenoid(Ports.pcm1, Ports.hDriveSolenoid);
-        baseFrontLiftSolenoid = new Solenoid(Ports.pcm1, Ports.frontButterflyDown);
-        baseBackLiftSolenoid = new Solenoid(Ports.pcm1, Ports.backButterflyDown);
+        //baseStrafeSolenoid = new Solenoid(Ports.drivePCM, Ports.hDriveSolenoid);
+        baseFrontLiftSolenoid = new Solenoid(Ports.drivePCM, Ports.frontButterflyDown);
+        baseBackLiftSolenoid = new Solenoid(Ports.drivePCM, Ports.backButterflyDown);
 
         baseStrafeDeployed = false;
 
         // Gear shifter
-        baseGearShiftSolenoid = new DoubleSolenoid(Ports.pcm1, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
-        baseHighGear = true;
+        baseGearShiftSolenoid = new DoubleSolenoid(Ports.drivePCM, Ports.driveGearShiftHigh, Ports.driveGearShiftLow);
+        baseHighGear = false;
 
-        // PID
-        leftSide = new PositionAndVelocityControlledDrive(baseFrontRightMaster, rightEncoder);
-        rightSide = new PositionAndVelocityControlledDrive(baseFrontLeftMaster, leftEncoder);
-
-        isInVelocityMode = false;
-
-        // Set initial states of all actuators
-        PULSES_PER_ROTATION = 1000;
-        DRIVE_WHEEL_RADIUS = 2; // This is in inches
-        DISTANCE_PER_PULSE = 2 * Math.PI * DRIVE_WHEEL_RADIUS / PULSES_PER_ROTATION;
-
+        // Slow Mode
+        slowMode = false;
+        
+        // Sets Defaults
         setEncoderDistancePerPulse();
         leftEncoder.reset();
         rightEncoder.reset();
@@ -163,7 +142,12 @@ public class DriveBaseSystem extends Subsystem
      */
     public void setLeftSpeed(double speed)
     {
-        baseFrontLeftMaster.set(speed);
+        if(Robot.armSystem.getArmShoulderState() == ArmState.UP)
+            baseFrontLeftMaster.set(speed / 10);
+        else if(slowMode)
+            baseFrontLeftMaster.set(speed / 2);
+        else
+            baseFrontLeftMaster.set(speed);
     }
 
     /**
@@ -176,106 +160,58 @@ public class DriveBaseSystem extends Subsystem
      */
     public void setRightSpeed(double speed)
     {
-        baseFrontRightMaster.set(speed);
-    }
-
-    /**
-     * Enables the PID
-     */
-    public void enable()
-    {
-        leftSide.enable();
-        rightSide.enable();
-    }
-
-    /**
-     * Disables the PID
-     */
-    public void disable()
-    {
-        leftSide.disable();
-        rightSide.disable();
-    }
-
-    /**
-     * Sets the mode to postition mode
-     */
-    public void setPositionMode()
-    {
-        leftSide.setPositionMode();
-        rightSide.setPositionMode();
-
-        leftEncoder.reset();
-        rightEncoder.reset();
-
-        isInVelocityMode = false;
-    }
-
-    /**
-     * Sets the mode to velocity mode
-     */
-    public void setVelocityMode()
-    {
-        leftSide.setVelocityMode();
-        rightSide.setVelocityMode();
-        leftEncoder.reset();
-        rightEncoder.reset();
-
-        isInVelocityMode = true;
-    }
-
-    /**
-     * @return returns true if in velocity
-     */
-    public boolean isInVelocityMode()
-    {
-        return isInVelocityMode;
-    }
-
-    /**
-     * Sets the target velocity for the PID
-     *
-     * @param speed
-     *            - Speed in feet per second
-     */
-    public void setLeftTargetVelocity(double speed)
-    {
-        leftSide.setSpeedAbsolute(speed);
-    }
-
-    /**
-     * Sets the target velocity for the PID
-     *
-     * @param speed
-     *            - Speed in feet per second
-     */
-    public void setRightTargetVelocity(double speed)
-    {
-        rightSide.setSpeedAbsolute(speed);
-    }
-
-    /**
-     * Sets the PID set point, which drives the robot straight
-     * 
-     * @param distance
-     *            the distance to drive forwards
-     */
-    public void driveStraight(double distance)
-    {
-        leftSide.setDistanceTarget(distance);
-        rightSide.setDistanceTarget(distance);
+        if(Robot.armSystem.getArmShoulderState() == ArmState.UP)
+            baseFrontRightMaster.set(speed / 10);
+        else if(slowMode)
+            baseFrontRightMaster.set(speed / 2);
+        else
+            baseFrontRightMaster.set(speed);
     }
 
     /**
      * Turns the robot around, with degrees being positive for clockwise
-     * 
+     *
      * @param degrees
      *            angle at which to rotate with positive being clockwise
      */
-    public void turnDegrees(double degrees)
+    public void turnDegrees(double angle)
     {
-        leftSide.setDistanceTarget(getTurnDistance(degrees));
-        leftSide.setDistanceTarget(-1 * getTurnDistance(degrees));
+        driveIMU.reset();
+        double turnSpeed = 0;
+        double currentAngle = driveIMU.updatePeriodic() + 180;
+        double targetAngle = currentAngle + angle;
+        if(targetAngle < 0) targetAngle += 360;
+        if(targetAngle > 360) targetAngle -= 360;
+
+        for(int i=0; i<60; i++)
+        {
+        	turnSpeed = Math.min(Math.abs(targetAngle - currentAngle)/25, 1.0);
+            if(angle > 0)    //If turning right
+            {
+                setRightSpeed(-.5*turnSpeed);
+                setLeftSpeed(.5*turnSpeed);
+            }
+            else
+            {
+                setRightSpeed(.5*turnSpeed);
+                setLeftSpeed(-.5*turnSpeed);
+            }
+            currentAngle = driveIMU.updatePeriodic() + 180;
+            if(Math.abs(targetAngle - currentAngle) < 1.0) break;
+            try{Thread.sleep(20);}
+            catch(Exception e) {}
+        }
+        setRightSpeed(0);
+        setLeftSpeed(0);
+        rightEncoder.reset();
+        leftEncoder.reset();
+    }
+    
+    public void straightDrive(double speed){
+    	double angle = driveIMU.updatePeriodic();
+        Robot.driveBaseSystem.setLeftSpeed(speed - 0.007 * angle);
+        Robot.driveBaseSystem.setRightSpeed(speed + 0.007 * angle);
+    	
     }
 
     public double getTurnDistance(double angle) // Turns angle to the distance
@@ -285,7 +221,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * Sets the distance per encoder pulse TODO set this distance
-     * 
+     *
      * @param distance
      *            in any unit
      */
@@ -293,39 +229,6 @@ public class DriveBaseSystem extends Subsystem
     {
         leftEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
         rightEncoder.setDistancePerPulse(DISTANCE_PER_PULSE);
-    }
-
-    /**
-     * This method is used to set the speed of the strafing motor.
-     *
-     * @param speed
-     *            - speed is the double number between 1 and -1, usually from the
-     *            joystick axis.
-     */
-    public void setStrafeSpeed(double rightAxis, double leftAxis)
-    {
-        double speed = leftAxis - rightAxis;
-
-        baseStrafe.set(speed);
-    }
-
-    /**
-     * Get the drive motor speed adjustment to set to counteract unwanted rotation
-     * while strafing.
-     *
-     * @return Returns an absolute speed differential to set between left and right
-     *         drive motors. Apply half this adjustment to the left motor speed and
-     *         negative half to the right motor speed.
-     */
-    public double getStrafeRotateAdjust()
-    {
-        if (baseStrafeDeployed)
-        {
-            return baseStrafeAngleController.getSpeedAdjust();
-        } else
-        {
-            return 0.0;
-        }
     }
 
     /**
@@ -337,24 +240,16 @@ public class DriveBaseSystem extends Subsystem
      */
     public void deployStrafe(boolean state)
     {
-        double angle;
-
         if (state)
         {
-            baseStrafeSolenoid.set(true);
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
 
-            angle = baseStrafeAngleController.getCurrentAngle();
-            baseStrafeAngleController.setAngleSetpoint(angle);
-            baseStrafeAngleController.enable();
-        } else
+        } 
+        else
         {
-            baseStrafeSolenoid.set(false);
             baseFrontLiftSolenoid.set(false);
             baseBackLiftSolenoid.set(false);
-
-            baseStrafeAngleController.disable();
         }
 
         baseStrafeDeployed = state;
@@ -388,6 +283,7 @@ public class DriveBaseSystem extends Subsystem
 
     /**
      * This method is used to change between low and high gear ratios.
+     * High gear is push, low gear is pull
      *
      * @param state
      *            - state is true to switch to high gear, false to switch to low
@@ -397,10 +293,10 @@ public class DriveBaseSystem extends Subsystem
     {
         if (high)
         {
-            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kReverse);
+            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kForward);
         } else
         {
-            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kForward);
+            baseGearShiftSolenoid.set(DoubleSolenoid.Value.kReverse);
         }
         baseHighGear = high;
     }
@@ -435,5 +331,52 @@ public class DriveBaseSystem extends Subsystem
     {
 
     }
-
+    
+    public void setSlowMode(boolean mode)
+    {
+        slowMode = mode;
+    }
+    
+    public boolean getSlowMode()
+    {
+        return slowMode;
+    }
+    
+    public void driveTimeDistance(double inches)
+    {
+    	double driveSpeed = 0.1;
+    	int i = 0;
+    	int accelSteps = 10;
+    	int accelStepTime = 140; // in milliseconds
+    	long totalDriveTime = (long)(Math.abs(inches*1000)/Ports.INCHESPERSECOND);
+    	driveIMU.reset();
+        straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        try {
+        	for(i = 0; i < accelSteps; i++){
+        		Thread.sleep(accelStepTime/4);
+        		driveSpeed = (i+1) * 0.1;
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        		Thread.sleep(accelStepTime/4);
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        		Thread.sleep(accelStepTime/4);
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        		Thread.sleep(accelStepTime/4);
+        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        	}
+        	driveSpeed = 1.0;
+            Robot.driveBaseSystem.setLeftSpeed(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+            Robot.driveBaseSystem.setRightSpeed(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+        	Thread.sleep(totalDriveTime - accelSteps*accelStepTime);
+        }
+        catch(Exception e) {}
+        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setRightSpeed(0);
+        try {Thread.sleep(3000);}
+        catch(Exception e) {}
+    }
+    
+    public boolean isStrafeDeployed()
+    {
+        return baseStrafeDeployed;
+    }
 }

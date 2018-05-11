@@ -1,11 +1,2 @@
 Command,@param1,@param2,...
-Drive,14.175,,
-Turn,90,,
-Drive,16.3875,,
-Turn,90,,
-Drive,4.05,,
-Turn,-90,,
-Drive,0.7125,,
-Arm,3,,
-,,,
-Arm,0,,
+Drive,236,,

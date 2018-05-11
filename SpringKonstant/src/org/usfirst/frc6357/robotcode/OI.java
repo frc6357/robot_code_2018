@@ -14,8 +14,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- * This class is the glue that binds the controls on the physical operator
- * interface to the commands and command groups that allow control of the robot.
+ * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control
+ * of the robot.
  */
 public class OI
 {
@@ -54,11 +54,15 @@ public class OI
     private Button buttonIntakeIn;
     private Button buttonIntakeOut;
     private Button buttonIntakeSwing;
-    private Button buttonStrafeDeploy;
-    private Button buttonStrafeStow;
+    private Button buttonStrafe;
     private Button buttonLowGear;
     private Button buttonHighGear;
-
+    private Button buttonArmUp;
+    private Button buttonArmDown;
+    private Button buttonGripper;
+    private Button buttonGripper2;
+    private Button buttonSlow;
+    
     public OI()
     {
         // Instantiate the joystick devices.
@@ -66,28 +70,48 @@ public class OI
         joystickDriver = new FilteredJoystick(Ports.OIDriverJoystick);
 
         // Create all the buttons we will be using.
+        buttonArmUp = new JoystickButton(joystickOperator, Ports.OIOperatorArmUp);
+        buttonArmDown = new JoystickButton(joystickOperator, Ports.OIOperatorArmDown);
+        
+        // TODO: Add control to move the intake up or down during the endgame.
+        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeRotation);
+
+        buttonSlow = new JoystickButton(joystickDriver, Ports.OIDriverSlow);
+        
         buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
         buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
-        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeSwing);
 
-        buttonStrafeDeploy = new JoystickButton(joystickDriver, Ports.OIDriverStrafeDeploy);
-        buttonStrafeStow = new JoystickButton(joystickDriver, Ports.OIDriverStrafeStow);
+        buttonStrafe = new JoystickButton(joystickDriver, Ports.OIDriverStrafe);
 
         buttonLowGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
         buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
 
-        buttonStrafeDeploy.whenPressed(new StrafeDeploy());
-        buttonStrafeStow.whenPressed(new StrafeStow());
+        buttonGripper = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle);
+        buttonGripper2 = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle2);
+
+        // Assign functions to all Buttons
+        buttonArmUp.whenPressed(new ArmUp());
+        buttonArmDown.whenPressed(new ArmDown());
+       
+        buttonStrafe.whileHeld(new StrafeStow());
+        buttonStrafe.whenReleased(new StrafeDeploy());
 
         buttonLowGear.whenPressed(new GearShiftCommand(false));
         buttonHighGear.whenPressed(new GearShiftCommand(true));
-
-        buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
 
         buttonIntakeIn.whenPressed(new IntakeCommand(true, true));
         buttonIntakeIn.whenReleased(new IntakeCommand(false, true));
         buttonIntakeOut.whenPressed(new IntakeCommand(true, false));
         buttonIntakeOut.whenReleased(new IntakeCommand(false, false));
+        buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
+
+        buttonGripper.whileHeld(new OpenGripper());
+        buttonGripper.whenReleased(new CloseGripper());
+        buttonGripper2.whileHeld(new OpenGripper());
+        buttonGripper2.whenReleased(new CloseGripper());
+        
+        buttonSlow.whileHeld(new SetSlowMode(true));
+        buttonSlow.whenReleased(new SetSlowMode(false));
 
         // Set deadbands and response curves for various joystick axes.
         filterClimbDeadband = new FilterDeadband(0.1);
@@ -95,20 +119,18 @@ public class OI
 
         // SmartDashboard insertions for autonomous command chooser.
         SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
+        SmartDashboard.putData("Open Gripper", new OpenGripper());
     }
 
     /**
      *
-     * This function may be called to retrieve the current, possibly-filtered, value
-     * of a given joystick axis on the driver joystick device.
+     * This function may be called to retrieve the current, possibly-filtered, value of a given joystick axis on the driver joystick device.
      *
      * @param port
-     *            The axis number for the joystick being queried. This will come
-     *            from Ports.java. @ param invert If true, the returned joystick
-     * value will be inverted. If false, the unmodified joystick value is returned.
-     * @return returnType The value of the joystick axis. Note that this may be a
-     *         filtered value if we subclass the joystick to allow control of
-     *         deadbands or response curves.
+     *            The axis number for the joystick being queried. This will come from Ports.java. @ param invert If true, the returned
+     *            joystick value will be inverted. If false, the unmodified joystick value is returned.
+     * @return returnType The value of the joystick axis. Note that this may be a filtered value if we subclass the joystick to allow
+     *         control of deadbands or response curves.
      */
     public double getDriverJoystickValue(int port, boolean invert)
     {
@@ -123,16 +145,14 @@ public class OI
 
     /**
      *
-     * This function may be called to retrieve the current, possibly-filtered, value
-     * of a given joystick axis on the operator joystick device.
+     * This function may be called to retrieve the current, possibly-filtered, value of a given joystick axis on the operator joystick
+     * device.
      *
      * @param port
-     *            The axis number for the joystick being queried. This will come
-     *            from Ports.java. @ param invert If true, the returned joystick
-     * value will be inverted. If false, the unmodified joystick value is returned.
-     * @return returnType The value of the joystick axis. Note that this may be a
-     *         filtered value if we subclass the joystick to allow control of
-     *         deadbands or response curves.
+     *            The axis number for the joystick being queried. This will come from Ports.java. @ param invert If true, the returned
+     *            joystick value will be inverted. If false, the unmodified joystick value is returned.
+     * @return returnType The value of the joystick axis. Note that this may be a filtered value if we subclass the joystick to allow
+     *         control of deadbands or response curves.
      */
     public double getOperatorJoystickValue(int port, boolean invert)
     {

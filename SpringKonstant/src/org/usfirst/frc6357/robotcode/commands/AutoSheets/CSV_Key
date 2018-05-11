@@ -1,0 +1,74 @@
+CSV_Key
+
+Commands:
+Wait,Time(milliseconds -> 1000 per second)
+Drive,Dist(inches)
+Turn,Angle(Deg, clockwise is positive)
+Arm,Up/Down
+Wrist,Up/Down
+Box Push
+Grippers,Open/Close
+
+Quick reference:
+  START  |    END   | GOAL POS | BOX | FILE
+Anywhere |Test file | Anywhere |  N  | /home/lvuser/AutoSheets/Test.csv
+Anywhere |Auto-Line | Anywhere |  N  | /home/lvuser/AutoSheets/CSV1.csv
+Anywhere |Null-Zone | Anywhere |  N  | /home/lvuser/AutoSheets/CSV2.csv
+Anywhere |Near-Null | Anywhere |  N  | /home/lvuser/AutoSheets/CSV18.csv
+Left     |Switch    | Left     |  N  | /home/lvuser/AutoSheets/CSV3.csv
+Left     |Switch    | Right    |  N  | /home/lvuser/AutoSheets/CSV5.csv
+Right    |Switch    | Right    |  N  | /home/lvuser/AutoSheets/CSV3.csv
+Right    |Switch    | Left     |  N  | /home/lvuser/AutoSheets/CSV4.csv
+Left     |Scale     | Left     |  N  | /home/lvuser/AutoSheets/CSV6.csv
+Left     |Scale     | Right    |  N  | /home/lvuser/AutoSheets/CSV7.csv
+Right    |Scale     | Right    |  N  | /home/lvuser/AutoSheets/CSV8.csv
+Right    |Scale     | Left     |  N  | /home/lvuser/AutoSheets/CSV9.csv
+Anywhere |Test file | Anywhere |  Y  | /home/lvuser/AutoSheets/Test2.csv
+Left     |Switch    | Left     |  Y  | /home/lvuser/AutoSheets/CSV10.csv
+Left     |Switch    | Right    |  Y  | /home/lvuser/AutoSheets/CSV11.csv
+Right    |Switch    | Right    |  Y  | /home/lvuser/AutoSheets/CSV12.csv
+Right    |Switch    | Left     |  Y  | /home/lvuser/AutoSheets/CSV13.csv
+Left     |Scale     | Left     |  Y  | /home/lvuser/AutoSheets/CSV14.csv
+Left     |Scale     | Right    |  Y  | /home/lvuser/AutoSheets/CSV15.csv
+Right    |Scale     | Right    |  Y  | /home/lvuser/AutoSheets/CSV16.csv
+Right    |Scale     | Left     |  Y  | /home/lvuser/AutoSheets/CSV17.csv
+
+- Test: Should be a file to test driving, turning, lifting arm, dropping boxes, and other basics
+
+- Test2: Drive forward a short distance and attempt to pick up a box
+
+- CSV1: is a short drive forward just pass the base line
+
+- CSV2: drive straight up to the null zone if it is on our side
+
+- CSV3: Place on left switch, starting on left
+
+- CSV4: Place on left switch, starting on right
+
+- CSV5: Place on right switch, starting on left
+
+- CSV6: Place on left scale, starting on left
+
+- CSV7: Place on right scale, starting on left
+
+- CSV8: Place on right scale, starting on right (Possible duplicate of CSV6?)
+
+- CSV9: Place on left scale, starting on right
+
+- CSV10: Place on left switch, starting on left, then pick up a box
+
+- CSV11: Place on right switch, starting on left, then pick up a box
+
+- CSV12: Place on right switch, starting on right, then pick up a box
+
+- CSV13: Place on left switch, starting on right, then pick up a box
+
+- CSV14: Place on left scale, starting on left, then pick up a box
+
+- CSV15: Place on right scale, starting on left, then pick up a box
+
+- CSV16: Place on right scale, starting on right, then pick up a box
+
+- CSV17: Place on left scale, starting on right, then pick up a boxs
+
+- CSV18: Drive forward almost to the null zone, and if it is not on our side move to the other one
