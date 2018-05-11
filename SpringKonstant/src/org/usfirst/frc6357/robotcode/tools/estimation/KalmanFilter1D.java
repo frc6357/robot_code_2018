@@ -6,14 +6,14 @@ import org.ejml.simple.*;
 // Time in seconds
 // Distance in Meters
 // Velocity in Meters Per Second
-// Accelertion in Meters Per Second Per Second
+// Acceleration in Meters Per Second Per Second
 
 public class KalmanFilter1D {
 
     private SimpleMatrix F;     // The state transition matrix, 2x2
     private SimpleMatrix B;     // The input matrix
     private SimpleMatrix state; // The state matrix, 2x1
-    private SimpleMatrix P;     // The posteriori covariance matrix, 2xx
+    private SimpleMatrix P;     // The posteriori covariance matrix, 2x2
     private SimpleMatrix Q;     // The process noise covariance, 2x2
     private double S;           // The Innovation Covariance, scalar
     private SimpleMatrix K;     // The Kalman Gain, 2x1
@@ -47,7 +47,7 @@ public class KalmanFilter1D {
         // For position, this is a 2 element row vector [1, 0]
         H.set(0,0,1);
 
-        // I is a pre-allocated identity matrix for use earlier
+        // I is a pre-allocated identity matrix for use later
         I.set(0,0,1);
         I.set(1,1,1);
 
