@@ -56,29 +56,39 @@ public class TFMini
     private final int baudRate = 115200;	// The baud rate to configure the serial port
     private final int dataBits = 8;			// The number of data bits per transfer
     private final SerialPort.StopBits stopBits = SerialPort.StopBits.kOne;
-    private final SerialPort.Parity parity = SerialPort.Parity.kEven;
+    private final SerialPort.Parity parity = SerialPort.Parity.kNone;
+    private final SerialPort.Port port = SerialPort.Port.kOnboard; //Port used to plug in TFMini
     
     // This is a list of bytes for the initialization of the LiDAR
     private final byte[] config = {0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06};
     
     // Data bytes
-    private double distL;					// byte 3: lower 8bits of distance
-    private double distH;					// byte 4: higher 8bits of distance
-    private double strengthL;				// byte 5: lower 8bit of strength
-    private double strengthH; 				// byte 6: higher 8bit of strength
-    private double reservedBytes;			// byte 7: reserved bytes
-    private double signalQualityDegree;		// byte 8: original signal quality degree
+    private int distance;    //Distance being read
+    private int strength;    //Strength of signal
+    private int quality;     //Quality of signal
+    private int checksum;    // byte 9: checksum
     
     private boolean startRead;		// Boolean to start or stop reading values
+    private ReceivingState state;   // State of the packet receive
+    private byte[] packet = new byte[9];    // Buffer for one packet
+    private int count = 0;
     
     /**
      * Constructor, creates an instance of Serial Port class.
      * @param - SerialPort.Port enum, pick where it is plugged into
      */
-    public TFMini(SerialPort.Port port)
+    public TFMini()
     {
         sensor = new SerialPort(baudRate, port, dataBits, parity, stopBits);
+        state = ReceivingState.WAIT_START1;
         initilize();
+    }
+    
+    private enum ReceivingState
+    {
+        WAIT_START1,
+        WAIT_START2,
+        RECEIVING,
     }
     
     /**
@@ -102,65 +112,29 @@ public class TFMini
      * Returns the distance. By By multiplying distH by 256, the binary data is
      * shifted by 8 to the left. Now the lower 8-bit distance data, distL is added
      * resulting in 16-bit data of total distance.
-     * @return - the total distance
+     * @return - the total distance in centimeters
      */
-    public double getDistance()
+    public int getDistance()
     {
-    	return (((int) distH * 256) + ((int) distL));
+    	return distance;
     }
     
     /**
-     * Gets the distance lower byte as a double
-     * @return - distance lower byte
+     * Returns the strength of the signal
+     * @return strength
      */
-    public double getDistL()
+    public int getStrength()
     {
-    	return distL;
+        return strength;
     }
-    
-    /**
-     * Gets the distance higher byte as a double
-     * @return - distance higher byte
-     */
-    public double getDistH()
-    {
-    	return distH;
-    }
-    
-    /**
-     * Gets the strength higher byte as a double
-     * @return - strength higher byte
-     */
-    public double getStrengthH()
-    {
-    	return strengthH;
-    }
-    
-    /**
-     * Gets the strength lower byte as a double
-     * @return - strength lower byte
-     */
-    public double getStrengthL()
-    {
-    	return strengthL;
-    }
-    
-    /**
-     * Gets the reserved byte as a double
-     * @return - reserved byte
-     */
-    public double getReservedBytes()
-    {
-    	return reservedBytes;
-    }
-    
+        
     /**
      * Gets the signal quality degree byte as a double
      * @return - signal quality degree byte
      */
-    public double getSignalQualityDegree()
+    public int getSignalQualityDegree()
     {
-    	return signalQualityDegree;
+    	return quality;
     }
     
     /**
@@ -171,7 +145,8 @@ public class TFMini
     private void initilize()
     {
     	sensor.write(config, config.length);
-    	sensor.setTimeout(1/100);				// Sensor is 100Hz, so timeout is .001 seconds
+    	sensor.setReadBufferSize(PACKET_LENGTH);
+    	sensor.setTimeout(4/100);
     }
     
     /**
@@ -181,15 +156,6 @@ public class TFMini
     private int amountOfBytes()
     {
         return sensor.getBytesReceived();
-    }
-    
-    /**
-     * Read raw bytes out of the buffer
-     * @return An array of the read bytes
-     */
-    private byte[] readBytes()
-    {
-        return sensor.read(PACKET_LENGTH);
     }
     
     /**
@@ -204,23 +170,63 @@ public class TFMini
             {
                while(startRead)
                {
-            	   if(amountOfBytes() >= 9)
-            	   {
-            		   byte bytes[] = readBytes();
-            		   if(isValid(bytes))
-            		   {
-            			   distL = bytes[2];
-            			   distH = bytes[3];
-            			   strengthL = bytes[4];
-            			   strengthH = bytes[5];
-            			   reservedBytes = bytes[6];
-            			   signalQualityDegree = bytes[7];
-            		   }
-            	   }
+                   byte bytes[] = sensor.read(1);
+                   if(bytes.length > 0)
+                   {
+                       switch(state)
+                       {
+                           case WAIT_START1:
+                               if(bytes[0] == 0x59)
+                               {
+                                   count = 0;
+                                   checksum = bytes[0];
+                                   packet[0] = bytes[0];
+                                   state = ReceivingState.WAIT_START2;
+                               }
+                               break;
+                           case WAIT_START2:
+                               if(bytes[0] == 0x59)
+                               {
+                                   count++;
+                                   checksum += bytes[0];
+                                   packet[1] = bytes[0];
+                                   state = ReceivingState.RECEIVING;
+                               }
+                               else
+                               {
+                                   state = ReceivingState.WAIT_START1;
+                               }
+                               break;
+                           case RECEIVING:
+                               count++;
+                               packet[count] = bytes[0];
+                               if(count == PACKET_LENGTH - 1)
+                               {
+                                   // Reached the end of the packet, check checksum
+                                   if(checksum == bytes[0])
+                                   {
+                                       parsePacket();
+                                   }
+                                   state = ReceivingState.WAIT_START1;
+                               }
+                               else
+                               {
+                                   checksum += bytes[0];
+                               }
+                               break;
+                       }
+                   }
                }
             }
             catch(Exception e) {}
         }).start();
+    }
+    
+    public void parsePacket()
+    {
+        distance = (((int) packet[3] * 256) + ((int) packet[2]));
+        strength = (((int) packet[5] * 256) + ((int) packet[4]));
+        quality = (int)packet[7];
     }
     
     /**

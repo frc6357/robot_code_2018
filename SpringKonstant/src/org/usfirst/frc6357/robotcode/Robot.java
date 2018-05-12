@@ -7,6 +7,7 @@ import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
 import org.usfirst.frc6357.robotcode.subsystems.SensorSystem;
+import org.usfirst.frc6357.robotcode.subsystems.TFMini;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
 import edu.wpi.first.wpilibj.CameraServer;
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot
     //public static LEDs lights;
        
     public static OI oi;
+    public static TFMini distanceLIDAR;
     int counter = 0;
 
     /**
@@ -121,6 +123,7 @@ public class Robot extends TimedRobot
         driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false); // Lift Strafe
         driveBaseSystem.setHighGear(true);
+        distanceLIDAR.start();
 
 //        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
         AutoPositionCheck.getGameData();
@@ -181,6 +184,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousPeriodic()
     {
+        SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
         Scheduler.getInstance().run();
     }
 
@@ -198,6 +202,7 @@ public class Robot extends TimedRobot
 
         driveBaseSystem.deployStrafe(true);
         Robot.driveBaseSystem.setHighGear(false);
+        distanceLIDAR.start();
     }
 
     /**
@@ -232,6 +237,7 @@ public class Robot extends TimedRobot
             SmartDashboard.putNumber("Right Encoder Dist", driveBaseSystem.rightEncoder.getDistance());
             SmartDashboard.putNumber("Left Encoder Dist", driveBaseSystem.leftEncoder.getDistance());
             SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
+            SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
             SmartDashboard.putNumber("IMU Angle", robotAngle);
         }
         counter++;
