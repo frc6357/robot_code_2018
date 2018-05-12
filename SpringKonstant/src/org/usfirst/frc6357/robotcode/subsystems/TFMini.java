@@ -50,6 +50,7 @@ public class TFMini
 {
     private final SerialPort sensor;		// WPI serial port class
     
+    // Serial port information
     private final int PACKET_LENGTH = 9;	// Length of the Packets/Data that the sensor sends back
     private final byte startByte = 0x59;	// This byte is the start of a UART message, also == to the double 89 (byte 1, and 2)
     private final int baudRate = 115200;	// The baud rate to configure the serial port
@@ -59,6 +60,8 @@ public class TFMini
     
     // This is a list of bytes for the initialization of the LiDAR
     private final byte[] config = {0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06};
+    
+    // Data bytes
     private double distL;					// byte 3: lower 8bits of distance
     private double distH;					// byte 4: higher 8bits of distance
     private double strengthL;				// byte 5: lower 8bit of strength
