@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.8.0_131"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_141]"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/cscore.jar" sourcepath="wpilib/java/current/lib/cscore-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/ntcore.jar" sourcepath="wpilib/java/current/lib/ntcore-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/java/current/lib/opencv.jar" sourcepath="wpilib/java/current/lib/opencv-sources.jar"/>
@@ -23,12 +23,12 @@
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/jna-platform-4.1.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/junit-4.12.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/ejml-simple-0.34.jar" sourcepath="wpilib/user/java/lib/ejml-simple-0.34-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="wpilib/user/java/lib/ejml-core-0.34.jar" sourcepath="wpilib/user/java/lib/ejml-core-0.34-sources.jar"/>
 	<classpathentry exported="true" kind="var" path="wpilib" sourcepath="wpilib.sources"/>
 	<classpathentry exported="true" kind="var" path="networktables" sourcepath="networktables.sources"/>
 	<classpathentry exported="true" kind="var" path="opencv" sourcepath="opencv.sources"/>
 	<classpathentry exported="true" kind="var" path="cscore" sourcepath="cscore.sources"/>
 	<classpathentry exported="true" kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
-	<classpathentry kind="lib" path="/home/hoo761/wpilib/user/java/lib/mindsensors.jar"/>
-	<classpathentry kind="lib" path="/home/hoo761/wpilib/user/java/lib/mindsensors-javadoc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
