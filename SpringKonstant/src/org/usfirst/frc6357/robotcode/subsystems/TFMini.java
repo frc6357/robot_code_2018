@@ -74,7 +74,7 @@ public class TFMini
      */
     public TFMini()
     {
-        sensor = new SerialPort(baudRate, SerialPort.Port.kMXP, dataBits, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
+        sensor = new SerialPort(baudRate, SerialPort.Port.kMXP, dataBits, SerialPort.Parity.kSpace, SerialPort.StopBits.kOne);
         state = ReceivingState.WAIT_START1;
         initialize();
     }
