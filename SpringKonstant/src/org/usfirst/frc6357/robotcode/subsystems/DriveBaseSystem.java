@@ -123,7 +123,7 @@ public class DriveBaseSystem extends Subsystem
 
         // Slow Mode
         slowMode = false;
-        
+
         // Sets Defaults
         setEncoderDistancePerPulse();
         leftEncoder.reset();
@@ -185,7 +185,7 @@ public class DriveBaseSystem extends Subsystem
 
         for(int i=0; i<60; i++)
         {
-        	turnSpeed = Math.min(Math.abs(targetAngle - currentAngle)/25, 1.0);
+            turnSpeed = Math.min(Math.abs(targetAngle - currentAngle)/25, 1.0);
             if(angle > 0)    //If turning right
             {
                 setRightSpeed(-.5*turnSpeed);
@@ -206,12 +206,11 @@ public class DriveBaseSystem extends Subsystem
         rightEncoder.reset();
         leftEncoder.reset();
     }
-    
+
     public void straightDrive(double speed){
-    	double angle = driveIMU.updatePeriodic();
+        double angle = driveIMU.updatePeriodic();
         Robot.driveBaseSystem.setLeftSpeed(speed - 0.007 * angle);
         Robot.driveBaseSystem.setRightSpeed(speed + 0.007 * angle);
-    	
     }
 
     public double getTurnDistance(double angle) // Turns angle to the distance
@@ -245,7 +244,7 @@ public class DriveBaseSystem extends Subsystem
             baseFrontLiftSolenoid.set(true);
             baseBackLiftSolenoid.set(true);
 
-        } 
+        }
         else
         {
             baseFrontLiftSolenoid.set(false);
@@ -331,42 +330,42 @@ public class DriveBaseSystem extends Subsystem
     {
 
     }
-    
+
     public void setSlowMode(boolean mode)
     {
         slowMode = mode;
     }
-    
+
     public boolean getSlowMode()
     {
         return slowMode;
     }
-    
+
     public void driveTimeDistance(double inches)
     {
-    	double driveSpeed = 0.1;
-    	int i = 0;
-    	int accelSteps = 10;
-    	int accelStepTime = 140; // in milliseconds
-    	long totalDriveTime = (long)(Math.abs(inches*1000)/Ports.INCHESPERSECOND);
-    	driveIMU.reset();
+        double driveSpeed = 0.1;
+        int i = 0;
+        int accelSteps = 10;
+        int accelStepTime = 140; // in milliseconds
+        long totalDriveTime = (long)(Math.abs(inches*1000)/Ports.MAXINCHESPERSECOND);
+        driveIMU.reset();
         straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
         try {
-        	for(i = 0; i < accelSteps; i++){
-        		Thread.sleep(accelStepTime/4);
-        		driveSpeed = (i+1) * 0.1;
-        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
-        		Thread.sleep(accelStepTime/4);
-        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
-        		Thread.sleep(accelStepTime/4);
-        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
-        		Thread.sleep(accelStepTime/4);
-        		straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
-        	}
-        	driveSpeed = 1.0;
+            for(i = 0; i < accelSteps; i++){
+                Thread.sleep(accelStepTime/4);
+                driveSpeed = (i+1) * 0.1;
+                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+                Thread.sleep(accelStepTime/4);
+                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+                Thread.sleep(accelStepTime/4);
+                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+                Thread.sleep(accelStepTime/4);
+                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+            }
+            driveSpeed = 1.0;
             Robot.driveBaseSystem.setLeftSpeed(inches > 0 ? driveSpeed : -1.0*driveSpeed);
             Robot.driveBaseSystem.setRightSpeed(inches > 0 ? driveSpeed : -1.0*driveSpeed);
-        	Thread.sleep(totalDriveTime - accelSteps*accelStepTime);
+            Thread.sleep(totalDriveTime - accelSteps*accelStepTime);
         }
         catch(Exception e) {}
         Robot.driveBaseSystem.setLeftSpeed(0);
@@ -374,7 +373,7 @@ public class DriveBaseSystem extends Subsystem
         try {Thread.sleep(3000);}
         catch(Exception e) {}
     }
-    
+
     public boolean isStrafeDeployed()
     {
         return baseStrafeDeployed;

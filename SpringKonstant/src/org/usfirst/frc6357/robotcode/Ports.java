@@ -25,7 +25,7 @@ public class Ports
     // **********************
     public static final int pcm1                        = 1; // CAN ID 1
     public static final int pcm2                        = 2; // CAN ID 2
-    
+
     public static final int CANLeds                     = 39;// CAN ID 39
 
     // *****************
@@ -63,7 +63,7 @@ public class Ports
 
     public static final int DriveRightEncoderA          = 0; // DIO input 0
     public static final int DriveRightEncoderB          = 1; // DIO input 1
-    
+
     public static final int leftUltrasonicInput         = -1; //UNKOWN input, DIO Channel
     public static final int leftUltrasonicOutput        = -1; //UNKOWN output
     public static final int rightUltrasonicInput        = -1; //UNKOWN input
@@ -101,7 +101,7 @@ public class Ports
     public static final int ArmLimitTop                 = 8; // DIO input 8
     public static final int ArmLimitBottom              = 9; // DIO input 9
 
-   public static final double INCHESPERSECOND           = 130; // Inches the robot travels per second at full speed
+   public static final double MAXINCHESPERSECOND        = 130; // Inches the robot travels per second at full speed
 
     //
     // Driver's and operator's OI channel assignments
