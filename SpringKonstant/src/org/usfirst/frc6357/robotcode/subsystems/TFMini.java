@@ -44,7 +44,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  * @author hoo761
  */
 
-public class TFMini
+public class TFMini extends Thread
 {
     private final SerialPort sensor;        // WPI serial port class
 
@@ -63,20 +63,29 @@ public class TFMini
     private int quality;     //Quality of signal
     private int checksum;    // byte 9: checksum
 
-    private boolean startRead;              // Boolean to start or stop reading values
+    private boolean startRead = false;              // Boolean to start or stop reading values
     public ReceivingState state;            // State of the packet receive
     public byte[] packet = new byte[9];     // Buffer for one packet
     private int count = 0;
+
+    private static TFMini m_instance = null;
 
     /**
      * Constructor, creates an instance of Serial Port class.
      * @param - SerialPort.Port enum, pick where it is plugged into
      */
-    public TFMini()
+    protected TFMini()
     {
         sensor = new SerialPort(baudRate, SerialPort.Port.kMXP, dataBits, SerialPort.Parity.kSpace, SerialPort.StopBits.kOne);
         state = ReceivingState.WAIT_START1;
         initialize();
+    }
+
+    public static TFMini getInstance(){
+        if(m_instance == null) {
+            m_instance = new TFMini();
+        }
+        return m_instance;
     }
 
     private enum ReceivingState
@@ -84,15 +93,6 @@ public class TFMini
         WAIT_START1,
         WAIT_START2,
         RECEIVING,
-    }
-
-    /**
-     * Starts the reading of numbers from the LiDAR
-     */
-    public void start()
-    {
-        startRead = true;
-        runLiDAR();
     }
 
     /**
@@ -111,7 +111,11 @@ public class TFMini
      */
     public int getDistance()
     {
-        return distance;
+        int retval;
+        synchronized(this){
+            retval = distance;
+        }
+        return retval;
     }
 
     /**
@@ -120,7 +124,11 @@ public class TFMini
      */
     public int getStrength()
     {
-        return strength;
+        int retval;
+        synchronized(this){
+            retval = strength;
+        }
+        return retval;
     }
 
     /**
@@ -129,7 +137,11 @@ public class TFMini
      */
     public int getSignalQualityDegree()
     {
-        return quality;
+        int retval;
+        synchronized(this){
+            retval = quality;
+        }
+        return retval;
     }
 
     /**
@@ -148,91 +160,80 @@ public class TFMini
      * Runs a loop in a Thread that will read the 9 byte packets and set each
      * byte to the correct piece of data for use if the data is valid.
      */
-    private void runLiDAR()
-    {
-        new Thread(() ->
-        {
-            try
-            {
-               while(startRead)
-               {
-                   byte bytes[] = sensor.read(1);
-                   if(bytes.length > 0)
-                   {
-                       switch(state)
-                       {
-                           case WAIT_START1:
-                               if(bytes[0] == startByte)
-                               {
-                                   // We've read our first 0x59 (packet start marker) so set things up just in case
-                                   // this really is the start of a packet. Clear our byte counter, initialize the
-                                   // checksum and store the first byte.
-                                   count = 0;
-                                   checksum = bytes[0];
-                                   packet[count] = bytes[0];
+    private void run() {
+        startRead = true;
+        try {
+            while (startRead) {
+                byte bytes[] = sensor.read(1);
+                if (bytes.length > 0) {
+                    switch (state) {
+                        case WAIT_START1:
+                            if (bytes[0] == startByte) {
+                                // We've read our first 0x59 (packet start marker) so set things up just in case
+                                // this really is the start of a packet. Clear our byte counter, initialize the
+                                // checksum and store the first byte.
+                                count = 0;
+                                checksum = bytes[0];
+                                packet[count] = bytes[0];
 
-                                   // Start looking for the next character which we hope is another 0x59.
-                                   state = ReceivingState.WAIT_START2;
-                               }
-                               break;
-                           case WAIT_START2:
-                               if(bytes[0] == startByte)
-                               {
-                                   // We received a second 0x59 so this really looks like a new packet.
-                                   // Store the byte, update the checksum and byte counter then start reading
-                                   // bytes until we reach the end of the packet.
-                                   count++;
-                                   checksum += bytes[0];
-                                   packet[count] = bytes[0];
-                                   state = ReceivingState.RECEIVING;
-                               }
-                               else
-                               {
-                                   // This wasn't an 0x59 so we are not at the start of a packet. Go back and
-                                   // start looking for a new packet header.
-                                   state = ReceivingState.WAIT_START1;
-                               }
-                               break;
-                           case RECEIVING:
-                               // Save this byte in our packet buffer.
-                               count++;
-                               packet[count] = bytes[0];
+                                // Start looking for the next character which we hope is another 0x59.
+                                state = ReceivingState.WAIT_START2;
+                            }
+                            break;
+                        case WAIT_START2:
+                            if (bytes[0] == startByte) {
+                                // We received a second 0x59 so this really looks like a new packet.
+                                // Store the byte, update the checksum and byte counter then start reading
+                                // bytes until we reach the end of the packet.
+                                count++;
+                                checksum += bytes[0];
+                                packet[count] = bytes[0];
+                                state = ReceivingState.RECEIVING;
+                            } else {
+                                // This wasn't an 0x59 so we are not at the start of a packet. Go back and
+                                // start looking for a new packet header.
+                                state = ReceivingState.WAIT_START1;
+                            }
+                            break;
+                        case RECEIVING:
+                            // Save this byte in our packet buffer.
+                            count++;
+                            packet[count] = bytes[0];
 
-                               // Have we read a whole packet of data?
-                               if(count == PACKET_LENGTH - 1)
-                               {
-                                   // Reached the end of the packet, so the byte we just received is the
-                                   // checksum. Make sure it agrees with the checksum we've been accumulating
-                                   // as we read packet bytes.
-                                   if(checksum == bytes[0])
-                                   {
-                                       // Checksum is good so extract the distance, strength and quality info from
-                                       // the received packet.
-                                       parsePacket();
-                                   }
+                            // Have we read a whole packet of data?
+                            if (count == PACKET_LENGTH - 1) {
+                                // Reached the end of the packet, so the byte we just received is the
+                                // checksum. Make sure it agrees with the checksum we've been accumulating
+                                // as we read packet bytes.
+                                if (checksum == bytes[0]) {
+                                    // Checksum is good so extract the distance, strength and quality info from
+                                    // the received packet.
+                                    parsePacket();
+                                }
 
-                                   // Start looking for the start of the next packet.
-                                   state = ReceivingState.WAIT_START1;
-                               }
-                               else
-                               {
-                                   // We're not at the end of the packet so just update our checksum
-                                   // accumulator and keep receiving.
-                                   checksum += bytes[0];
-                               }
-                               break;
-                       }
-                   }
-               }
+                                // Start looking for the start of the next packet.
+                                state = ReceivingState.WAIT_START1;
+                            } else {
+                                // We're not at the end of the packet so just update our checksum
+                                // accumulator and keep receiving.
+                                checksum += bytes[0];
+                            }
+                            break;
+                    }
+                }
+                Thread.sleep(10);
             }
-            catch(Exception e) {}
-        }).start();
+        } catch (Exception e) {
+        }
+
     }
 
     public void parsePacket()
     {
-        distance = (((int) packet[3] * 256) + ((int) packet[2]));
-        strength = (((int) packet[5] * 256) + ((int) packet[4]));
-        quality = (int)packet[7];
+        synchronized(this) {
+            distance = (((int) packet[3] * 256) + ((int) packet[2]));
+            strength = (((int) packet[5] * 256) + ((int) packet[4]));
+            quality = (int) packet[7];
+        }
     }
 }
