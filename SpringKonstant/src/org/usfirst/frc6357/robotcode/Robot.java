@@ -73,7 +73,9 @@ public class Robot extends TimedRobot
         chooserBox.addDefault("Don't pick up a box", "N");
         chooserBox.addObject("Pick up a box", "Y");
         chooserBox.addObject("Test pickup", "T");
-        
+
+        distanceLIDAR = TFMini.getInstance();
+
         CameraServer.getInstance().startAutomaticCapture();        
     }
 
@@ -202,7 +204,6 @@ public class Robot extends TimedRobot
 
         driveBaseSystem.deployStrafe(true);
         Robot.driveBaseSystem.setHighGear(false);
-        distanceLIDAR.start();
     }
 
     /**
