@@ -76,13 +76,14 @@ public class TFMini extends Thread
      */
     protected TFMini()
     {
-        sensor = new SerialPort(baudRate, SerialPort.Port.kMXP, dataBits, SerialPort.Parity.kSpace, SerialPort.StopBits.kOne);
+        sensor = new SerialPort(baudRate, SerialPort.Port.kMXP, dataBits, SerialPort.Parity.kNone, SerialPort.StopBits.kOne);
         state = ReceivingState.WAIT_START1;
         initialize();
     }
 
     public static TFMini getInstance(){
-        if(m_instance == null) {
+        if(m_instance == null) 
+        {
             m_instance = new TFMini();
         }
         return m_instance;
@@ -112,7 +113,8 @@ public class TFMini extends Thread
     public int getDistance()
     {
         int retval;
-        synchronized(this){
+        synchronized(this)
+        {
             retval = distance;
         }
         return retval;
@@ -125,7 +127,8 @@ public class TFMini extends Thread
     public int getStrength()
     {
         int retval;
-        synchronized(this){
+        synchronized(this)
+        {
             retval = strength;
         }
         return retval;
@@ -138,7 +141,8 @@ public class TFMini extends Thread
     public int getSignalQualityDegree()
     {
         int retval;
-        synchronized(this){
+        synchronized(this)
+        {
             retval = quality;
         }
         return retval;
@@ -160,15 +164,20 @@ public class TFMini extends Thread
      * Runs a loop in a Thread that will read the 9 byte packets and set each
      * byte to the correct piece of data for use if the data is valid.
      */
-    private void run() {
+    private void run() 
+    {
         startRead = true;
-        try {
-            while (startRead) {
+        try 
+        {
+            while (startRead) 
+            {
                 byte bytes[] = sensor.read(1);
                 if (bytes.length > 0) {
-                    switch (state) {
+                    switch (state) 
+                    {
                         case WAIT_START1:
-                            if (bytes[0] == startByte) {
+                            if (bytes[0] == startByte) 
+                            {
                                 // We've read our first 0x59 (packet start marker) so set things up just in case
                                 // this really is the start of a packet. Clear our byte counter, initialize the
                                 // checksum and store the first byte.
@@ -181,7 +190,8 @@ public class TFMini extends Thread
                             }
                             break;
                         case WAIT_START2:
-                            if (bytes[0] == startByte) {
+                            if (bytes[0] == startByte) 
+                            {
                                 // We received a second 0x59 so this really looks like a new packet.
                                 // Store the byte, update the checksum and byte counter then start reading
                                 // bytes until we reach the end of the packet.
@@ -189,7 +199,9 @@ public class TFMini extends Thread
                                 checksum += bytes[0];
                                 packet[count] = bytes[0];
                                 state = ReceivingState.RECEIVING;
-                            } else {
+                            } 
+                            else 
+                            {
                                 // This wasn't an 0x59 so we are not at the start of a packet. Go back and
                                 // start looking for a new packet header.
                                 state = ReceivingState.WAIT_START1;
@@ -201,11 +213,13 @@ public class TFMini extends Thread
                             packet[count] = bytes[0];
 
                             // Have we read a whole packet of data?
-                            if (count == PACKET_LENGTH - 1) {
+                            if (count == PACKET_LENGTH - 1) 
+                            {
                                 // Reached the end of the packet, so the byte we just received is the
                                 // checksum. Make sure it agrees with the checksum we've been accumulating
                                 // as we read packet bytes.
-                                if (checksum == bytes[0]) {
+                                if (checksum == bytes[0]) 
+                                {
                                     // Checksum is good so extract the distance, strength and quality info from
                                     // the received packet.
                                     parsePacket();
@@ -213,7 +227,9 @@ public class TFMini extends Thread
 
                                 // Start looking for the start of the next packet.
                                 state = ReceivingState.WAIT_START1;
-                            } else {
+                            } 
+                            else 
+                            {
                                 // We're not at the end of the packet so just update our checksum
                                 // accumulator and keep receiving.
                                 checksum += bytes[0];
@@ -223,14 +239,14 @@ public class TFMini extends Thread
                 }
                 Thread.sleep(10);
             }
-        } catch (Exception e) {
-        }
-
+        } 
+        catch (Exception e) {}
     }
 
     public void parsePacket()
     {
-        synchronized(this) {
+        synchronized(this) 
+        {
             distance = (((int) packet[3] * 256) + ((int) packet[2]));
             strength = (((int) packet[5] * 256) + ((int) packet[4]));
             quality = (int) packet[7];
