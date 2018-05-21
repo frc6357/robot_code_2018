@@ -26,9 +26,8 @@ public class Robot extends TimedRobot
 {
     Command autonomousCommand;
     public static SendableChooser<String> chooserStart = new SendableChooser<>(); // Allows the user to pick the starting point
-    public static SendableChooser<String> chooserEnd = new SendableChooser<>(); // Allows the user to pick the ending point
-    public static SendableChooser<String> chooserBox = new SendableChooser<>(); // Allows the user to choose to attempt to pick up a box
-
+    public static SendableChooser<String> chooserOverride = new SendableChooser<>();
+    
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
   //  public static SensorSystem sensorSystem;
@@ -37,7 +36,7 @@ public class Robot extends TimedRobot
     //public static LEDs lights;
        
     public static OI oi;
-    public static TFMini distanceLIDAR;
+//    public static TFMini distanceLIDAR;
     int counter = 0;
 
     /**
@@ -63,18 +62,15 @@ public class Robot extends TimedRobot
         // It is VITAL TO NOTE that if the user picks an illegal combination of choices then the program automatically chooses to cross the auto-line
         chooserStart.addDefault("Left", "L");
         chooserStart.addObject("Right", "R");
-        chooserStart.addObject("TEST", "T");
-
-        chooserEnd.addDefault("Auto Line", "Auto");
-        chooserEnd.addObject("Null Zone", "Null");
-        chooserEnd.addObject("Switch", "Switch");
-        chooserEnd.addObject("Scale", "Scale");
         
-        chooserBox.addDefault("Don't pick up a box", "N");
-        chooserBox.addObject("Pick up a box", "Y");
-        chooserBox.addObject("Test pickup", "T");
+        chooserOverride.addDefault("No Override (Scale then switch)", "N");
+        chooserOverride.addObject("Flipped (Switch then scale)", "F");
+        chooserOverride.addObject("Switch Only, then drive", "SO");
+        chooserOverride.addObject("Scale only, then drive", "SCO");
+        chooserOverride.addObject("Drive Straight", "DS");
 
-        distanceLIDAR = TFMini.getInstance();
+//        distanceLIDAR = TFMini.getInstance();
+//        distanceLIDAR.start();
 
         CameraServer.getInstance().startAutomaticCapture();        
     }
@@ -95,8 +91,6 @@ public class Robot extends TimedRobot
         Robot.driveBaseSystem.setHighGear(false);
         
         SmartDashboard.putData("Start Chooser", chooserStart);
-        SmartDashboard.putData("End Chooser", chooserEnd);
-        SmartDashboard.putData("Box Option", chooserBox);
         
     }
 
@@ -109,10 +103,12 @@ public class Robot extends TimedRobot
         Scheduler.getInstance().run();
         
         driveBaseSystem.setHighGear(false);
-        
+      
+        //System.out.print("LiDAR: ");
+        //System.out.println( distanceLIDAR.getDistance());
+//        SmartDashboard.putNumber("LiDAR", distanceLIDAR.getDistance());
         SmartDashboard.putData("Start Chooser", chooserStart);
-        SmartDashboard.putData("End Chooser", chooserEnd);
-        SmartDashboard.putData("Box Option", chooserBox);
+        SmartDashboard.putData("Priority Chooser", chooserOverride);
     }
     
     /**
@@ -125,59 +121,15 @@ public class Robot extends TimedRobot
         driveBaseSystem.rightEncoder.reset();
         driveBaseSystem.deployStrafe(false); // Lift Strafe
         driveBaseSystem.setHighGear(true);
-        distanceLIDAR.start();
 
 //        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
+//        autonomousCommand = new AutonomousCommand(10000); // New autoplan; wait 10 seconds, drive straight
         AutoPositionCheck.getGameData();
         
-        autonomousCommand = new AutonomousCommand(chooserStart.getSelected());
+        autonomousCommand = new AutonomousCommand(chooserStart.getSelected(), chooserOverride.getSelected());
 
         // schedule the autonomous command (example)
         if (autonomousCommand != null) autonomousCommand.start();
-    }
-
-    /**
-     * Method which parses through the various choosers and figures out which auto-plan to use Should allow the user to have a simple way to
-     * select from lots of plans Deprecated due to CSV files not currently working.
-     *
-     * @return the String which represents the name of the file to parse
-     */
-    private String getSelectedFile()
-    {
-        AutoPositionCheck.getGameData();
-        String start = chooserStart.getSelected(), end = chooserEnd.getSelected(), box = chooserBox.getSelected();
-        String scale = AutoPositionCheck.getScale(), allySwitch = AutoPositionCheck.getAllySwitch();
-        
-        if(start.equals("T"))
-            return "/home/lvuser/AutoSheets/Test.csv";
-        if(box.equals("T"))
-            return "/home/lvuser/AutoSheets/Test2.csv";
-        if(end.equals("Auto"))
-            return "/home/lvuser/AutoSheets/CSV1.csv";
-        if(end.equals("Null"))
-            return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV2.csv" : "/home/lvuser/AutoSheets/CSV18.csv";
-        
-        switch(start + end + box)
-        {
-            case "LSwitchN":
-                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV3.csv" : "/home/lvuser/AutoSheets/CSV5.csv";
-            case "RSwitchN":
-                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV3.csv" : "/home/lvuser/AutoSheets/CSV4.csv";
-            case "LScaleN":
-                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV6.csv" : "/home/lvuser/AutoSheets/CSV7.csv";
-            case "RScaleN":
-                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV8.csv" : "/home/lvuser/AutoSheets/CSV9.csv";
-            case "LSwitchY":
-                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV10.csv" : "/home/lvuser/AutoSheets/CSV11.csv";
-            case "RSwitchY":
-                return allySwitch.equals(start) ? "/home/lvuser/AutoSheets/CSV12.csv" : "/home/lvuser/AutoSheets/CSV13.csv";
-            case "LScaleY":
-                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV14.csv" : "/home/lvuser/AutoSheets/CSV15.csv";
-            case "RScaleY":
-                return scale.equals(start) ? "/home/lvuser/AutoSheets/CSV16.csv" : "/home/lvuser/AutoSheets/CSV17.csv";
-        }
-        
-        return "/home/lvuser/AutoSheets/CSV1.csv";
     }
 
     /**
@@ -186,7 +138,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousPeriodic()
     {
-        SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
+//        SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
         Scheduler.getInstance().run();
     }
 
@@ -204,6 +156,7 @@ public class Robot extends TimedRobot
 
         driveBaseSystem.deployStrafe(true);
         Robot.driveBaseSystem.setHighGear(false);
+//        distanceLIDAR.stopLidar();
     }
 
     /**
@@ -238,7 +191,7 @@ public class Robot extends TimedRobot
             SmartDashboard.putNumber("Right Encoder Dist", driveBaseSystem.rightEncoder.getDistance());
             SmartDashboard.putNumber("Left Encoder Dist", driveBaseSystem.leftEncoder.getDistance());
             SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
-            SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
+//            SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
             SmartDashboard.putNumber("IMU Angle", robotAngle);
         }
         counter++;

@@ -6,6 +6,8 @@ import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -183,7 +185,7 @@ public class DriveBaseSystem extends Subsystem
         if(targetAngle < 0) targetAngle += 360;
         if(targetAngle > 360) targetAngle -= 360;
 
-        for(int i=0; i<60; i++)
+        for(int i=0; i<70; i++)
         {
             turnSpeed = Math.min(Math.abs(targetAngle - currentAngle)/25, 1.0);
             if(angle > 0)    //If turning right
@@ -340,6 +342,43 @@ public class DriveBaseSystem extends Subsystem
     {
         return slowMode;
     }
+    
+//    public void driveLIDARDistance(double inches)
+//    {
+//        double driveSpeed = 0.1;
+//        int i = 0;
+//        int accelSteps = 10;
+//        int accelStepTime = 140; // in milliseconds
+//        long totalDriveTime = (long)(Math.abs(inches*1000)/Ports.MAXINCHESPERSECOND);
+//        driveIMU.reset();
+//        ((VictorSPX)baseFrontRightMaster).setNeutralMode(NeutralMode.Brake);
+//        ((VictorSPX)baseFrontLeftMaster).setNeutralMode(NeutralMode.Brake);
+//        straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+//        try {
+//            for(i = 0; i < accelSteps; i++){
+//                Thread.sleep(accelStepTime/4);
+//                driveSpeed = (i+1) * 0.1;
+//                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+//                Thread.sleep(accelStepTime/4);
+//                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+//                Thread.sleep(accelStepTime/4);
+//                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+//                Thread.sleep(accelStepTime/4);
+//                straightDrive(inches > 0 ? driveSpeed : -1.0*driveSpeed);
+//            }
+//            driveSpeed = 1.0;
+//            double error = inches - Robot.distanceLIDAR.getDistance()/2.54;
+//            for(i=0; i<40 || error<3; i++)
+//            {
+//                error = inches - Robot.distanceLIDAR.getDistance()/2.54;
+//                straightDrive(error*0.02);
+//                Thread.sleep(50);
+//            }
+//        }
+//        catch(Exception e) {}
+//        setLeftSpeed(0);
+//        setRightSpeed(0);
+//    }
 
     public void driveTimeDistance(double inches)
     {

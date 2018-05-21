@@ -1,6 +1,7 @@
 package org.usfirst.frc6357.robotcode.subsystems;
 
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.SerialPort.WriteBufferMode;
 
 /**
  * This is a handler class for the TFMini LiDAR sensor for the FRC WPIlib
@@ -63,7 +64,7 @@ public class TFMini extends Thread
     private int quality;     //Quality of signal
     private int checksum;    // byte 9: checksum
 
-    private boolean startRead = false;              // Boolean to start or stop reading values
+    private boolean startRead = true;              // Boolean to start or stop reading values
     public ReceivingState state;            // State of the packet receive
     public byte[] packet = new byte[9];     // Buffer for one packet
     private int count = 0;
@@ -99,7 +100,7 @@ public class TFMini extends Thread
     /**
      * Stops the reading of the LiDAR
      */
-    public void stop()
+    public void stopLidar()
     {
         startRead = false;
     }
@@ -112,12 +113,7 @@ public class TFMini extends Thread
      */
     public int getDistance()
     {
-        int retval;
-        synchronized(this)
-        {
-            retval = distance;
-        }
-        return retval;
+        return distance;
     }
 
     /**
@@ -126,12 +122,7 @@ public class TFMini extends Thread
      */
     public int getStrength()
     {
-        int retval;
-        synchronized(this)
-        {
-            retval = strength;
-        }
-        return retval;
+        return strength;
     }
 
     /**
@@ -140,12 +131,7 @@ public class TFMini extends Thread
      */
     public int getSignalQualityDegree()
     {
-        int retval;
-        synchronized(this)
-        {
-            retval = quality;
-        }
-        return retval;
+        return quality;
     }
 
     /**
@@ -155,8 +141,9 @@ public class TFMini extends Thread
      */
     private void initialize()
     {
-        sensor.write(config, config.length);
-        sensor.setReadBufferSize(PACKET_LENGTH);
+        //sensor.write(config, config.length);
+        sensor.setReadBufferSize(PACKET_LENGTH + 3);
+        sensor.setWriteBufferMode(WriteBufferMode.kFlushWhenFull);
         sensor.setTimeout(4/100);
     }
 
@@ -164,7 +151,7 @@ public class TFMini extends Thread
      * Runs a loop in a Thread that will read the 9 byte packets and set each
      * byte to the correct piece of data for use if the data is valid.
      */
-    private void run() 
+    public void run() 
     {
         startRead = true;
         try 
@@ -215,14 +202,21 @@ public class TFMini extends Thread
                             // Have we read a whole packet of data?
                             if (count == PACKET_LENGTH - 1) 
                             {
+                                //System.out.println("Packet Complete");
                                 // Reached the end of the packet, so the byte we just received is the
                                 // checksum. Make sure it agrees with the checksum we've been accumulating
                                 // as we read packet bytes.
-                                if (checksum == bytes[0]) 
+                                if ((checksum & 0xFF) == (bytes[0] & 0xFF)) 
                                 {
+                                    //System.out.println("Checksum Passed");
                                     // Checksum is good so extract the distance, strength and quality info from
                                     // the received packet.
                                     parsePacket();
+                                    sensor.flush();
+                                    Thread.sleep(10);
+                                }
+                                else {
+                                    //System.out.println("Checksum Failed");
                                 }
 
                                 // Start looking for the start of the next packet.
@@ -237,7 +231,6 @@ public class TFMini extends Thread
                             break;
                     }
                 }
-                Thread.sleep(10);
             }
         } 
         catch (Exception e) {}
@@ -247,9 +240,9 @@ public class TFMini extends Thread
     {
         synchronized(this) 
         {
-            distance = (((int) packet[3] * 256) + ((int) packet[2]));
-            strength = (((int) packet[5] * 256) + ((int) packet[4]));
-            quality = (int) packet[7];
+            distance = ((((int)(packet[3] & 0xFF)) * 256) + ((int)(packet[2] & 0xFF)));
+            strength = ((((int)(packet[5] & 0xFF)) * 256) + ((int)(packet[4] & 0xFF)));
+            quality = (int)(packet[7] & 0xFF);
         }
     }
 }

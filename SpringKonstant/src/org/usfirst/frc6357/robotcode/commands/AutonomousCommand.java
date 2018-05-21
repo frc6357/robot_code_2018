@@ -32,128 +32,111 @@ public class AutonomousCommand extends Command
         }).start();
     }
     
+    //Auto that waits a length of time then drives across the line
+    public AutonomousCommand(long millis)
+    {
+        try {Thread.sleep(millis);}
+        catch(Exception e) {}
+        Robot.driveBaseSystem.driveTimeDistance(143);
+    }
+    
     // Overloaded Constructor to do the current plan of using the IMU and the US sensors
-    public AutonomousCommand(String startSide)
+    public AutonomousCommand(String startSide, String override)
     {
         requires(Robot.driveBaseSystem);
-       // requires(Robot.sensorSystem);
         
         try {Thread.sleep(100);} //Waits .1 seconds for the high gear to deploy
         catch(Exception e) {}
         
-        if(AutoPositionCheck.getScale().equals(startSide)) //Same side, go to scale
+        switch(override)
         {
-            Robot.driveBaseSystem.driveTimeDistance(305); //Drive to center of scale
-//            Robot.sensorSystem.getDistanceToCenter(); //Ping to check position 
-            Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
-            Robot.armSystem.armUp(); //Lift arm for 3 seconds
-            try {Thread.sleep(2800);}
-            catch(Exception e) {}
-            Robot.intakeSystem.setIntakeGrippers(true);
-            try {Thread.sleep(200);}
-            catch (Exception e) {}
-            Robot.intakeSystem.setIntakeSpeed(0,.5); //Open and reverse gripper
-            try {Thread.sleep(1000);}
-            catch (Exception e) {}
-            Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
-            Robot.intakeSystem.setIntakeGrippers(false);
-            Robot.armSystem.armDown(); //Lower the arm
-        }
-        else if(AutoPositionCheck.getAllySwitch().equals(startSide)) //Same side, go to switch
-        {
-        	Robot.driveBaseSystem.driveTimeDistance(140); //Drive to center of scale
-//          Robot.sensorSystem.getDistanceToCenter(); //Ping to check position 
-	        Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
-	        Robot.armSystem.armUp(); //Lift arm for 3 seconds
-	        try {Thread.sleep(2800);}
-	        catch(Exception e) {}
-	        Robot.intakeSystem.setIntakeGrippers(true);
-	        try {Thread.sleep(200);}
-	        catch (Exception e) {}
-	        Robot.intakeSystem.setIntakeSpeed(0,.5); //Open and reverse gripper
-	        try {Thread.sleep(1000);}
-	        catch (Exception e) {}
-	        Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
-	        Robot.intakeSystem.setIntakeGrippers(false);
-	        Robot.armSystem.armDown(); //Lower the arm
-        }
-        else //Drive forward
-        {
-            Robot.driveBaseSystem.driveTimeDistance(300); //Drive 25'
+        case "N": //NULL OVERRIDE; SCALE FIRST, THEN SWITCH, THEN DRIVE
+            if(AutoPositionCheck.getScale().equals(startSide))
+                scalePlan(startSide);
+            else if(AutoPositionCheck.getAllySwitch().equals(startSide))
+                switchPlan(startSide);
+            else
+                Robot.driveBaseSystem.driveTimeDistance(143);
+            break;
+        case "F": //FLIP OVERRIDE; SWITCH FIRST, THEN SCALE, THEN DRIVE
+            if(AutoPositionCheck.getAllySwitch().equals(startSide))
+                switchPlan(startSide);
+            else if(AutoPositionCheck.getScale().equals(startSide))
+                scalePlan(startSide);
+            else
+                Robot.driveBaseSystem.driveTimeDistance(143);
+            break;
+        case "SO": //SWITCH ONLY OVERRIDE; SWITCH FIRST, THEN DRIVE
+            if(AutoPositionCheck.getAllySwitch().equals(startSide))
+            {
+                switchPlan(startSide);
+                break;
+            }
+        case "SCO": //SCALE ONLY OVERRIDE; SCALE FIRST, THEN DRIVE
+            if(AutoPositionCheck.getScale().equals(startSide))
+            {
+                scalePlan(startSide);
+                break;
+            }
+        default: //DRIVE ONLY OVERRIDE
+            Robot.driveBaseSystem.driveTimeDistance(143);
         }
     }
     
-    //Quick recreation of the auto command with the new files
-    public AutonomousCommand(String[][] s2d)
+    /**
+     * Method which uses timers to make the robot drive straight to the scale, turn, and place
+     * @param startSide The String representing which side the robot starts on
+     */
+    private void scalePlan(String startSide)
     {
-        requires(Robot.driveBaseSystem);
-
-        new Thread(() -> 
-        {
-            for(int row = 0; row < s2d.length; row++)
-            {
-                switch(s2d[row][0])
-                {
-                case "Wait":
-                    try
-                    {
-                        Thread.sleep(Integer.parseInt(s2d[row][1]));
-                    }
-                    catch(Exception e)
-                    {
-                    }
-                    break;
-                case "Drive":
-                    //Find actually viable drive method
-                    break;
-                case "Turn":
-                    Robot.driveBaseSystem.turnDegrees(Double.parseDouble(s2d[row][1]));
-                    break;
-                case "Arm":
-                    if(s2d[row][1].equals("Up"))
-                    {
-                        Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
-                        Robot.armSystem.setArmShoulderState(Robot.armSystem.UP);
-                    }
-                    else if(s2d[row][1].equals("Down"))
-                    {
-                        Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
-                        Robot.armSystem.setArmShoulderState(Robot.armSystem.DOWN);
-                    }
-                    try {Thread.sleep(2800);}
-                    catch(Exception e) {}
-                    break;
-                case "Wrist":
-                    if(s2d[row][1].equals("Up"))
-                        Robot.armSystem.setArmElbowState(Robot.armSystem.UP);
-                    else if(s2d[row][1].equals("Down"))
-                        Robot.armSystem.setArmElbowState(Robot.armSystem.DOWN);
-                    try {Thread.sleep(500);}
-                    catch(Exception e) {}
-                    break;
-                case "Grippers":
-                    if(s2d[row][1].equals("Open"))
-                    {
-                        Robot.intakeSystem.setIntakeGrippers(true);
-                        Robot.intakeSystem.setIntakeSpeed(.5, .5);
-                    }
-                    else if(s2d[row][1].equals("Close"))
-                    {
-                        Robot.intakeSystem.setIntakeGrippers(false);
-                        Robot.intakeSystem.setIntakeSpeed(0, 0);
-                    }
-                    break;
-                case "Box Push":
-                    Robot.intakeSystem.setIntakeSpeed(-.5, -.5);
-                    Robot.intakeSystem.setIntakeGrippers(true);
-                    try {Thread.sleep(250);}
-                    catch (Exception e) {}
-                    Robot.intakeSystem.setIntakeSpeed(0, 0);
-                    Robot.intakeSystem.setIntakeGrippers(false);
-                    break;
-                }
-            }
-        }).start();
+        Robot.driveBaseSystem.driveTimeDistance(303); //Drive to center of scale, timed
+        Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
+        Robot.driveBaseSystem.setLeftSpeed(-.3);
+        Robot.driveBaseSystem.setRightSpeed(-.3);
+        try {Thread.sleep(250);}
+        catch(Exception e) {}
+        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setRightSpeed(0);
+        Robot.armSystem.armUp(); //Lift arm for 3 seconds
+        try {Thread.sleep(2800);}
+        catch(Exception e) {}
+        Robot.intakeSystem.setIntakeGrippers(true);
+        try {Thread.sleep(200);}
+        catch (Exception e) {}
+        Robot.intakeSystem.setIntakeSpeed(0,.5); //Open and reverse gripper
+        try {Thread.sleep(1000);}
+        catch (Exception e) {}
+        Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
+        Robot.intakeSystem.setIntakeGrippers(false);
+        Robot.armSystem.armDown(); //Lower the arm
+    }
+    
+    /**
+     * Method that uses timers to make the robot drive to the switch, turn, back up, and place
+     * @param startSide the String representing the side on which the robot starts
+     */
+    private void switchPlan(String startSide)
+    {
+        Robot.driveBaseSystem.driveTimeDistance(143); //Drive to center of scale, timed
+        Robot.driveBaseSystem.turnDegrees(startSide.equals("R") ? 90 : -90); //Turn away from center
+        Robot.driveBaseSystem.setLeftSpeed(-.4);
+        Robot.driveBaseSystem.setRightSpeed(-.4);
+        try {Thread.sleep(1000);}
+        catch(Exception e) {}
+        Robot.driveBaseSystem.setLeftSpeed(0);
+        Robot.driveBaseSystem.setRightSpeed(0);
+        Robot.armSystem.armUp(); //Lift arm for 3 seconds
+        try {Thread.sleep(2800);}
+        catch(Exception e) {}
+        Robot.intakeSystem.setIntakeGrippers(true);
+        try {Thread.sleep(200);}
+        catch (Exception e) {}
+        Robot.intakeSystem.setIntakeSpeed(0,.5); //Open and reverse gripper
+        try {Thread.sleep(1000);}
+        catch (Exception e) {}
+        Robot.intakeSystem.setIntakeSpeed(0, 0); //Close and stop gripper
+        Robot.intakeSystem.setIntakeGrippers(false);
+        Robot.armSystem.armDown(); //Lower the arm
     }
 
     // Called just before this Command runs the first time
@@ -162,7 +145,7 @@ public class AutonomousCommand extends Command
     {
 
     }
-
+    
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute()
