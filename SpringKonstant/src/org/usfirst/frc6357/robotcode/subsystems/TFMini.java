@@ -55,9 +55,6 @@ public class TFMini extends Thread
     private final int baudRate = 115200;    // The baud rate to configure the serial port
     private final int dataBits = 8;         // The number of data bits per transfer
 
-    // This is a list of bytes for the initialization of the LiDAR
-    private final byte[] config = {0x42, 0x57, 0x02, 0x00, 0x00, 0x00, 0x01, 0x06};
-
     // Data bytes
     private int distance;    //Distance being read
     private int strength;    //Strength of signal

@@ -6,8 +6,6 @@ import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
 import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
 import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
-import org.usfirst.frc6357.robotcode.subsystems.SensorSystem;
-import org.usfirst.frc6357.robotcode.subsystems.TFMini;
 import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
 import edu.wpi.first.wpilibj.CameraServer;

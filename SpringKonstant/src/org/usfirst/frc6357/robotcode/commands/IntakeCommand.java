@@ -9,9 +9,6 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class IntakeCommand extends Command
 {
-    private final boolean isStart;
-    private final boolean isIn;
-    
     /**
      * 
      * @param start: sets the state of the robot when the button is pressed
@@ -20,8 +17,6 @@ public class IntakeCommand extends Command
     public IntakeCommand(boolean start, boolean in)
     {
         requires(Robot.intakeSystem);
-        isStart = start;
-        isIn = in;
     }
 
     // Called just before this Command runs the first time

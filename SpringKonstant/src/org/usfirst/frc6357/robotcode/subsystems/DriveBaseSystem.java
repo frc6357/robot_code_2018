@@ -6,8 +6,6 @@ import org.usfirst.frc6357.robotcode.subsystems.ArmSystem.ArmState;
 import org.usfirst.frc6357.robotcode.subsystems.IMU.OrientationAxis;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
