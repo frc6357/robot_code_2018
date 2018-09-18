@@ -21,3 +21,6 @@ SpringKonstant/dist/*
 SpringKonstant/.DS_Store
 .DS_Store
 SpringKonstant/.DS_Store
+
+# Eclipse Class Path
+SpringKonstant/.classpath
