@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>SpringKonstant</name>
-	<comment></comment>
+	<comment>Project SpringKonstant created by Buildship.</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -10,20 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.buildship.core.gradleprojectbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>edu.wpi.first.wpilib.plugins.core.nature.FRCProjectNature</nature>
+		<nature>org.eclipse.buildship.core.gradleprojectnature</nature>
 	</natures>
-	<filteredResources>
-		<filter>
-			<id>1487451506138</id>
-			<name></name>
-			<type>30</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-location-matches-false-false-*~</arguments>
-			</matcher>
-		</filter>
-	</filteredResources>
 </projectDescription>
