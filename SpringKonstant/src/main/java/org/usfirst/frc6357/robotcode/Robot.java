@@ -3,12 +3,8 @@ package org.usfirst.frc6357.robotcode;
 //import java.io.IOException;
 
 import org.usfirst.frc6357.robotcode.commands.AutonomousCommand;
-import org.usfirst.frc6357.robotcode.subsystems.ArmSystem;
 import org.usfirst.frc6357.robotcode.subsystems.DriveBaseSystem;
-import org.usfirst.frc6357.robotcode.subsystems.IntakeSystem;
-import org.usfirst.frc6357.robotcode.tools.AutoPositionCheck;
 
-import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -28,13 +24,8 @@ public class Robot extends TimedRobot
     
     // Subsystems
     public static DriveBaseSystem driveBaseSystem;
-  //  public static SensorSystem sensorSystem;
-    public static ArmSystem armSystem;
-    public static IntakeSystem intakeSystem;
-    //public static LEDs lights;
-       
     public static OI oi;
-//    public static TFMini distanceLIDAR;
+
     int counter = 0;
 
     /**
@@ -45,32 +36,12 @@ public class Robot extends TimedRobot
     {
         // Subsystem Creation
         driveBaseSystem = new DriveBaseSystem();
-      //  sensorSystem = new SensorSystem();
-        armSystem = new ArmSystem();
-        intakeSystem = new IntakeSystem();
-       // lights = new LEDs();
        
         // OI must be constructed after subsystems. If the OI creates Commands
         // (which it very likely will), subsystems are not guaranteed to be
         // constructed yet. Thus, their requires() statements may grab null
         // pointers. Bad news. Don't move it.
-        oi = new OI();
-
-        // Add commands to Autonomous Sendable Chooser
-        // It is VITAL TO NOTE that if the user picks an illegal combination of choices then the program automatically chooses to cross the auto-line
-        chooserStart.addDefault("Left", "L");
-        chooserStart.addObject("Right", "R");
-        
-        chooserOverride.addDefault("No Override (Scale then switch)", "N");
-        chooserOverride.addObject("Flipped (Switch then scale)", "F");
-        chooserOverride.addObject("Switch Only, then drive", "SO");
-        chooserOverride.addObject("Scale only, then drive", "SCO");
-        chooserOverride.addObject("Drive Straight", "DS");
-
-//        distanceLIDAR = TFMini.getInstance();
-//        distanceLIDAR.start();
-
-        CameraServer.getInstance().startAutomaticCapture();        
+        oi = new OI();   
     }
 
     /**
@@ -79,17 +50,6 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit()
     {
-        //lights.randomColor();
-        driveBaseSystem.deployStrafe(false);
-        driveBaseSystem.leftEncoder.reset();
-        driveBaseSystem.rightEncoder.reset();
-        armSystem.armDown();
-        armSystem.armElbowUp();
-        intakeSystem.setIntakeGrippers(false); // Close gripper
-        Robot.driveBaseSystem.setHighGear(false);
-        
-        SmartDashboard.putData("Start Chooser", chooserStart);
-        
     }
 
     /**
@@ -99,14 +59,6 @@ public class Robot extends TimedRobot
     public void disabledPeriodic()
     {
         Scheduler.getInstance().run();
-        
-        driveBaseSystem.setHighGear(false);
-      
-        //System.out.print("LiDAR: ");
-        //System.out.println( distanceLIDAR.getDistance());
-//        SmartDashboard.putNumber("LiDAR", distanceLIDAR.getDistance());
-        SmartDashboard.putData("Start Chooser", chooserStart);
-        SmartDashboard.putData("Priority Chooser", chooserOverride);
     }
     
     /**
@@ -115,15 +67,6 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        driveBaseSystem.leftEncoder.reset(); // Reset encoder distances to zero
-        driveBaseSystem.rightEncoder.reset();
-        driveBaseSystem.deployStrafe(false); // Lift Strafe
-        driveBaseSystem.setHighGear(true);
-
-//        autonomousCommand = new AutonomousCommand(); // Select new autoplan, just drives straight
-//        autonomousCommand = new AutonomousCommand(10000); // New autoplan; wait 10 seconds, drive straight
-        AutoPositionCheck.getGameData();
-        
         autonomousCommand = new AutonomousCommand(chooserStart.getSelected(), chooserOverride.getSelected());
 
         // schedule the autonomous command (example)
@@ -151,10 +94,6 @@ public class Robot extends TimedRobot
         // continue until interrupted by another command, remove
         // this line or comment it out.
         if (autonomousCommand != null) autonomousCommand.cancel();
-
-        driveBaseSystem.deployStrafe(true);
-        Robot.driveBaseSystem.setHighGear(false);
-//        distanceLIDAR.stopLidar();
     }
 
     /**
@@ -163,34 +102,22 @@ public class Robot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
-        double driveLeft, driveRight, robotAngle;
-        double intakeSpeedIn, intakeSpeedOut;
+        double driveLeft, driveRight;
 
         Scheduler.getInstance().run();
 
         driveLeft = oi.getDriverJoystickValue(Ports.OIDriverLeftDrive, true); // Retrieves the status of all buttons and joysticks
         driveRight = oi.getDriverJoystickValue(Ports.OIDriverRightDrive, true);
-        intakeSpeedIn = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeIn, false);
-        intakeSpeedOut = oi.getOperatorJoystickValue(Ports.OIOperatorIntakeOut, false);
-
-        robotAngle = driveBaseSystem.driveIMU.updatePeriodic(); // Retrieve robot angle
 
         driveBaseSystem.setLeftSpeed(driveLeft); // Listens to input and drives the robot
         driveBaseSystem.setRightSpeed(driveRight);
 
-        intakeSystem.setIntakeSpeed(intakeSpeedOut, intakeSpeedIn);
-
         if(counter % 10 == 0)
         {
-            SmartDashboard.putNumber("Left Encoder Raw", driveBaseSystem.getLeftEncoderRaw()); // Put data onto Shuffleboard for reading
-            SmartDashboard.putNumber("Right Encoder Raw", driveBaseSystem.getRightEncoderRaw());
-            SmartDashboard.putNumber("Left Encoder Rate", driveBaseSystem.getLeftEncoderRate());
-            SmartDashboard.putNumber("Right Encoder Rate", driveBaseSystem.getRightEncoderRate());
-            SmartDashboard.putNumber("Right Encoder Dist", driveBaseSystem.rightEncoder.getDistance());
-            SmartDashboard.putNumber("Left Encoder Dist", driveBaseSystem.leftEncoder.getDistance());
-            SmartDashboard.putBoolean("Strafe Deployed", driveBaseSystem.getStrafeState());
-//            SmartDashboard.putNumber("LIDAR Distance", distanceLIDAR.getDistance());
-            SmartDashboard.putNumber("IMU Angle", robotAngle);
+            SmartDashboard.putNumber("Left Speed (actual)", driveBaseSystem.getLeftSpeed()); // Put data onto Shuffleboard for reading
+            SmartDashboard.putNumber("Right Speed (actual)", driveBaseSystem.getRightSpeed());
+            SmartDashboard.putNumber("Left Speed (set)", driveLeft); // Put data onto Shuffleboard for reading
+            SmartDashboard.putNumber("Right Speed (set)", driveRight);
         }
         counter++;
     }

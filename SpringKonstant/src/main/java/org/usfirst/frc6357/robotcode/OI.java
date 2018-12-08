@@ -5,13 +5,12 @@
 
 package org.usfirst.frc6357.robotcode;
 
-import org.usfirst.frc6357.robotcode.commands.*;
+//import org.usfirst.frc6357.robotcode.commands.*;
 import org.usfirst.frc6357.robotcode.tools.FilteredJoystick;
-import org.usfirst.frc6357.robotcode.tools.filters.*;
+//import org.usfirst.frc6357.robotcode.tools.filters.*;
 
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.buttons.Button;
+//import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator interface to the commands and command groups that allow control
@@ -48,78 +47,12 @@ public class OI
 
     private FilteredJoystick joystickOperator;
     private FilteredJoystick joystickDriver;
-
-    private FilterDeadband filterClimbDeadband;
-
-    private Button buttonIntakeIn;
-    private Button buttonIntakeOut;
-    private Button buttonIntakeSwing;
-    private Button buttonStrafe;
-    private Button buttonLowGear;
-    private Button buttonHighGear;
-    private Button buttonArmUp;
-    private Button buttonArmDown;
-    private Button buttonGripper;
-    private Button buttonGripper2;
-    private Button buttonSlow;
     
     public OI()
     {
         // Instantiate the joystick devices.
         joystickOperator = new FilteredJoystick(Ports.OIOperatorJoystick);
         joystickDriver = new FilteredJoystick(Ports.OIDriverJoystick);
-
-        // Create all the buttons we will be using.
-        buttonArmUp = new JoystickButton(joystickOperator, Ports.OIOperatorArmUp);
-        buttonArmDown = new JoystickButton(joystickOperator, Ports.OIOperatorArmDown);
-        
-        // TODO: Add control to move the intake up or down during the endgame.
-        buttonIntakeSwing = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeRotation);
-
-        buttonSlow = new JoystickButton(joystickDriver, Ports.OIDriverSlow);
-        
-        buttonIntakeIn = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeIn);
-        buttonIntakeOut = new JoystickButton(joystickOperator, Ports.OIOperatorIntakeOut);
-
-        buttonStrafe = new JoystickButton(joystickDriver, Ports.OIDriverStrafe);
-
-        buttonLowGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectLow);
-        buttonHighGear = new JoystickButton(joystickDriver, Ports.IODriverGearSelectHigh);
-
-        buttonGripper = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle);
-        buttonGripper2 = new JoystickButton(joystickOperator, Ports.OIOperatorGripperToggle2);
-
-        // Assign functions to all Buttons
-        buttonArmUp.whenPressed(new ArmUp());
-        buttonArmDown.whenPressed(new ArmDown());
-       
-        buttonStrafe.whileHeld(new StrafeStow());
-        buttonStrafe.whenReleased(new StrafeDeploy());
-
-        buttonLowGear.whenPressed(new GearShiftCommand(false));
-        buttonHighGear.whenPressed(new GearShiftCommand(true));
-
-        buttonIntakeIn.whenPressed(new IntakeCommand(true, true));
-        buttonIntakeIn.whenReleased(new IntakeCommand(false, true));
-        buttonIntakeOut.whenPressed(new IntakeCommand(true, false));
-        buttonIntakeOut.whenReleased(new IntakeCommand(false, false));
-        buttonIntakeSwing.whenPressed(new IntakeSwingToggle());
-
-        buttonGripper.whileHeld(new OpenGripper());
-        buttonGripper.whenReleased(new CloseGripper());
-        buttonGripper2.whileHeld(new OpenGripper());
-        buttonGripper2.whenReleased(new CloseGripper());
-        
-        buttonSlow.whileHeld(new SetSlowMode(true));
-        buttonSlow.whenReleased(new SetSlowMode(false));
-
-        // Set deadbands and response curves for various joystick axes.
-        filterClimbDeadband = new FilterDeadband(0.1);
-        joystickOperator.setFilter(Ports.OIOperatorClimbWinch, filterClimbDeadband);
-
-        // SmartDashboard insertions for autonomous command chooser.
-        SmartDashboard.putData("Autonomous Command", new AutonomousCommand());
-        SmartDashboard.putData("Open Gripper", new OpenGripper());
     }
 
     /**
